@@ -1,0 +1,379 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ok
+enum ProductStatus {
+  AVAILABLE
+  LOW_STOCK
+  OUT_OF_STOCK
+  ARCHIVED
+}
+
+// ok
+model Product {
+  id                   String                 @id @default(uuid())
+  title                String                 @db.VarChar(75)
+  image                String                 @db.VarChar(100)
+  description          String                 @db.Text
+  showing_instruction  String                 @db.Text
+  bloom_size           String                 @db.VarChar(75)
+  type_id              String
+  color_id             String
+  family_id            String
+  cost_price           Float                  @db.Float
+  selling_price        Float                  @db.Float
+  inventory            Int                    @db.Int
+  sku                  Int                    @db.Int
+  discount_id          String?
+  admin_id             String //
+  status               ProductStatus          @default(OUT_OF_STOCK)
+  create_at            DateTime               @db.DateTime()
+  modified_at          DateTime?              @db.DateTime()
+  deleted_at           DateTime?              @db.DateTime()
+  category             Category[]
+  Flower_Family        Flower_Family          @relation(fields: [family_id], references: [id])
+  Seasonal_Information Seasonal_Information[]
+  Flower_Color         Flower_Color           @relation(fields: [color_id], references: [id])
+  Flower_Type          Flower_Type            @relation(fields: [type_id], references: [id])
+  Discount             Discount?              @relation(fields: [discount_id], references: [id])
+  Product_Review       Product_Review[]
+  Order_Item           Order_Item[]
+  Admin_User           Admin_User             @relation(fields: [admin_id], references: [id])
+}
+
+// ok
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  description String    @db.Text
+  create_at   DateTime  @db.DateTime()
+  modified_at DateTime? @db.DateTime()
+  deleted_at  DateTime? @db.DateTime()
+  Product     Product[]
+}
+
+// ok
+model Flower_Family {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(75)
+  description String?   @db.Text
+  create_at   DateTime  @db.DateTime()
+  modified_at DateTime? @db.DateTime()
+  deleted_at  DateTime? @db.DateTime()
+  Product     Product[]
+}
+
+// ok
+model Seasonal_Information {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(75)
+  description String?   @db.Text
+  create_at   DateTime  @db.DateTime()
+  modified_at DateTime? @db.DateTime()
+  deleted_at  DateTime? @db.DateTime()
+  Product     Product[]
+}
+
+// ok
+model Flower_Type {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(75)
+  description String?   @db.Text
+  create_at   DateTime  @db.DateTime()
+  modified_at DateTime? @db.DateTime()
+  deleted_at  DateTime? @db.DateTime()
+  Product     Product[]
+}
+
+// ok
+model Flower_Color {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(75)
+  description String?   @db.Text
+  create_at   DateTime  @db.DateTime()
+  modified_at DateTime? @db.DateTime()
+  deleted_at  DateTime? @db.DateTime()
+  Product     Product[]
+}
+
+// ok
+enum Discount_Status {
+  ACTIVE
+  INACTIVE
+}
+
+// ok
+model Discount {
+  id               String          @id @default(uuid())
+  name             String          @db.VarChar(75)
+  description      String?         @db.Text
+  discount_precent Float           @db.Float
+  status           Discount_Status @default(INACTIVE)
+  create_at        DateTime        @db.DateTime()
+  modified_at      DateTime?       @db.DateTime()
+  deleted_at       DateTime?       @db.DateTime()
+  Product          Product[]
+}
+
+// ok
+model Product_Review {
+  id           String    @id @default(uuid())
+  product_id   String?
+  title        String    @db.VarChar(100)
+  rating       Int       @db.SmallInt
+  content      String?   @db.Text
+  published_on DateTime  @db.DateTime()
+  deleted_at   DateTime? @db.DateTime()
+
+  Product Product? @relation(fields: [product_id], references: [id])
+}
+
+// ok
+enum GenderType {
+  male
+  female
+}
+
+// ok
+enum Acc_status {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+// ok
+model User {
+  id            String      @id @default(cuid())
+  email         String?     @unique
+  emailVerified DateTime?
+  image         String?
+  first_name    String      @db.VarChar(50)
+  last_name     String      @db.VarChar(50)
+  username      String      @unique @db.VarChar(50)
+  password      String
+  telephone     String      @db.VarChar(15)
+  dob           DateTime    @db.DateTime()
+  gender        GenderType?
+  register_on   DateTime    @db.DateTime()
+  last_login    DateTime    @db.DateTime()
+  acc_status    Acc_status  @default(ACTIVE)
+  modified_at   DateTime?   @db.DateTime()
+  deleted_at    DateTime?   @db.DateTime()
+
+  accounts      Account[]
+  sessions      Session[]
+  User_Payment  User_Payment[]
+  Address       Address[]
+  Order_details Order_details[]
+}
+
+// ok
+model User_Payment {
+  id           String    @id @default(uuid())
+  user_id      String
+  card_type    String    @db.VarChar(50)
+  provider     String    @db.VarChar(75)
+  name_on_card String    @db.VarChar(100)
+  card_number  String    @db.VarChar(16)
+  cvv          String    @db.VarChar(4)
+  card_expiry  DateTime  @db.DateTime()
+  create_at    DateTime  @db.DateTime()
+  modified_at  DateTime? @db.DateTime()
+  deleted_at   DateTime? @db.DateTime()
+
+  User User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  Order_Transaction Order_Transaction[]
+}
+
+// ok
+enum CardType {
+  CREDIT
+  DEBIT
+}
+
+// ok
+enum OrderTransactionStatus {
+  CANCELED
+  FAILED
+  PENDING
+  REJECTED
+  DECLINED
+  SUCCESSFUL
+}
+
+// ok
+model Order_Transaction {
+  id          String                 @id @default(uuid())
+  order_id    String
+  payment_id  String
+  type        CardType
+  amount      Float                  @db.Float
+  status      OrderTransactionStatus
+  create_at   DateTime               @db.DateTime()
+  modified_at DateTime?              @db.DateTime()
+
+  Order        Order_details @relation(fields: [order_id], references: [id])
+  User_Payment User_Payment  @relation(fields: [payment_id], references: [id])
+}
+
+// ok
+model Shipping {
+  id                       String          @id @default(uuid())
+  shipping_method          String          @db.VarChar(50)
+  courier_service_provider String          @db.VarChar(75)
+  shipping_cost            Float           @db.Float
+  create_at                DateTime        @db.DateTime()
+  modified_at              DateTime?       @db.DateTime()
+  deleted_at               DateTime?       @db.DateTime()
+  Order_details            Order_details[]
+}
+
+// ok
+model Address {
+  id            String    @id @default(uuid())
+  user_id       String?
+  address_line1 String    @db.VarChar(100)
+  address_line2 String?   @db.VarChar(100)
+  subDistrict   String    @db.VarChar(50)
+  district      String    @db.VarChar(50)
+  province      String    @db.VarChar(50)
+  zipcode       String    @db.VarChar(5)
+  create_at     DateTime  @db.DateTime()
+  modified_at   DateTime? @db.DateTime()
+  deleted_at    DateTime? @db.DateTime()
+
+  User          User?           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Order_details Order_details[]
+}
+
+// ok
+model Order_Status {
+  id            String         @id @default(uuid())
+  status        StatusType     @unique @default(PENDING)
+  description   String?        @db.Text
+  create_at     DateTime       @db.DateTime()
+  modified_at   DateTime?      @db.DateTime()
+  Order_details Order_details?
+}
+
+// ok
+model Order_Item {
+  id          String    @id @default(uuid())
+  order_id    String
+  product_id  String?
+  price       Float     @db.Float
+  discount    Float?    @db.Float
+  quantity    Int       @db.SmallInt
+  create_at   DateTime  @db.DateTime()
+  modified_at DateTime? @db.DateTime()
+
+  Order   Order_details @relation(fields: [order_id], references: [id])
+  Product Product?      @relation(fields: [product_id], references: [id])
+}
+
+// ok
+enum StatusType {
+  CANCELED
+  PENDING
+  REJECTED
+  DELIVERED
+}
+
+// ok
+model Order_details {
+  id              String    @id @default(uuid())
+  user_id         String
+  status_id       String    @unique
+  subtotal_amount Float     @db.Float
+  product_discout Float     @db.Float
+  tax_amount      Int       @db.Int
+  shipping_id     String
+  shipping_date   DateTime  @db.Date
+  address_id      String
+  total_amount    Float     @db.Float
+  create_at       DateTime  @db.DateTime()
+  modified_at     DateTime? @db.DateTime()
+  admin_UserId    String    @unique
+
+  Status            Order_Status        @relation(fields: [status_id], references: [id])
+  User              User                @relation(fields: [user_id], references: [id])
+  shipping          Shipping            @relation(fields: [shipping_id], references: [id])
+  Address           Address             @relation(fields: [address_id], references: [id])
+  Order_Item        Order_Item[]
+  Order_Transaction Order_Transaction[]
+}
+ // ok
+enum AdminType {
+  admin
+  manager
+  staff
+}
+
+// ok
+model Admin_Type {
+  id          String       @id @default(uuid())
+  type        AdminType    @unique @default(staff)
+  permission  String       @db.VarChar(100)
+  create_at   DateTime     @db.DateTime()
+  modified_at DateTime?    @db.DateTime()
+  Admin_User  Admin_User[]
+}
+
+// ok
+model Admin_User {
+  id            String    @id @default(uuid())
+  usernames     String    @db.VarChar(50)
+  password      String    @db.VarChar(50)
+  first_name    String    @db.VarChar(50)
+  last_name     String    @db.VarChar(50)
+  last_login    DateTime  @db.DateTime()
+  create_at     DateTime  @db.DateTime()
+  modified_at   DateTime? @db.DateTime()
+  deleted_at    DateTime? @db.DateTime()
+  admin_type_id String
+  Product       Product[]
+
+  AdminType Admin_Type @relation(fields: [admin_type_id], references: [id])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
