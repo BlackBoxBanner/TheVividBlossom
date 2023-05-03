@@ -8,9 +8,6 @@ function LoginPage({csrfToken}: { csrfToken: string }) {
         <>
             <div>
                 <CredentialsLogin/>
-                <Button onClick={() => signIn("credentials", {}, {
-
-                },)}>test</Button>
             </div>
         </>
     );

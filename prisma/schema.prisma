@@ -309,7 +309,8 @@ model Order_details {
   Order_Item        Order_Item[]
   Order_Transaction Order_Transaction[]
 }
- // ok
+
+// ok
 enum AdminType {
   admin
   manager
@@ -329,18 +330,18 @@ model Admin_Type {
 // ok
 model Admin_User {
   id            String    @id @default(uuid())
-  usernames     String    @db.VarChar(50)
-  password      String    @db.VarChar(50)
+  usernames     String    @unique @db.VarChar(50)
+  password      String
   first_name    String    @db.VarChar(50)
   last_name     String    @db.VarChar(50)
   last_login    DateTime  @db.DateTime()
   create_at     DateTime  @db.DateTime()
   modified_at   DateTime? @db.DateTime()
   deleted_at    DateTime? @db.DateTime()
-  admin_type_id String
+  admin_type_id String?
   Product       Product[]
 
-  AdminType Admin_Type @relation(fields: [admin_type_id], references: [id])
+  AdminType Admin_Type? @relation(fields: [admin_type_id], references: [id])
 }
 
 model Account {
