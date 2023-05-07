@@ -1,6 +1,4 @@
 import Head from "next/head";
-import {NavBar} from "@/components/navbar";
-import {Button} from "@/components/ui/button"
 
 export default function Home({csrfToken}: { csrfToken: string }) {
 	return (
@@ -12,9 +10,7 @@ export default function Home({csrfToken}: { csrfToken: string }) {
 				<link rel="icon" href="/favicon.ico"/>
 			</Head>
 			<main>
-				<NavBar/>
-				<Button>test</Button>
-				<button className={"bg-blue-300 p-10"}>test</button>
+				Test
 			</main>
 		</>
 	);
