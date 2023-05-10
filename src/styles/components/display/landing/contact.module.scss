@@ -1,0 +1,52 @@
+@import "../../../variable";
+
+.main {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contactContainer {
+  padding: 4.5rem 5rem;
+  color: $primary_color;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem;
+
+  &:after,
+  &:before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 1px;
+    background-color: $primary_color;
+
+  }
+
+  &:after {
+    bottom: 0;
+    right: 0;
+  }
+
+  &:before {
+    top: 0;
+    left: 0;
+  }
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+
+  p {
+    font-size: 5.5rem;
+  }
+}
+
+.items {
+  font-size: 3.5rem;
+  display: flex;
+  align-items: center;
+}

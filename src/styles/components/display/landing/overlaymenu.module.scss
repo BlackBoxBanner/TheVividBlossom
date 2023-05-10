@@ -1,0 +1,44 @@
+@import "../../../variable";
+
+
+.container {
+  //z-index: 3;
+  background-color: #000;
+  position: absolute;
+  opacity: 0.9;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  //display: none;
+  transition: ease-in-out 1000ms;
+
+  button {
+    color: #FDFCF5;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.closeIcon {
+  width: 2rem;
+  height: 2rem;
+  transition: ease 500ms;
+
+  &:hover {
+    transform: rotate(180deg);
+  }
+
+  path {
+    stroke: $primary_color;
+  }
+}

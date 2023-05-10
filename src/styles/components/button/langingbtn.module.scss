@@ -1,0 +1,35 @@
+@import "../../variable";
+
+
+.btn {
+  width: fit-content;
+  font-size: $landing_font_menu;
+  line-height: 2.5rem;
+  position: relative;
+  display: flex;
+
+  &:before {
+    transition: ease-in-out 500ms;
+    content: "";
+    width: 0;
+    height: 1px;
+    background-color: $primary_text_color;
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+  }
+
+  &:hover:before {
+    width: 100%
+  }
+
+  &:after {
+    position: absolute;
+    content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3C!-- Created with Vectornator (http://vectornator.io/) --%3E%3Csvg height='100%25' stroke-miterlimit='10' style='fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;' version='1.1' viewBox='0 0 17 16' width='100%25' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:vectornator='http://vectornator.io' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs/%3E%3Cg id='Untitled' vectornator:layerName='Untitled'%3E%3Cpath d='M6.15625 0C5.60396 0 5.15625 0.447718 5.15625 1C5.15625 1.55229 5.60396 2 6.15625 2L12.7188 2L0.28125 14.4375L1.71875 15.8438L14.1562 3.40625L14.1562 10C14.1562 10.5523 14.6041 11 15.1562 11C15.7086 11 16.1562 10.5523 16.1562 10L16.1562 1C16.1562 0.447718 15.7086-7.94729e-08 15.1562 0L6.15625 0Z' fill='%232a2e21' fill-rule='nonzero' opacity='1' stroke='none'/%3E%3C/g%3E%3C/svg%3E%0A");
+    top: 0;
+    bottom: 0;
+    right: -25px;
+    height: $landing_font_menu/1.7;
+    width: $landing_font_menu/1.7;
+  }
+}

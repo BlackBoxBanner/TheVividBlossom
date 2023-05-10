@@ -1,0 +1,22 @@
+.overText {
+  font-size: 275px;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+
+  div {
+    transition: ease-in-out 1000ms;
+    position: absolute;
+  }
+
+  .text1 {
+    top: -4rem;
+    left: 0;
+  }
+
+  .text2 {
+    bottom: -5.8rem;
+    right: 1rem;
+  }
+}

@@ -1,0 +1,156 @@
+@import "../variable";
+
+.main {
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: $primary_color;
+  display: flex;
+  position: relative;
+  padding: 0 2.5rem;
+}
+
+.sidebar {
+  min-width: 16rem;
+  z-index: 1;
+}
+
+.rightContent {
+  display: flex;
+  width: 100%;
+  padding: 8rem 0;
+}
+
+.leftsidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.rightsidebar {
+  min-width: 12rem;
+  padding-left: 1rem;
+  display: flex;
+  justify-content: right;
+  flex-direction: column;
+  gap: 1rem;
+
+  div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 2rem;
+  }
+}
+
+.searchMenu {
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+
+  div {
+    display: flex;
+    justify-content: flex-end;
+    height: 2rem;
+
+    input {
+      font-size: 0.75rem;
+      transition: ease-in-out 300ms;
+      width: 0;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &:before {
+      transition: ease-in-out 300ms;
+      content: "";
+      width: 0;
+      height: 1px;
+      background-color: $primary_text_color;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
+}
+
+.searchMenu.searchActive {
+  div:before {
+    width: 100%;
+  }
+}
+
+.content {
+  width: 100%;
+  position: relative;
+
+  div {
+    transition: ease-in-out 2500ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 910px;
+    min-height: 100%;
+
+  }
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  gap: 2.5rem;
+
+  .image {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+
+
+    .only {
+      width: 100%;
+      height: 100%;
+    }
+
+    .image1 {
+      height: 24rem;
+    }
+
+    .image2 {
+      height: 15rem;
+      width: 15rem;
+    }
+
+    .image3 {
+      height: 15rem;
+      width: 25rem;
+    }
+
+    .image4 {
+      bottom: 0;
+      left: 0;
+      height: 23rem;
+      width: 30rem;
+    }
+
+    div {
+      display: flex;
+      height: 100%;
+    }
+  }
+}
