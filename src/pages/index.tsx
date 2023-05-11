@@ -44,8 +44,6 @@ export default function Home() {
 
 
 	useEffect(() => {
-		console.log(state)
-
 		function intervalCallback() {
 			if (state < colorList.length - 1) {
 				setState((prev) => prev + 1)
@@ -57,6 +55,7 @@ export default function Home() {
 		const interval = setInterval(intervalCallback, timePerLoop)
 		return () => clearInterval(interval)
 	}, [colorList.length, state])
+	
 	return (
 		<>
 			<Head>
