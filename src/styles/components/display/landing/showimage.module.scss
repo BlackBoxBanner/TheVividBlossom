@@ -27,7 +27,7 @@
   display: flex;
   width: 100%;
   padding: 7rem 0 3rem 0;
-  align-items: end;
+  align-items: flex-end;
   gap: 3rem;
 }
 
@@ -47,35 +47,37 @@
   width: 100%;
   padding: 1rem 0 1rem 0;
   gap: 3rem;
-  justify-content: space-between;
+  //justify-content: space-between;
 
   .imageRightContainer {
     display: flex;
     width: fit-content;
-    align-items: end;
+    align-items: flex-end;
     position: relative;
 
     .image4 {
       min-height: 20rem;
-      height: auto;
-      width: 100%;
+      //height: 100%;
+      width: auto;
+      @include media("retina2x", ">desktop") {
+        height: 40%;
+      }
     }
   }
 
   .imageLeftContainer {
-    width: 70%;
+    width: min-content;
     display: flex;
-    //width: fit-content;
-    align-items: start;
+    align-items: flex-start;
     position: relative;
-    @include media("retina2x", ">desktop") {
-      width: 100%;
-    }
 
     .image3 {
-      //min-height:15rem;
-      height: auto;
-      width: 100%;
+      min-height: 15rem;
+      width: auto;
+
+      @include media("retina2x", ">desktop") {
+        height: 40%;
+      }
     }
   }
 }
