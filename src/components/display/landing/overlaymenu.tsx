@@ -1,6 +1,5 @@
 import styles from "@/styles/components/display/landing/overlaymenu.module.scss"
 import {ComponentProps} from "react";
-import {AiOutlineClose} from "react-icons/ai";
 
 interface OverMenuProps extends ComponentProps<"div"> {
 	onClose: () => void
@@ -11,6 +10,7 @@ export default function OverMenu(props: OverMenuProps) {
 		<>
 			<div
 				className={styles.container}
+				onDoubleClick={props.onClose}
 				style={props.style}
 			>
 				<div className={styles.btn}>

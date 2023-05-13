@@ -1,5 +1,5 @@
 @import "../../../variable";
-
+@import "include-media";
 
 .container {
   //z-index: 3;
@@ -10,11 +10,11 @@
   height: 100vh;
   left: 0;
   top: 0;
-  //display: none;
-  transition: ease-in-out 1000ms;
+  color: $primary_color;
+  transition: ease-in-out 750ms;
 
   button {
-    color: #FDFCF5;
+    color: $primary_color;
   }
 
   div {
