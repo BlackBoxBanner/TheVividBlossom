@@ -63,12 +63,14 @@ export default function RightMenu() {
       <div>
         <div
           className={`${styles.searchMenu} ${search || !!searchInputRef.current?.value ? styles.searchActive : ''}`}>
-          <div className={outfit.className}>
+          <div className={`${outfit.className} ${styles.inputContainer}`}>
             <input
               ref={searchInputRef}
               style={{width: search || !!searchInputRef.current?.value ? "100%" : "0",}}
               type={"search"}
-              placeholder={"What are you looking for ?"}
+              placeholder={`What are you looking for ? `}
+              // onFocus={"if(this.value==this.defaultValue)this.value='';"}
+              // onBlur={"if(this.value=='')this.value=this.defaultValue;"}
               onMouseOver={() => setSearch(true)}
               onMouseLeave={() => setSearch(false)}
             />

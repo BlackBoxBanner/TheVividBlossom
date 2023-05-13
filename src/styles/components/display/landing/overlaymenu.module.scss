@@ -11,7 +11,7 @@
   left: 0;
   top: 0;
   color: $primary_color;
-  transition: ease-in-out 750ms;
+  transition: ease-in-out $line_animation;
 
   button {
     color: $primary_color;
@@ -32,7 +32,7 @@
 .closeIcon {
   width: 2rem;
   height: 2rem;
-  transition: ease 500ms;
+  transition: ease $btn_animation;
 
   &:hover {
     transform: rotate(180deg);

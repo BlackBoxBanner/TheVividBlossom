@@ -28,10 +28,10 @@
   all: unset;
   padding: .75rem 2.75rem;
   display: flex;
-  justify-content: start;
-  align-items: start;
+  justify-content: flex-start;
+  align-items: flex-start;
   font-size: 5.5rem;
-  transition: ease-in-out all 200ms;
+  transition: ease-in-out all $btn_animation;
 
   &:hover {
     color: $inner_btn_hover;

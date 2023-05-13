@@ -35,7 +35,7 @@
 }
 
 .rightsidebar {
-  min-width: 12rem;
+  min-width: 13rem;
   padding-left: 1rem;
   display: flex;
   justify-content: right;
@@ -51,8 +51,9 @@
 }
 
 .searchMenu {
-  width: fit-content;
+  width: 100%;
   height: fit-content;
+
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -65,7 +66,7 @@
 
     input {
       font-size: 0.75rem;
-      transition: ease-in-out 300ms;
+      transition: ease-in-out $line_animation;
       width: 0;
 
       &:focus {
@@ -74,7 +75,7 @@
     }
 
     &:before {
-      transition: ease-in-out 300ms;
+      transition: ease-in-out $line_animation;
       content: "";
       width: 0;
       height: 1px;
@@ -84,6 +85,10 @@
       bottom: 0;
     }
   }
+}
+
+.inputContainer {
+  width: 100%;
 }
 
 .searchMenu.searchActive {
