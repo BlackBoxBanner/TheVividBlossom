@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import styles from "@/styles/components/button/iconbtn.module.scss"
 
 interface IconHoverProps {
   outlineIcon: React.ReactElement;
@@ -12,7 +13,7 @@ const IconHover: React.FC<IconHoverProps> = ({outlineIcon, fillIcon, size, prima
 
   return (
     <div
-      style={{position: 'relative'}}
+      className={styles.container}
       onMouseOver={() => setIcon(true)}
       onMouseLeave={() => setIcon(false)}
     >

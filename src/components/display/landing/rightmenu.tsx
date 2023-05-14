@@ -8,10 +8,11 @@ import {
   AiOutlineShopping, AiTwotoneShopping
 } from "react-icons/ai";
 import {Button} from "@/components/button";
-import IconHover from "@/styles/components/button/iconwithhover";
+import IconHover from "@/components/button/iconwithhover";
 import {useRef, useState} from "react";
 import {Outfit} from "next/font/google";
 import {useSession} from "next-auth/react"
+import btnStyles from "@/styles/components/button/iconbtn.module.scss"
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -24,24 +25,24 @@ export default function RightMenu() {
       <>
         <div>
           <IconHover
-            outlineIcon={<AiOutlineMessage />}
-            fillIcon={<AiFillMessage />}
+            outlineIcon={<AiOutlineMessage/>}
+            fillIcon={<AiFillMessage/>}
             size={25}
             primaryTextColor={styles.primaryTextColor}
           />
         </div>
         <div>
           <IconHover
-            outlineIcon={<AiOutlineHeart />}
-            fillIcon={<AiFillHeart />}
+            outlineIcon={<AiOutlineHeart/>}
+            fillIcon={<AiFillHeart/>}
             size={25}
             primaryTextColor={styles.primaryTextColor}
           />
         </div>
         <div>
           <IconHover
-            outlineIcon={<AiOutlineShopping />}
-            fillIcon={<AiTwotoneShopping />}
+            outlineIcon={<AiOutlineShopping/>}
+            fillIcon={<AiTwotoneShopping/>}
             size={25}
             primaryTextColor={styles.primaryTextColor}
           />
@@ -79,11 +80,11 @@ export default function RightMenu() {
             onMouseOver={() => setSearch(true)}
             onMouseLeave={() => setSearch(false)}
           >
-            <AiOutlineSearch size={"25"} />
+            <AiOutlineSearch size={"25"} className={btnStyles.icon}/>
           </div>
         </div>
       </div>
-      {session ? <HasAuth /> : <NoAuth />}
+      {session ? <HasAuth/> : <NoAuth/>}
     </div>
   )
 }
