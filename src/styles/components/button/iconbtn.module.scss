@@ -1,0 +1,13 @@
+@import "../../variable";
+
+.container {
+  position: relative;
+
+  * {
+    fill: $primary_text_color;
+  }
+}
+
+.icon {
+  fill: $primary_text_color;
+}
