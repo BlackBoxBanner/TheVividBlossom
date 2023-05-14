@@ -1,5 +1,5 @@
 import styles from "@/styles/components/display/landing/contact.module.scss"
-import {Cardo} from "@next/font/google";
+import {Cardo} from "next/font/google";
 import Link from "next/link";
 import {ComponentProps} from "react";
 

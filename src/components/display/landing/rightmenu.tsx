@@ -10,7 +10,7 @@ import {
 import {Button} from "@/components/button";
 import IconHover from "@/styles/components/button/iconwithhover";
 import {useRef, useState} from "react";
-import {Outfit} from "@next/font/google";
+import {Outfit} from "next/font/google";
 import {useSession} from "next-auth/react"
 
 
