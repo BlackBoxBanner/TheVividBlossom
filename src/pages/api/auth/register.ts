@@ -124,7 +124,7 @@ async function createUser(props: {
           card_expiry: props.payment.card_expiry!,
           cvv: props.payment.cvv!,
           card_type: "credit",
-          provider: "SCB",
+          provider: "MasterCard",
           create_at: new Date(),
         },
       },
