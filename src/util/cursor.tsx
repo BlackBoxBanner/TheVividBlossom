@@ -155,7 +155,7 @@ function Circle({children}: { children: React.ReactNode }) {
             mixBlendMode: "difference",
             backgroundColor: cursorColor,
             transition: 'transform 0.2s ease',
-            zIndex: 1000,
+            zIndex: 1000000,
           }}
         />
         <span
@@ -170,7 +170,7 @@ function Circle({children}: { children: React.ReactNode }) {
             pointerEvents: 'none',
             mixBlendMode: "difference",
             transition: 'transform 0.2s ease 0.2s, opacity 0.5s ease 0s',
-            zIndex: 1000,
+            zIndex: 1000000,
           }}
         />
       </div>
