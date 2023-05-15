@@ -1,0 +1,36 @@
+@import "../../variable";
+
+.input {
+  all: unset;
+  font-size: 1rem;
+  width: 100%;
+  padding: .25rem 0;
+  color: $primary_text_color;
+  border-bottom: 1px solid $primary_text_color;
+}
+
+.coverInput {
+  position: relative;
+}
+
+.inputContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-weight: lighter;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 1rem
+}
+
+.inputError {
+  border-color: $error_color;
+}
+
+.error {
+  color: $error_color;
+  font-size: .8125rem;
+}
