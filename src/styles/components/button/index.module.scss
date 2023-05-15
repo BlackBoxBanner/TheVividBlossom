@@ -6,6 +6,7 @@
   border: 1px solid $primary_text_color;
   border-radius: 2rem;
   transition: ease-in-out $btn_animation;
+  font-size: $landing_btn_font_menu;
 
   &:hover {
     color: $primary_color;
