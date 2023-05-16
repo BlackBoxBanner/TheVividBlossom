@@ -31,7 +31,7 @@ export default function ImageContainer(props: { stage: number }) {
       <div className={styles.content}>
         <ShowSets stage={props.stage} setsNumber={1}>
           <Image
-            style={{paddingRight: "2rem"}}
+            style={{paddingRight: "1rem"}}
             fill
             src={image1}
             alt={"flower1"}

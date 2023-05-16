@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import Head from "next/head";
-import {Cardo, Outfit} from "@next/font/google";
+import {Cardo, Outfit} from "next/font/google";
 
 import styles from "@/styles/pages/landing.module.scss"
 
@@ -14,7 +14,7 @@ import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
-const cardo = Cardo({weight: "400", style: "italic", subsets: ["latin", "greek"]})
+const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
 
 export default function Home() {
 
@@ -154,8 +154,8 @@ export default function Home() {
             >Contact</MenuButton>
           </div>
           <div className={styles.rightContent}>
-            <ImageContainer stage={state} />
-            <RightMenu />
+            <ImageContainer stage={state}/>
+            <RightMenu/>
           </div>
           <OverText
             colors={colorList}
@@ -176,11 +176,11 @@ export default function Home() {
           style={overMenu ? {opacity: "0.9", zIndex: 3} : {opacity: "0", zIndex: 0}}
         >
           {/*{seed && <InnerMenu list={flowerSeed}/>}*/}
-          {color && <InnerMenu list={flowerColor} />}
-          {type && <InnerMenu list={flowerType} />}
-          {season && <InnerMenu list={flowerSeason} />}
-          {recommend && <InnerMenu list={flowerRecommend} />}
-          {contact && <Contact />}
+          {color && <InnerMenu list={flowerColor}/>}
+          {type && <InnerMenu list={flowerType}/>}
+          {season && <InnerMenu list={flowerSeason}/>}
+          {recommend && <InnerMenu list={flowerRecommend}/>}
+          {contact && <Contact/>}
         </OverMenu>
       </main>
 
