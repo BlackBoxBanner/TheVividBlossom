@@ -13,6 +13,7 @@ import {useRef, useState} from "react";
 import {Outfit} from "next/font/google";
 import {useSession} from "next-auth/react"
 import btnStyles from "@/styles/components/button/iconbtn.module.scss"
+import {useRouter} from "next/router";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -52,8 +53,10 @@ export default function RightMenu() {
   }
 
   const NoAuth = () => {
+    const router = useRouter()
+
     return (
-      <div><Button>log in</Button></div>
+      <div><Button onClick={()=>router.push("/auth/login")}>log in</Button></div>
     )
   }
 

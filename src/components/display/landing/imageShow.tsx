@@ -2,11 +2,11 @@ import {ComponentProps} from "react";
 import styles from "@/styles/components/display/landing/showimage.module.scss";
 import Image from "next/image";
 
-import image1 from "@./public/landing/image1.jpg"
-import image2 from "@./public/landing/image2.jpg"
-import image3 from "@./public/landing/image3.jpg"
-import image4 from "@./public/landing/image4.jpg"
-import image5 from "@./public/landing/image5.jpg"
+import image1 from "@./public/pages/landing/image1.jpg"
+import image2 from "@./public/pages/landing/image2.jpg"
+import image3 from "@./public/pages/landing/image3.jpg"
+import image4 from "@./public/pages/landing/image4.jpg"
+import image5 from "@./public/pages/landing/image5.jpg"
 
 interface ShowSetsProps extends ComponentProps<"div"> {
   stage: number,

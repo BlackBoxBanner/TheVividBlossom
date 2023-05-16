@@ -71,13 +71,6 @@ export default async function handler(
     }
 
     const {user, address, payment} = req.body;
-    let userExist: string[] = []
-    await checkUserExist(user).then((e) => {
-      userExist.push("User already exists")
-    })
-
-    if (userExist) return res.status(400).json(userExist)
-
     checkUser(user)
     checkAddress(address)
     checkPayment(payment)
@@ -85,6 +78,14 @@ export default async function handler(
     if (errorArray) {
       return res.status(400).json(errorArray)
     }
+
+    let userExist: string[] = []
+    await checkUserExist(user).then((e) => {
+      userExist.push("User already exists")
+    })
+
+    if (userExist) return res.status(400).json(userExist)
+
 
     await createUser({user, payment, address})
 
