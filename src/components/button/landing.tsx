@@ -9,9 +9,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function MenuButton(props: ButtonProps) {
-	return (
-		<>
-			<button className={`${styles.btn} ${cardo.className}`}  {...props}>{props.children}</button>
-		</>
-	)
+  return (
+    <>
+      <button {...props} className={`${styles.btn} ${cardo.className} ${props.className}`}  >{props.children}</button>
+    </>
+  )
 }

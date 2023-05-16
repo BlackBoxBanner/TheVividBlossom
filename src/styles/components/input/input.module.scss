@@ -32,5 +32,20 @@
 
 .error {
   color: $error_color;
-  font-size: .8125rem;
+  font-size: $error_font_size;
+}
+
+.inputRelative {
+  position: relative;
+}
+
+.hideBtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.icon {
+  fill: $primary_text_color
 }

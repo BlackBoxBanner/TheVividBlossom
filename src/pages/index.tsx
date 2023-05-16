@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import Head from "next/head";
-import {Cardo, Outfit} from "next/font/google";
+import {Cardo} from "next/font/google";
 
 import styles from "@/styles/pages/landing.module.scss"
 
@@ -13,11 +13,10 @@ import ImageContainer from "@/components/display/landing/imageShow";
 import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
 
-const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
+// const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
 
 export default function Home() {
-
 
   const colorList = [
     {set1: "#DC6A74", set2: "#D61C4E"},
