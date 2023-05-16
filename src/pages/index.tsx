@@ -14,7 +14,7 @@ import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
-const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
+const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
 
 export default function Home() {
 
