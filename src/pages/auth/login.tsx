@@ -1,14 +1,18 @@
 import Head from "next/head";
-import styles from "@/styles/pages/auth/login.module.scss"
-import image from "@./public/pages/login/login_image.jpg"
 import Image from "next/image"
-import {FormInput} from "@/components/input";
+import Link from "next/link";
 import {Cardo} from "next/font/google";
+
+import styles from "@/styles/pages/auth/login.module.scss"
+
+import image from "@./public/pages/login/login_image.jpg"
+
+import {FormInput} from "@/components/input";
 import {ButtonLogin} from "@/components/button";
+
 import {useForm, SubmitHandler,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import Link from "next/link";
 import {signIn} from "next-auth/react"
 
 const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
