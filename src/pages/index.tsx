@@ -130,7 +130,7 @@ export default function Home() {
           href="/favicon.ico"
         />
       </Head>
-      <Button onClick={() => signOut()}>signOut</Button>
+      {/*<Button onClick={() => signOut()}>Sign out</Button>*/}
       <main style={{position: "relative"}}>
         <div className={styles.main + " " + cardo.className}>
           <div className={styles.sidebar + " " + styles.leftsidebar}>
