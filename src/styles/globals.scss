@@ -10,9 +10,12 @@ html,
 body {
   overflow-x: hidden;
   min-height: 100vh;
+  color: #2A2E21FF;
+  background-color: #FDFCF5FF;
+  fill: #2A2E21FF;
 }
 
-button,input,select,textarea {
+button, input, select, textarea {
   background-color: transparent;
   border-width: 0;
   font-family: inherit;
