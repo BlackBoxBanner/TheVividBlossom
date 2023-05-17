@@ -19,7 +19,8 @@ import prisma from "@/lib/prisma";
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
-const outfitLabel = Outfit({weight: "600", style: ["normal"], subsets: ["latin"]});
+const outfitLabel = Outfit({weight: "500", style: ["normal"], subsets: ["latin"]});
+const outfitStrong = Outfit({weight: "600", style: ["normal"], subsets: ["latin"]});
 
 
 interface RegisterProps {
@@ -52,7 +53,11 @@ export default function Register(props: RegisterProps) {
         return !usersEmail.includes(value)
       }, "Invalid email"),
       password: z.string().min(1, "Please enter your password"),
-      confirmedPassword: z.string().min(1, "Please enter your password"),
+      confirmedPassword: z.string().min(1, "Please enter your password").refine((value) => {
+        console.log(props)
+        const password = getValues("info.password") as string;
+        return value === password
+      }, "Passwords do not match. Please try again."),
       telephone: z.string().refine((value) => {
         const regex = /^\d{3} \d{3} \d{4}$/;
         return regex.test(value);
@@ -61,10 +66,10 @@ export default function Register(props: RegisterProps) {
     address: z.object({
       address_line_1: z.string().min(1, "Please fill out your address"),
       address_line_2: z.string(),
-      subDistrict: z.string().min(1, "Please fill out your address"),
-      district: z.string().min(1, "Please fill out your address"),
-      province: z.string().min(1, "Please fill out your address"),
-      zipcode: z.string().min(1, "Please fill out your address"),
+      subDistrict: z.string().min(1, "Please fill out your sub district"),
+      district: z.string().min(1, "Please fill out your district"),
+      province: z.string().min(1, "Please fill out your province"),
+      zipcode: z.string().min(1, "Please fill out your postal code"),
     }),
     payment: z.object({
       card_number: z.string()
@@ -92,10 +97,8 @@ export default function Register(props: RegisterProps) {
     watch,
     setError,
     clearErrors,
+    getValues
   } = useForm<DataProps>({resolver: zodResolver(schema)})
-  const onSubmit: SubmitHandler<DataProps> = async (data) => {
-    console.log(data)
-  }
 
   async function getImage(e: File) {
     const imageUrl = eventToUrl(e)
@@ -103,24 +106,35 @@ export default function Register(props: RegisterProps) {
   }
 
   useEffect(() => {
-    const subscription = watch((value) => {
+    const subscription = watch(async (value) => {
       if (value.info?.image[0]) {
         console.log(value.info?.image[0])
         getImage(value.info?.image[0]).then((e) => {
           setImage(e!)
         })
       }
-      if (value.info?.password != value.info?.confirmedPassword) {
-        setError("info.confirmedPassword", {
-          message: "Those passwords didn’t match. Try again.",
-          type: "value",
+    });
+    return () => subscription.unsubscribe();
+  }, [watch])
+
+  useEffect(() => {
+    const subscription = watch(async (value) => {
+      if (value.info?.password !== value.info?.confirmedPassword) {
+        await setError("info.confirmedPassword", {
+          message: "Passwords do not match. Please try again.",
         })
-      } else {
-        clearErrors("info.confirmedPassword")
+      }
+      if (value.info?.password === value.info?.confirmedPassword) {
+        clearErrors(["info.confirmedPassword", "info.password"])
       }
     });
     return () => subscription.unsubscribe();
   }, [clearErrors, setError, watch])
+
+  const onSubmit: SubmitHandler<DataProps> = async (data) => {
+    console.log(data)
+  }
+
   return (
     <>
       <Head>
@@ -239,7 +253,7 @@ interface StrongProps extends ComponentProps<"div"> {
 }
 
 function Strong(props: StrongProps) {
-  return <span className={outfitLabel.className}>{props.children}</span>
+  return <span className={outfitStrong.className}>{props.children}</span>
 }
 
 
