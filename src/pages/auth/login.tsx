@@ -14,6 +14,7 @@ import {useForm, SubmitHandler,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {signIn, useSession} from "next-auth/react"
+import {useRouter} from "next/router";
 
 const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
 
@@ -27,6 +28,8 @@ type DataProps = z.infer<typeof schema>
 
 export default function Login() {
 
+  const router = useRouter()
+
   const {register, handleSubmit, formState: {errors}, setError} = useForm<DataProps>({resolver: zodResolver(schema)})
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     await signIn("credentials", {
@@ -37,6 +40,8 @@ export default function Login() {
       if (e?.error) {
         const error = JSON.parse(e.error) as { name: "email" | "password", message: string }
         setError(error.name, {message: error.message})
+      } else {
+        router.push("/")
       }
     })
   }

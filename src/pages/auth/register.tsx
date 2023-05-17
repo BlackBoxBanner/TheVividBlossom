@@ -33,6 +33,7 @@ interface RegisterProps {
 
 export default function Register(props: RegisterProps) {
   const [usersEmail, setUsersEmail] = useState<string[]>([])
+  // const labelRef
 
   const router = useRouter()
 
@@ -174,9 +175,6 @@ export default function Register(props: RegisterProps) {
         router.push("/auth/login")
       }
     })
-
-    // todo : NOTE delete console.log()
-    console.log(req)
   }
 
   return (
@@ -207,6 +205,7 @@ export default function Register(props: RegisterProps) {
           <FormContainer header={"Personal Information"}>
             <div className={styles.imageContainer}>
               <div className={styles.imageCoverContainer}>
+                {/*TODO*/}
                 <label className={styles.imageInputContainer} htmlFor={"image"}>
                   {image ?
                     <div style={{position: "relative", height: "100%", width: "100%"}}>
@@ -217,10 +216,8 @@ export default function Register(props: RegisterProps) {
 
                   <input type="file" style={{display: "none"}} id={"image"} {...register("info.image")} accept="image/*"
                          className={styles.imageInput}/>
+                  <span/>
                 </label>
-                <div>
-                  <BsCamera size={20} className={styles.camera}/>
-                </div>
               </div>
             </div>
             <RegisterInput label={"First Name *"} placeholder={"First Name"}
