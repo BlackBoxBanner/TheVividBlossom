@@ -12,6 +12,8 @@ import {Contact} from "@/components/display/landing/contact";
 import ImageContainer from "@/components/display/landing/imageShow";
 import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
+import {signOut, useSession} from "next-auth/react";
+import {Button} from "@/components/button";
 
 // const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
@@ -108,6 +110,9 @@ export default function Home() {
     }
   ] satisfies ListItem[]
 
+  const {data,} = useSession()
+
+
   return (
     <>
       <Head>
@@ -125,6 +130,7 @@ export default function Home() {
           href="/favicon.ico"
         />
       </Head>
+      <Button onClick={() => signOut()}>signOut</Button>
       <main style={{position: "relative"}}>
         <div className={styles.main + " " + cardo.className}>
           <div className={styles.sidebar + " " + styles.leftsidebar}>

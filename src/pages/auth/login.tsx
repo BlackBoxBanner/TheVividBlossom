@@ -13,7 +13,7 @@ import {ButtonLogin} from "@/components/button";
 import {useForm, SubmitHandler,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {signIn} from "next-auth/react"
+import {signIn, useSession} from "next-auth/react"
 
 const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
 
@@ -37,7 +37,6 @@ export default function Login() {
       if (e?.error) {
         const error = JSON.parse(e.error) as { name: "email" | "password", message: string }
         setError(error.name, {message: error.message})
-
       }
     })
   }
@@ -58,6 +57,7 @@ export default function Login() {
           href="/favicon.ico"
         />
       </Head>
+
       <main className={styles.main}>
         <div className={styles.formContainer}>
           <h1 className={`${styles.title} ${cardo.className}`}>LOG IN</h1>

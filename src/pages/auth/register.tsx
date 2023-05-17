@@ -15,6 +15,9 @@ import mastercard from "@./public/pages/register/mastercard.svg"
 import visa from "@./public/pages/register/visa.svg"
 import {GetServerSideProps} from "next";
 import prisma from "@/lib/prisma";
+import axios from "axios"
+import {PostType} from "@/pages/api/auth/register";
+import {useRouter} from "next/router";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -30,11 +33,13 @@ interface RegisterProps {
 
 export default function Register(props: RegisterProps) {
   const [usersEmail, setUsersEmail] = useState<string[]>([])
+
+  const router = useRouter()
+
   useEffect(() => {
     props.user.map((e) => {
       setUsersEmail(prev => [...prev, e.email]);
     })
-    console.log(props)
   }, [props])
   type DataProps = z.infer<typeof schema>
 
@@ -54,7 +59,6 @@ export default function Register(props: RegisterProps) {
       }, "Invalid email"),
       password: z.string().min(1, "Please enter your password"),
       confirmedPassword: z.string().min(1, "Please enter your password").refine((value) => {
-        console.log(props)
         const password = getValues("info.password") as string;
         return value === password
       }, "Passwords do not match. Please try again."),
@@ -108,7 +112,6 @@ export default function Register(props: RegisterProps) {
   useEffect(() => {
     const subscription = watch(async (value) => {
       if (value.info?.image[0]) {
-        console.log(value.info?.image[0])
         getImage(value.info?.image[0]).then((e) => {
           setImage(e!)
         })
@@ -132,7 +135,48 @@ export default function Register(props: RegisterProps) {
   }, [clearErrors, setError, watch])
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
-    console.log(data)
+    const [monthStr, yearStr] = data.payment.card_expiry.split(" / ");
+    const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
+
+    const req = await axios({
+      baseURL: "/api/auth/register",
+      method: "POST",
+      headers: {
+        Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
+      },
+      data: {
+        user: {
+          image: image,
+          email: data.info.email,
+          first_name: data.info.first_name,
+          last_name: data.info.last_name,
+          telephone: data.info.telephone,
+          dob: data.info.dob,
+          password: data.info.password,
+        },
+        address: {
+          address_line1: data.address.address_line_1,
+          address_line2: data.address.address_line_2,
+          subDistrict: data.address.subDistrict,
+          district: data.address.district,
+          province: data.address.province,
+          zipcode: data.address.zipcode,
+        },
+        payment: {
+          card_number: data.payment.card_number,
+          name_on_card: data.payment.name_on_card,
+          card_expiry: date,
+          cvv: data.payment.cvv,
+        }
+      } as PostType
+    }).then((e) => {
+      if (e.status == 200) {
+        router.push("/auth/login")
+      }
+    })
+
+    // todo : NOTE delete console.log()
+    console.log(req)
   }
 
   return (
@@ -152,7 +196,6 @@ export default function Register(props: RegisterProps) {
           href="/favicon.ico"
         />
       </Head>
-      {/*<button onClick={() => console.log(image)}>log</button>*/}
       <main className={styles.main}>
         <div className={styles.header}>
           <div className={`${styles.title} ${cardo.className}`}>
