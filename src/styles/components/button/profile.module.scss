@@ -1,0 +1,10 @@
+@import "../../variable";
+
+.imageContailer {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid $primary_text_color;
+  border-radius: 50%;
+  overflow: hidden;
+}

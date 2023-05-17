@@ -20,7 +20,7 @@ function Btn(props: ListItem) {
       <Link className={styles.btn} onClick={props.onClick} href={""}>
         {props.title}
       </Link>
-      <span className={styles.line} />
+      <span className={styles.line}/>
     </>
   )
 }
@@ -29,8 +29,22 @@ export default function InnerMenu(props: InnerMenuProps) {
   return (
     <>
       <div className={`${styles.container} ${cardo.className}`}>
-        {props.list.map((e, key) => <Btn {...e} key={key} />)}
+        {props.list.map((e, key) => <Btn {...e} key={key}/>)}
       </div>
     </>
   )
+}
+
+export function ProfileBtn(props: ListItem) {
+  return (
+    <>
+      <Link className={styles.profileBtn} onClick={props.onClick} href={""}>
+        {props.title}
+      </Link>
+    </>
+  )
+}
+
+export function Line() {
+  return <span className={styles.line}/>
 }
