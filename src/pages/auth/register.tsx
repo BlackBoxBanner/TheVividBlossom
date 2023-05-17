@@ -19,7 +19,7 @@ import prisma from "@/lib/prisma";
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
-const outfitLabel = Outfit({weight: "500", style: ["normal"], subsets: ["latin"]});
+const outfitLabel = Outfit({weight: "600", style: ["normal"], subsets: ["latin"]});
 
 
 interface RegisterProps {
