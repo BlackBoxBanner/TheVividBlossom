@@ -41,7 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           />
           {initType === "password" && (
             type === "password" ? (
-              <button onClick={changeHandler} type="button" className={styles.hideBtn}>
+              <button onClick={changeHandler} type="button" className={styles.hideBtn} >
                 <AiOutlineEye size={25} className={styles.icon}/>
               </button>
             ) : (

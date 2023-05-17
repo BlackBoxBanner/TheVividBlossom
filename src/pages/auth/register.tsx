@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "@/styles/pages/auth/register.module.scss"
 import Image from "next/image"
-import {InputDate, RegisterInput, RegisterInputMask} from "@/components/input";
+import {RegisterInput, RegisterInputMask} from "@/components/input";
 import {Cardo, Outfit} from "next/font/google";
 import {ButtonLogin} from "@/components/button";
 import {SubmitHandler, useForm,} from "react-hook-form";
@@ -89,7 +89,9 @@ export default function Register(props: RegisterProps) {
     register,
     handleSubmit,
     formState: {errors},
-    watch
+    watch,
+    setError,
+    clearErrors,
   } = useForm<DataProps>({resolver: zodResolver(schema)})
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     console.log(data)
@@ -108,9 +110,17 @@ export default function Register(props: RegisterProps) {
           setImage(e!)
         })
       }
+      if (value.info?.password != value.info?.confirmedPassword) {
+        setError("info.confirmedPassword", {
+          message: "Those passwords didn’t match. Try again.",
+          type: "value",
+        })
+      } else {
+        clearErrors("info.confirmedPassword")
+      }
     });
     return () => subscription.unsubscribe();
-  }, [watch])
+  }, [clearErrors, setError, watch])
   return (
     <>
       <Head>
@@ -177,7 +187,7 @@ export default function Register(props: RegisterProps) {
             <RegisterInput label={"Address Line 1 *"}
                            error={errors.address?.address_line_1?.message}
                            placeholder={"House number, Village no, Street address"} {...register("address.address_line_1")}/>
-            <RegisterInput label={"Address Line 2 *"}
+            <RegisterInput label={"Address Line 2"}
                            error={errors.address?.address_line_2?.message}
                            placeholder={"Village / Building name, Floor number"} {...register("address.address_line_2")}/>
             <RegisterInput label={"Sub District *"}
@@ -234,7 +244,7 @@ function Strong(props: StrongProps) {
 
 
 // @ts-ignore
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const user = await prisma.user.findMany({
     select: {
       email: true
