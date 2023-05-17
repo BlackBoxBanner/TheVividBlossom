@@ -45,8 +45,8 @@ async function convertImageUrlToBase64(url: string): Promise<string | null> {
   }
 }
 
-function eventToUrl(e: React.ChangeEvent<HTMLInputElement>) {
-  const file = e.target.files?.[0]
+function eventToUrl(e: File) {
+  const file = e
   if (file) {
     return URL.createObjectURL(file);
   }

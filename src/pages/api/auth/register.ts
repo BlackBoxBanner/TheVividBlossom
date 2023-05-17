@@ -3,13 +3,15 @@ import {User, Address, User_Payment} from ".prisma/client";
 import {NextApiRequest, NextApiResponse} from "next";
 import {hash} from "bcrypt";
 
+export interface PostType {
+  user: Partial<User>
+  address: Partial<Address>
+  payment: Partial<User_Payment>
+}
+
 interface ExtendedNextApiRequest extends NextApiRequest {
   query: {};
-  body: {
-    user: Partial<User>
-    address: Partial<Address>
-    payment: Partial<User_Payment>
-  };
+  body: PostType
 }
 
 export default async function handler(
@@ -26,42 +28,6 @@ export default async function handler(
       break
   }
 
-  let errorArray: Record<string, string>[] = []
-
-  function checkUser(user: Partial<User>) {
-    if (user.first_name) errorArray.push({firstname: "Firstname is missing"})
-    if (user.last_name) errorArray.push({Lastname: "Lastname is missing"})
-    if (user.email) errorArray.push({email: "Email is missing"})
-    if (user.dob) errorArray.push({dateOfBirth: "Date of birth is missing"})
-    if (user.password) errorArray.push({password: "password is missing"})
-    if (user.telephone) errorArray.push({telephone: "Phone number is missing"})
-    // todo : check date of date is valid.
-  }
-
-  function checkAddress(address: Partial<Address>) {
-    if (address.address_line1) errorArray.push({address_line1: "Address line 1 is missing"})
-    if (address.subDistrict) errorArray.push({subDistrict: "Sub district is missing"})
-    if (address.district) errorArray.push({district: "District is missing"})
-    if (address.province) errorArray.push({province: "Province is missing"})
-    if (address.zipcode) errorArray.push({zipcode: "Zipcode is missing"})
-  }
-
-  function checkPayment(payment: Partial<User_Payment>) {
-    if (payment.card_number) errorArray.push({card_number: "Card number is missing"})
-    if (payment.name_on_card) errorArray.push({name_on_card: "Name on card is missing"})
-    if (payment.card_expiry) errorArray.push({card_expiry: "Card expire date is missing"})
-    if (payment.cvv) errorArray.push({cvv: "CVV code is missing"})
-  }
-
-  async function checkUserExist(user: Partial<User>) {
-    const exists = await prisma.user.findUnique({
-      where: {
-        email: user.email!
-      },
-    })
-    return !exists;
-  }
-
   async function postMethod() {
 
     if (
@@ -71,25 +37,66 @@ export default async function handler(
     }
 
     const {user, address, payment} = req.body;
-    checkUser(user)
-    checkAddress(address)
-    checkPayment(payment)
 
-    if (errorArray) {
+    let errorArray: Record<string, string>[] = []
+    console.log("Starting checking user input")
+    await checkUser(user)
+    await checkAddress(address)
+    await checkPayment(payment)
+    console.log("User input verify")
+
+
+    function checkUser(user: Partial<User>) {
+      if (!user.first_name) errorArray.push({firstname: "Firstname is missing"})
+      if (!user.last_name) errorArray.push({Lastname: "Lastname is missing"})
+      if (!user.email) errorArray.push({email: "Email is missing"})
+      if (!user.dob) errorArray.push({dateOfBirth: "Date of birth is missing"})
+      if (!user.password) errorArray.push({password: "password is missing"})
+      if (!user.telephone) errorArray.push({telephone: "Phone number is missing"})
+      // todo : check date of date is valid.
+    }
+
+    function checkAddress(address: Partial<Address>) {
+      if (!address.address_line1) errorArray.push({address_line1: "Address line 1 is missing"})
+      if (!address.subDistrict) errorArray.push({subDistrict: "Sub district is missing"})
+      if (!address.district) errorArray.push({district: "District is missing"})
+      if (!address.province) errorArray.push({province: "Province is missing"})
+      if (!address.zipcode) errorArray.push({zipcode: "Zipcode is missing"})
+    }
+
+    function checkPayment(payment: Partial<User_Payment>) {
+      if (!payment.card_number) errorArray.push({card_number: "Card number is missing"})
+      if (!payment.name_on_card) errorArray.push({name_on_card: "Name on card is missing"})
+      if (!payment.card_expiry) errorArray.push({card_expiry: "Card expire date is missing"})
+      if (!payment.cvv) errorArray.push({cvv: "CVV code is missing"})
+    }
+
+    async function checkUserExist(user: Partial<User>) {
+      const exists = await prisma.user.findUnique({
+        where: {
+          email: user.email!
+        },
+      })
+      return !!exists;
+    }
+
+    if (errorArray.length !== 0) {
       return res.status(400).json(errorArray)
     }
 
+    console.log("Starting check if user already exist.")
     let userExist: string[] = []
     await checkUserExist(user).then((e) => {
       userExist.push("User already exists")
     })
+    if (userExist.length === 0) return res.status(400).json(userExist)
+    console.log("User is not existed.")
 
-    if (userExist) return res.status(400).json(userExist)
+    console.log("Creating user")
+    await createUser({user, payment, address}).then((e) => console.log(e))
+    console.log("User created")
 
-
-    await createUser({user, payment, address})
-
-    res.status(200)
+    res.status(200).send("User created")
   }
 }
 
@@ -98,15 +105,20 @@ async function createUser(props: {
   address: Partial<Address>,
   payment: Partial<User_Payment>
 }) {
-  await prisma.user.create({
+  return await prisma.user.create({
     data: {
       first_name: props.user.first_name!,
       last_name: props.user.last_name!,
       telephone: props.user.telephone!,
-      dob: new Date(props.user.dob!),
+      dob: new Date(String(props.user.dob).split(" / ").reverse().join("-")).toISOString(),
       email: props.user.email!,
       password: await hash(props.user.password!, 10),
       register_on: new Date(),
+      UserImage: {
+        create: {
+          image: props.user.image!
+        }
+      },
       Address: {
         create: {
           address_line1: props.address.address_line1!,
@@ -130,5 +142,5 @@ async function createUser(props: {
         },
       },
     },
-  });
+  })
 }

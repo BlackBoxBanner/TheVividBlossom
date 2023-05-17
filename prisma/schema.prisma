@@ -2,19 +2,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// // For development
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-// // For production
+// // // For development
 // datasource db {
-//   provider          = "postgresql"
-//   url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
-//   directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-//   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
 // }
+
+// For production
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
 
 // ok
 enum ProductStatus {
@@ -27,24 +27,24 @@ enum ProductStatus {
 // ok
 model Product {
   id                   String                 @id @default(uuid())
-  title                String                 @db.VarChar(75)
-  image                String                 @db.VarChar(100)
-  description          String                 @db.Text
-  showing_instruction  String                 @db.Text
-  bloom_size           String                 @db.VarChar(75)
+  title                String
+  image                String
+  description          String
+  showing_instruction  String
+  bloom_size           String
   type_id              String
   color_id             String
   family_id            String
   cost_price           Float
   selling_price        Float
-  inventory            Int                    @db.Integer
-  sku                  Int                    @db.Integer
+  inventory            Int
+  sku                  Int
   discount_id          String?
   admin_id             String //
   status               ProductStatus          @default(OUT_OF_STOCK)
-  create_at            DateTime               @db.Date
-  modified_at          DateTime?              @db.Date
-  deleted_at           DateTime?              @db.Date
+  create_at            DateTime
+  modified_at          DateTime?
+  deleted_at           DateTime?
   category             Category[]
   Flower_Family        Flower_Family          @relation(fields: [family_id], references: [id])
   Seasonal_Information Seasonal_Information[]
@@ -59,55 +59,55 @@ model Product {
 // ok
 model Category {
   id          String    @id @default(uuid())
-  name        String    @db.VarChar(100)
-  description String    @db.Text
-  create_at   DateTime  @db.Date
-  modified_at DateTime? @db.Date
-  deleted_at  DateTime? @db.Date
+  name        String
+  description String
+  create_at   DateTime
+  modified_at DateTime?
+  deleted_at  DateTime?
   Product     Product[]
 }
 
 // ok
 model Flower_Family {
   id          String    @id @default(uuid())
-  name        String    @db.VarChar(75)
-  description String?   @db.Text
-  create_at   DateTime  @db.Date
-  modified_at DateTime? @db.Date
-  deleted_at  DateTime? @db.Date
+  name        String
+  description String?
+  create_at   DateTime
+  modified_at DateTime?
+  deleted_at  DateTime?
   Product     Product[]
 }
 
 // ok
 model Seasonal_Information {
   id          String    @id @default(uuid())
-  name        String    @db.VarChar(75)
-  description String?   @db.Text
-  create_at   DateTime  @db.Date
-  modified_at DateTime? @db.Date
-  deleted_at  DateTime? @db.Date
+  name        String
+  description String?
+  create_at   DateTime
+  modified_at DateTime?
+  deleted_at  DateTime?
   Product     Product[]
 }
 
 // ok
 model Flower_Type {
   id          String    @id @default(uuid())
-  name        String    @db.VarChar(75)
-  description String?   @db.Text
-  create_at   DateTime  @db.Date
-  modified_at DateTime? @db.Date
-  deleted_at  DateTime? @db.Date
+  name        String
+  description String?
+  create_at   DateTime
+  modified_at DateTime?
+  deleted_at  DateTime?
   Product     Product[]
 }
 
 // ok
 model Flower_Color {
   id          String    @id @default(uuid())
-  name        String    @db.VarChar(75)
-  description String?   @db.Text
-  create_at   DateTime  @db.Date
-  modified_at DateTime? @db.Date
-  deleted_at  DateTime? @db.Date
+  name        String
+  description String?
+  create_at   DateTime
+  modified_at DateTime?
+  deleted_at  DateTime?
   Product     Product[]
 }
 
@@ -120,13 +120,13 @@ enum Discount_Status {
 // ok
 model Discount {
   id               String          @id @default(uuid())
-  name             String          @db.VarChar(75)
-  description      String?         @db.Text
+  name             String
+  description      String?
   discount_precent Float
   status           Discount_Status @default(INACTIVE)
-  create_at        DateTime        @db.Date
-  modified_at      DateTime?       @db.Date
-  deleted_at       DateTime?       @db.Date
+  create_at        DateTime
+  modified_at      DateTime?
+  deleted_at       DateTime?
   Product          Product[]
 }
 
@@ -134,11 +134,11 @@ model Discount {
 model Product_Review {
   id           String    @id @default(uuid())
   product_id   String?
-  title        String    @db.VarChar(100)
-  rating       Int       @db.SmallInt
-  content      String?   @db.Text
-  published_on DateTime  @db.Date
-  deleted_at   DateTime? @db.Date
+  title        String
+  rating       Int
+  content      String?
+  published_on DateTime
+  deleted_at   DateTime?
 
   Product Product? @relation(fields: [product_id], references: [id])
 }
@@ -156,37 +156,45 @@ model User {
   email         String?    @unique
   emailVerified DateTime?
   image         String?
-  first_name    String     @db.VarChar(50)
-  last_name     String     @db.VarChar(50)
+  first_name    String
+  last_name     String
   password      String
-  telephone     String     @db.VarChar(15)
-  dob           DateTime   @db.Date
-  register_on   DateTime   @db.Date
-  last_login    DateTime?  @db.Date
+  telephone     String
+  dob           DateTime
+  register_on   DateTime
+  last_login    DateTime?
   acc_status    Acc_status @default(ACTIVE)
-  modified_at   DateTime?  @db.Date
-  deleted_at    DateTime?  @db.Date
+  modified_at   DateTime?
+  deleted_at    DateTime?
 
   accounts      Account[]
   sessions      Session[]
   User_Payment  User_Payment[]
   Address       Address[]
   Order_details Order_details[]
+  UserImage     UserImage[]
+}
+
+model UserImage {
+  id     String  @id @default(cuid())
+  image  String?
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
 
 // ok
 model User_Payment {
   id           String    @id @default(uuid())
   user_id      String
-  card_type    String    @db.VarChar(50)
-  provider     String    @db.VarChar(75)
-  name_on_card String    @db.VarChar(100)
-  card_number  String    @db.VarChar(16)
-  cvv          String    @db.VarChar(4)
-  card_expiry  DateTime  @db.Date
-  create_at    DateTime  @db.Date
-  modified_at  DateTime? @db.Date
-  deleted_at   DateTime? @db.Date
+  card_type    String
+  provider     String
+  name_on_card String
+  card_number  String
+  cvv          String
+  card_expiry  DateTime
+  create_at    DateTime
+  modified_at  DateTime?
+  deleted_at   DateTime?
 
   User User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
@@ -217,8 +225,8 @@ model Order_Transaction {
   type        CardType
   amount      Float
   status      OrderTransactionStatus
-  create_at   DateTime               @db.Date
-  modified_at DateTime?              @db.Date
+  create_at   DateTime
+  modified_at DateTime?
 
   Order        Order_details @relation(fields: [order_id], references: [id])
   User_Payment User_Payment  @relation(fields: [payment_id], references: [id])
@@ -227,12 +235,12 @@ model Order_Transaction {
 // ok
 model Shipping {
   id                       String          @id @default(uuid())
-  shipping_method          String          @db.VarChar(50)
-  courier_service_provider String          @db.VarChar(75)
+  shipping_method          String
+  courier_service_provider String
   shipping_cost            Float
-  create_at                DateTime        @db.Date
-  modified_at              DateTime?       @db.Date
-  deleted_at               DateTime?       @db.Date
+  create_at                DateTime
+  modified_at              DateTime?
+  deleted_at               DateTime?
   Order_details            Order_details[]
 }
 
@@ -240,15 +248,15 @@ model Shipping {
 model Address {
   id            String    @id @default(uuid())
   user_id       String
-  address_line1 String    @db.VarChar(100)
-  address_line2 String?   @db.VarChar(100)
-  subDistrict   String    @db.VarChar(50)
-  district      String    @db.VarChar(50)
-  province      String    @db.VarChar(50)
-  zipcode       String    @db.VarChar(5)
-  create_at     DateTime  @db.Date
-  modified_at   DateTime? @db.Date
-  deleted_at    DateTime? @db.Date
+  address_line1 String
+  address_line2 String?
+  subDistrict   String
+  district      String
+  province      String
+  zipcode       String
+  create_at     DateTime
+  modified_at   DateTime?
+  deleted_at    DateTime?
 
   User          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
   Order_details Order_details[]
@@ -258,9 +266,9 @@ model Address {
 model Order_Status {
   id            String         @id @default(uuid())
   status        StatusType     @unique @default(PENDING)
-  description   String?        @db.Text
-  create_at     DateTime       @db.Date
-  modified_at   DateTime?      @db.Date
+  description   String?
+  create_at     DateTime
+  modified_at   DateTime?
   Order_details Order_details?
 }
 
@@ -271,9 +279,9 @@ model Order_Item {
   product_id  String?
   price       Float
   discount    Float?
-  quantity    Int       @db.SmallInt
-  create_at   DateTime  @db.Date
-  modified_at DateTime? @db.Date
+  quantity    Int
+  create_at   DateTime
+  modified_at DateTime?
 
   Order   Order_details @relation(fields: [order_id], references: [id])
   Product Product?      @relation(fields: [product_id], references: [id])
@@ -294,13 +302,13 @@ model Order_details {
   status_id       String    @unique
   subtotal_amount Float
   product_discout Float
-  tax_amount      Int       @db.Integer
+  tax_amount      Int
   shipping_id     String
-  shipping_date   DateTime  @db.Date
+  shipping_date   DateTime
   address_id      String
   total_amount    Float
-  create_at       DateTime  @db.Date
-  modified_at     DateTime? @db.Date
+  create_at       DateTime
+  modified_at     DateTime?
   admin_UserId    String    @unique
 
   Status            Order_Status        @relation(fields: [status_id], references: [id])
@@ -322,23 +330,23 @@ enum AdminType {
 model Admin_Type {
   id          String       @id @default(uuid())
   type        AdminType    @unique @default(staff)
-  permission  String       @db.VarChar(100)
-  create_at   DateTime     @db.Date
-  modified_at DateTime?    @db.Date
+  permission  String
+  create_at   DateTime
+  modified_at DateTime?
   Admin_User  Admin_User[]
 }
 
 // ok
 model Admin_User {
   id            String    @id @default(uuid())
-  usernames     String    @unique @db.VarChar(50)
+  usernames     String    @unique
   password      String
-  first_name    String    @db.VarChar(50)
-  last_name     String    @db.VarChar(50)
-  last_login    DateTime  @db.Date
-  create_at     DateTime  @db.Date
-  modified_at   DateTime? @db.Date
-  deleted_at    DateTime? @db.Date
+  first_name    String
+  last_name     String
+  last_login    DateTime
+  create_at     DateTime
+  modified_at   DateTime?
+  deleted_at    DateTime?
   admin_type_id String?
   Product       Product[]
 
@@ -351,12 +359,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

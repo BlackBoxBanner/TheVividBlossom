@@ -7,6 +7,10 @@
   padding: .25rem 0;
   color: $primary_text_color;
   border-bottom: 1px solid $primary_text_color;
+
+  ::placeholder {
+    color: $primary_placeholder_text_color;
+  }
 }
 
 .coverInput {
@@ -22,6 +26,7 @@
 }
 
 .label {
+  color: $primary_text_color;
   font-weight: bold;
   font-size: 1rem
 }
@@ -37,9 +42,22 @@
 
 .inputRelative {
   position: relative;
+
+  input[type="date"] {
+    width: 100%;
+
+    ::placeholder {
+      color: $primary_placeholder_text_color;
+    }
+
+    &:focus {
+
+    }
+  }
 }
 
 .hideBtn {
+  all: unset;
   position: absolute;
   right: 0;
   top: 0;
@@ -48,4 +66,7 @@
 
 .icon {
   fill: $primary_text_color
+}
+
+.date {
 }

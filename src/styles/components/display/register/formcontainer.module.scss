@@ -1,0 +1,33 @@
+@import "../../../variable";
+
+.container {
+  border: 1px solid $primary_text_color;
+  padding: 1rem 12rem;
+  width: 100%;
+}
+
+.formHeader {
+  font-size: 1.125rem;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1rem;
+  position: relative;
+  color: $primary_text_color;
+
+  &:after {
+    content: "";
+    background-color: $primary_text_color;
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+}
+
+.content {
+  padding: 1.5rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
