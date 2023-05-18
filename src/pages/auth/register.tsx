@@ -44,15 +44,20 @@ export default function Register(props: RegisterProps) {
   }, [props])
   type DataProps = z.infer<typeof schema>
 
-  const dateRegex = /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/;
-
   const schema = z.object({
     info: z.object({
       image: z.any(),
       first_name: z.string().min(1, "Please fill out your first name"),
       last_name: z.string().min(1, "Please fill out your last name"),
-      dob: z.string().min(1, "Invalid birthdate").optional().refine((value) => {
-        return !dateRegex.test(value!);
+      dob: z.string().min(14, "Invalid birthdate").optional().refine((value) => {
+        const date = value?.split(" / ")
+        if (parseInt(date![0]) < 0) return
+        if (parseInt(date![0]) > 31) return
+        if (parseInt(date![1]) < 0) return
+        if (parseInt(date![1]) > 12) return
+        if (parseInt(date![2]) < 1500) return
+        if (parseInt(date![2]) > 3000) return
+        return true
       }, "Invalid birthdate format (DD / MM / YYYY)"),
       email: z.string().email().refine((value) => {
         // Add your disallowed email addresses to this array
