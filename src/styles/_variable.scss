@@ -12,3 +12,13 @@ $error_color: #AC001A;
 
 $line_animation: 800ms;
 $btn_animation: 500ms;
+
+@mixin animate($animation,$duration,$method,$times){
+  animation: $animation $duration $method $times;
+}
+
+@mixin keyframes($name){
+  @keyframes #{$name}{
+    @content;
+  }
+}

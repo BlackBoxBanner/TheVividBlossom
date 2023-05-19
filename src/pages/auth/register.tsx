@@ -18,6 +18,7 @@ import prisma from "@/lib/prisma";
 import axios from "axios"
 import {PostType} from "@/pages/api/auth/register";
 import {useRouter} from "next/router";
+import {useProcessing} from "@/components/display/processing/container";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -33,6 +34,7 @@ interface RegisterProps {
 
 export default function Register(props: RegisterProps) {
   const [usersEmail, setUsersEmail] = useState<string[]>([])
+  const {Processing, setState} = useProcessing()
   // const labelRef
 
   const router = useRouter()
@@ -144,6 +146,8 @@ export default function Register(props: RegisterProps) {
     const [monthStr, yearStr] = data.payment.card_expiry.split(" / ");
     const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
 
+    setState(prevState => !prevState)
+
     const req = await axios({
       baseURL: "/api/auth/register",
       method: "POST",
@@ -199,6 +203,7 @@ export default function Register(props: RegisterProps) {
           href="/favicon.ico"
         />
       </Head>
+      <Processing/>
       <main className={styles.main}>
         <div className={styles.header}>
           <div className={`${styles.title} ${cardo.className}`}>

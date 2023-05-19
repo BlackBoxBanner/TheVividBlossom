@@ -14,7 +14,7 @@ export function Profile(props: Profile) {
     <>
       <button onClick={() => props.onClick}>
         <div className={styles.imageContailer} onClick={() => props.onClick}>
-          {props.image && <Image src={props.image} alt={"User profile"} fill onClick={() => props.onClick}/>}
+          {props.image ? <Image src={props.image} alt={"User profile"} fill onClick={() => props.onClick}/>:"test"}
         </div>
       </button>
     </>
