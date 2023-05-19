@@ -13,7 +13,7 @@ import {ButtonLogin} from "@/components/button";
 import {useForm, SubmitHandler,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {signIn, useSession} from "next-auth/react"
+import {signIn} from "next-auth/react"
 import {useRouter} from "next/router";
 import {useState} from "react";
 

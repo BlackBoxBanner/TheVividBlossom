@@ -10,7 +10,7 @@ import * as z from "zod";
 import {FormContainer} from "@/components/display/register/formcontainer";
 import {convertImageUrlToBase64, eventToUrl} from "@/hook/urltobase64";
 import {ComponentProps, useEffect, useState} from "react";
-import {BsCamera, BsPersonFill} from "react-icons/bs";
+import {BsPersonFill} from "react-icons/bs";
 import mastercard from "@./public/pages/register/mastercard.svg"
 import visa from "@./public/pages/register/visa.svg"
 import {GetServerSideProps} from "next";
@@ -148,7 +148,7 @@ export default function Register(props: RegisterProps) {
 
     setState(prevState => !prevState)
 
-    const req = await axios({
+    await axios({
       baseURL: "/api/auth/register",
       method: "POST",
       headers: {
