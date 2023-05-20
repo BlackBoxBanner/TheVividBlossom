@@ -26,5 +26,7 @@
 }
 
 .default {
+  transition: all ease-in-out 1s;
   display: none;
+  opacity: 1;
 }
