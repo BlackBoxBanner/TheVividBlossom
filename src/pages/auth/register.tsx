@@ -3,7 +3,7 @@ import styles from "@/styles/pages/auth/register.module.scss"
 import Image from "next/image"
 import {RegisterInput, RegisterInputMask} from "@/components/input";
 import {Cardo, Outfit} from "next/font/google";
-import {Button, ButtonLogin} from "@/components/button";
+import { ButtonLogin} from "@/components/button";
 import {SubmitHandler, useForm,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
