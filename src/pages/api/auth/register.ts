@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import {User, Address, User_Payment} from ".prisma/client";
 import {NextApiRequest, NextApiResponse} from "next";
 import {hash} from "bcrypt";
+import {breakImage} from "@/hook/image";
+import {uploadImage} from "@/hook/api/image";
 
 export interface PostType {
   user: Partial<User>
@@ -105,7 +107,9 @@ async function createUser(props: {
   address: Partial<Address>,
   payment: Partial<User_Payment>
 }) {
-  return await prisma.user.create({
+  const imageId = await uploadImage(props.user.image);
+
+  const user = await prisma.user.create({
     data: {
       first_name: props.user.first_name!,
       last_name: props.user.last_name!,
@@ -114,11 +118,7 @@ async function createUser(props: {
       email: props.user.email!,
       password: await hash(props.user.password!, 10),
       register_on: new Date(),
-      UserImage: {
-        create: {
-          image: props.user.image!
-        }
-      },
+      imageId: imageId.id,
       Address: {
         create: {
           address_line1: props.address.address_line1!,
@@ -144,3 +144,4 @@ async function createUser(props: {
     },
   })
 }
+

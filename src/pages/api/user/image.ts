@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import prisma from "@/lib/prisma";
+import {getImage} from "@/hook/api/image";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   query: {
@@ -19,20 +20,20 @@ export default async function handler(
 
   if (!email) return res.status(400).send("No email provided!");
 
-  const imageData = await prisma.user.findUnique({
+  const imageId = await prisma.user.findUnique({
     where: {
       email
     },
     select: {
-      UserImage: {
-        select: {
-          image: true
-        }
-      }
+      imageId: true
     }
   })
 
-  const image = imageData?.UserImage[0].image! || null
+
+  if (!imageId?.imageId) return res.status(200).send("imageId not found!")
+
+  const image = await getImage(imageId.imageId)
+  if (!image) return res.status(404).send("User not found!")
 
   res.status(200).json({image});
 }

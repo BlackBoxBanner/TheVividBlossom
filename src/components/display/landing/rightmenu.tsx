@@ -31,7 +31,7 @@ export default function RightMenu(props: RightMenuProps) {
 
   useEffect(() => {
     async function fetchData() {
-      const imageRes = await axios<{ image: string }>({
+      const imageRes = await axios<{ image: string | undefined | null }>({
         method: "GET",
         baseURL: "/api/user/image",
         params: {
@@ -43,8 +43,8 @@ export default function RightMenu(props: RightMenuProps) {
 
     if (!image && session?.user?.email) {
       fetchData().then((e) => {
+        if (!e.image) return
         setImage(e.image)
-        console.log(e)
       })
     }
 

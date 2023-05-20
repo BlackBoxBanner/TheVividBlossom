@@ -149,6 +149,7 @@ model User {
   email         String?    @unique
   emailVerified DateTime?
   image         String?
+  imageId       String?
   first_name    String
   last_name     String
   password      String
@@ -165,14 +166,27 @@ model User {
   User_Payment  User_Payment[]
   Address       Address[]
   Order_details Order_details[]
-  UserImage     UserImage[]
 }
 
-model UserImage {
-  id     String  @id @default(cuid())
-  image  String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String?
+model image {
+  id     String @id @default(cuid())
+  prefix String
+  data1  String @db.Text
+  data2  String @db.Text
+  data3  String @db.Text
+  data4  String @db.Text
+  data5  String @db.Text
+  data6  String @db.Text
+  data7  String @db.Text
+  data8  String @db.Text
+  data9  String @db.Text
+  data10 String @db.Text
+  data11 String @db.Text
+  data12 String @db.Text
+  data13 String @db.Text
+  data14 String @db.Text
+  data15 String @db.Text
+  data16 String @db.Text
 }
 
 // ok
@@ -256,16 +270,6 @@ model Address {
 }
 
 // ok
-model Order_Status {
-  id            String         @id @default(uuid())
-  status        StatusType     @unique @default(PENDING)
-  description   String?
-  create_at     DateTime
-  modified_at   DateTime?
-  Order_details Order_details?
-}
-
-// ok
 model Order_Item {
   id          String    @id @default(uuid())
   order_id    String
@@ -290,9 +294,9 @@ enum StatusType {
 
 // ok
 model Order_details {
-  id              String    @id @default(uuid())
+  id              String     @id @default(uuid())
   user_id         String
-  status_id       String    @unique
+  status          StatusType
   subtotal_amount Float
   product_discout Float
   tax_amount      Int
@@ -302,9 +306,7 @@ model Order_details {
   total_amount    Float
   create_at       DateTime
   modified_at     DateTime?
-  admin_UserId    String    @unique
 
-  Status            Order_Status        @relation(fields: [status_id], references: [id])
   User              User                @relation(fields: [user_id], references: [id])
   shipping          Shipping            @relation(fields: [shipping_id], references: [id])
   Address           Address             @relation(fields: [address_id], references: [id])

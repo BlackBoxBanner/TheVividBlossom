@@ -19,6 +19,7 @@ import axios from "axios"
 import {PostType} from "@/pages/api/auth/register";
 import {useRouter} from "next/router";
 import {useProcessing} from "@/components/display/processing/container";
+import {getImage} from "@/hook/getImage";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -112,10 +113,6 @@ export default function Register(props: RegisterProps) {
     getValues
   } = useForm<DataProps>({resolver: zodResolver(schema)})
 
-  async function getImage(e: File) {
-    const imageUrl = eventToUrl(e)
-    return await convertImageUrlToBase64(imageUrl!)
-  }
 
   useEffect(() => {
     const subscription = watch(async (value) => {
@@ -215,7 +212,6 @@ export default function Register(props: RegisterProps) {
           <FormContainer header={"Personal Information"}>
             <div className={styles.imageContainer}>
               <div className={styles.imageCoverContainer}>
-                {/*TODO*/}
                 <label className={styles.imageInputContainer} htmlFor={"image"}>
                   {image ?
                     <div style={{position: "relative", height: "100%", width: "100%"}}>
