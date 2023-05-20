@@ -37,3 +37,18 @@
     color: $inner_btn_hover;
   }
 }
+
+.profileBtn {
+  all: unset;
+  padding: .75rem 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5.5rem;
+  transition: ease-in-out all $btn_animation;;
+
+  &:hover {
+    color: $inner_btn_hover;
+  }
+}

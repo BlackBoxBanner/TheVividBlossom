@@ -9,7 +9,7 @@
   display: flex;
 
   &:before {
-    transition: ease $line_animation;
+    transition: ease $line_animation/2;
     content: "";
     width: 0;
     height: 1px;

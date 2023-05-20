@@ -50,3 +50,16 @@
   display: flex;
   align-items: center;
 }
+
+.profileContainer {
+  padding: 4.5rem 14%;
+  width: 100%;
+  color: $primary_color;
+  position: relative;
+}
+
+.line {
+  padding: .25px;
+  background-color: $primary_color;
+}
+

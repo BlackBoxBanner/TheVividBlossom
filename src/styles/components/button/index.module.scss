@@ -13,3 +13,25 @@
     background-color: $primary_text_color;
   }
 }
+
+.logins {
+  color: $primary_color;
+  background-color: $primary_text_color;
+  font-size: 1rem;
+  border: none;
+
+  &:hover {
+    color: $primary_color;
+    background-color: $primary_btn_hover;
+    border-color: $primary_btn_hover;
+  }
+
+}
+
+.disable {
+  background-color: $primary_btn_hover;
+
+  div {
+    width: fit-content;
+  }
+}

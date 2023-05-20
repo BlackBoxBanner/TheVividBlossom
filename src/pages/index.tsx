@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import Head from "next/head";
-import {Cardo, Outfit} from "next/font/google";
+import {Cardo} from "next/font/google";
 
 import styles from "@/styles/pages/landing.module.scss"
 
@@ -12,12 +12,16 @@ import {Contact} from "@/components/display/landing/contact";
 import ImageContainer from "@/components/display/landing/imageShow";
 import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
+import {signOut, useSession} from "next-auth/react";
+import {Button} from "@/components/button";
+import {GetServerSideProps} from "next";
+import prisma from "@/lib/prisma";
+import {ProfileMenu} from "@/components/display/landing/profile";
 
-const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
-const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
+// const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
+const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
 
 export default function Home() {
-
 
   const colorList = [
     {set1: "#DC6A74", set2: "#D61C4E"},
@@ -34,6 +38,7 @@ export default function Home() {
   const [type, setType] = useState(false)
   const [season, setSeason] = useState(false)
   const [recommend, setRecommend] = useState(false)
+  const [image, setImage] = useState(false)
 
 
   useEffect(() => {
@@ -109,6 +114,9 @@ export default function Home() {
     }
   ] satisfies ListItem[]
 
+  const {data,} = useSession()
+
+
   return (
     <>
       <Head>
@@ -155,7 +163,7 @@ export default function Home() {
           </div>
           <div className={styles.rightContent}>
             <ImageContainer stage={state}/>
-            <RightMenu/>
+            <RightMenu onProfile={setImage} setOverMenu={setOverMenu}/>
           </div>
           <OverText
             colors={colorList}
@@ -172,6 +180,7 @@ export default function Home() {
             setType(false)
             setSeason(false)
             setRecommend(false)
+            setImage(false)
           }}
           style={overMenu ? {opacity: "0.9", zIndex: 3} : {opacity: "0", zIndex: 0}}
         >
@@ -181,9 +190,9 @@ export default function Home() {
           {season && <InnerMenu list={flowerSeason}/>}
           {recommend && <InnerMenu list={flowerRecommend}/>}
           {contact && <Contact/>}
+          {image && <ProfileMenu/>}
         </OverMenu>
       </main>
-
     </>
   )
 }

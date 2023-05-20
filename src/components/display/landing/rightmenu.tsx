@@ -9,20 +9,59 @@ import {
 } from "react-icons/ai";
 import {Button} from "@/components/button";
 import IconHover from "@/components/button/iconwithhover";
-import {useRef, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
 import {Outfit} from "next/font/google";
 import {useSession} from "next-auth/react"
 import btnStyles from "@/styles/components/button/iconbtn.module.scss"
+import {useRouter} from "next/router";
+import {Profile} from "@/components/button/profile";
+import axios from "axios";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 
-export default function RightMenu() {
+interface RightMenuProps {
+  onProfile: Dispatch<SetStateAction<boolean>>
+  setOverMenu: Dispatch<SetStateAction<boolean>>
+}
+
+export default function RightMenu(props: RightMenuProps) {
   const {data: session, status} = useSession()
+  const [image, setImage] = useState<string>()
+
+  useEffect(() => {
+    async function fetchData() {
+      const imageRes = await axios<{ image: string | undefined | null }>({
+        method: "GET",
+        baseURL: "/api/user/image",
+        params: {
+          email: session?.user?.email
+        }
+      })
+      return imageRes.data
+    }
+
+    if (!image && session?.user?.email) {
+      fetchData().then((e) => {
+        if (!e.image) return
+        setImage(e.image)
+      })
+    }
+
+    return
+  }, [image, session?.user?.email])
 
   const HasAuth = () => {
     return (
       <>
+        <div>
+          <div onClick={() => {
+            props.onProfile(true)
+            props.setOverMenu(true)
+          }}>
+            <Profile email={session?.user?.email!} image={image}/>
+          </div>
+        </div>
         <div>
           <IconHover
             outlineIcon={<AiOutlineMessage/>}
@@ -47,13 +86,16 @@ export default function RightMenu() {
             primaryTextColor={styles.primaryTextColor}
           />
         </div>
+
       </>
     )
   }
 
   const NoAuth = () => {
+    const router = useRouter()
+
     return (
-      <div><Button>log in</Button></div>
+      <div><Button onClick={() => router.push("/auth/login")}>log in</Button></div>
     )
   }
 
