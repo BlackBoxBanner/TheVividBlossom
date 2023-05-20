@@ -1,0 +1,32 @@
+@import "../../../variable";
+
+.screen {
+  overflow: hidden;
+  //height: 100vh;
+}
+
+
+.content, .processing {
+  position: fixed;
+  overflow: hidden;
+  z-index: 11;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.processing {
+  opacity: 0.8;
+  z-index: 10;
+  background-color: $primary_text_color;
+}
+
+.default {
+  transition: all ease-in-out 1s;
+  display: none;
+  opacity: 1;
+}

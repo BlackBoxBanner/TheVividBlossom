@@ -13,8 +13,9 @@ import {ButtonLogin} from "@/components/button";
 import {useForm, SubmitHandler,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {signIn, useSession} from "next-auth/react"
+import {signIn} from "next-auth/react"
 import {useRouter} from "next/router";
+import {useState} from "react";
 
 const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
 
@@ -29,9 +30,11 @@ type DataProps = z.infer<typeof schema>
 export default function Login() {
 
   const router = useRouter()
+  const [disable, setDisable] = useState(false)
 
   const {register, handleSubmit, formState: {errors}, setError} = useForm<DataProps>({resolver: zodResolver(schema)})
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
+    setDisable(true)
     await signIn("credentials", {
       email: data.email,
       password: data.password,
@@ -40,6 +43,7 @@ export default function Login() {
       if (e?.error) {
         const error = JSON.parse(e.error) as { name: "email" | "password", message: string }
         setError(error.name, {message: error.message})
+        setDisable(false)
       } else {
         router.push("/")
       }
@@ -76,7 +80,7 @@ export default function Login() {
                 <Link href={""} className={`${styles.forgetPassword}`} style={cardo.style}>Forget password ?</Link>
               </div>
             </div>
-            <ButtonLogin font={"Outfit"} style={{marginTop: "1rem"}}>
+            <ButtonLogin disable={disable} font={"Outfit"} style={{marginTop: "1rem"}}>
               Log In
             </ButtonLogin>
           </form>

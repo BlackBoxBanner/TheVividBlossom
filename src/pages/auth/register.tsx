@@ -3,14 +3,13 @@ import styles from "@/styles/pages/auth/register.module.scss"
 import Image from "next/image"
 import {RegisterInput, RegisterInputMask} from "@/components/input";
 import {Cardo, Outfit} from "next/font/google";
-import {ButtonLogin} from "@/components/button";
+import { ButtonLogin} from "@/components/button";
 import {SubmitHandler, useForm,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {FormContainer} from "@/components/display/register/formcontainer";
-import {convertImageUrlToBase64, eventToUrl} from "@/hook/urltobase64";
 import {ComponentProps, useEffect, useState} from "react";
-import {BsCamera, BsPersonFill} from "react-icons/bs";
+import {BsPersonFill} from "react-icons/bs";
 import mastercard from "@./public/pages/register/mastercard.svg"
 import visa from "@./public/pages/register/visa.svg"
 import {GetServerSideProps} from "next";
@@ -18,6 +17,9 @@ import prisma from "@/lib/prisma";
 import axios from "axios"
 import {PostType} from "@/pages/api/auth/register";
 import {useRouter} from "next/router";
+import {useProcessing} from "@/components/display/processing/container";
+import {getImage} from "@/hook/getImage";
+import {WaitingContent} from "@/components/display/processing/waiting";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -33,6 +35,7 @@ interface RegisterProps {
 
 export default function Register(props: RegisterProps) {
   const [usersEmail, setUsersEmail] = useState<string[]>([])
+  const {Processing, setState} = useProcessing()
   // const labelRef
 
   const router = useRouter()
@@ -44,15 +47,20 @@ export default function Register(props: RegisterProps) {
   }, [props])
   type DataProps = z.infer<typeof schema>
 
-  const dateRegex = /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/;
-
   const schema = z.object({
     info: z.object({
       image: z.any(),
       first_name: z.string().min(1, "Please fill out your first name"),
       last_name: z.string().min(1, "Please fill out your last name"),
-      dob: z.string().min(1, "Invalid birthdate").optional().refine((value) => {
-        return !dateRegex.test(value!);
+      dob: z.string().min(14, "Invalid birthdate").optional().refine((value) => {
+        const date = value?.split(" / ")
+        if (parseInt(date![0]) < 0) return
+        if (parseInt(date![0]) > 31) return
+        if (parseInt(date![1]) < 0) return
+        if (parseInt(date![1]) > 12) return
+        if (parseInt(date![2]) < 1500) return
+        if (parseInt(date![2]) > 3000) return
+        return true
       }, "Invalid birthdate format (DD / MM / YYYY)"),
       email: z.string().email().refine((value) => {
         // Add your disallowed email addresses to this array
@@ -105,10 +113,6 @@ export default function Register(props: RegisterProps) {
     getValues
   } = useForm<DataProps>({resolver: zodResolver(schema)})
 
-  async function getImage(e: File) {
-    const imageUrl = eventToUrl(e)
-    return await convertImageUrlToBase64(imageUrl!)
-  }
 
   useEffect(() => {
     const subscription = watch(async (value) => {
@@ -139,7 +143,9 @@ export default function Register(props: RegisterProps) {
     const [monthStr, yearStr] = data.payment.card_expiry.split(" / ");
     const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
 
-    const req = await axios({
+    setState(prevState => !prevState)
+
+    await axios({
       baseURL: "/api/auth/register",
       method: "POST",
       headers: {
@@ -194,6 +200,9 @@ export default function Register(props: RegisterProps) {
           href="/favicon.ico"
         />
       </Head>
+      <Processing>
+        <WaitingContent title={"registration"}/>
+      </Processing>
       <main className={styles.main}>
         <div className={styles.header}>
           <div className={`${styles.title} ${cardo.className}`}>
@@ -205,7 +214,6 @@ export default function Register(props: RegisterProps) {
           <FormContainer header={"Personal Information"}>
             <div className={styles.imageContainer}>
               <div className={styles.imageCoverContainer}>
-                {/*TODO*/}
                 <label className={styles.imageInputContainer} htmlFor={"image"}>
                   {image ?
                     <div style={{position: "relative", height: "100%", width: "100%"}}>

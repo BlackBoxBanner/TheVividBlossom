@@ -22,7 +22,16 @@
 
   &:hover {
     color: $primary_color;
-    background-color: #54574B;
-    border-color: #54574B;
+    background-color: $primary_btn_hover;
+    border-color: $primary_btn_hover;
+  }
+
+}
+
+.disable {
+  background-color: $primary_btn_hover;
+
+  div {
+    width: fit-content;
   }
 }
