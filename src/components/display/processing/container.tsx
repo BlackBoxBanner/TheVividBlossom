@@ -11,17 +11,21 @@ export function useProcessing() {
 
   function Processing(props: ProcessingProps) {
     return (
-      <div className={`${styles.processing} ${!state && styles.default}`}>
-        {props.children}
-        <button onClick={() => setState(false)} style={{opacity: 0}}>quit</button>
-        <style jsx global>
-          {`
-            html {
-              overflow: ${state ? "hidden" : "initial"};
-            }
-          `}
-        </style>
-      </div>
+      <>
+        <div className={`${!state && styles.default}`}>
+          <div className={`${styles.processing}`}/>
+          <div className={`${styles.content}`}>
+            {props.children}
+          </div>
+          <style jsx global>
+            {`
+              html {
+                overflow: ${state ? "hidden" : "initial"};
+              }
+            `}
+          </style>
+        </div>
+      </>
     )
   }
 

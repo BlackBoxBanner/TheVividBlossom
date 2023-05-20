@@ -3,12 +3,11 @@ import styles from "@/styles/pages/auth/register.module.scss"
 import Image from "next/image"
 import {RegisterInput, RegisterInputMask} from "@/components/input";
 import {Cardo, Outfit} from "next/font/google";
-import {ButtonLogin} from "@/components/button";
+import {Button, ButtonLogin} from "@/components/button";
 import {SubmitHandler, useForm,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {FormContainer} from "@/components/display/register/formcontainer";
-import {convertImageUrlToBase64, eventToUrl} from "@/hook/urltobase64";
 import {ComponentProps, useEffect, useState} from "react";
 import {BsPersonFill} from "react-icons/bs";
 import mastercard from "@./public/pages/register/mastercard.svg"
@@ -20,6 +19,7 @@ import {PostType} from "@/pages/api/auth/register";
 import {useRouter} from "next/router";
 import {useProcessing} from "@/components/display/processing/container";
 import {getImage} from "@/hook/getImage";
+import {WaitingContent} from "@/components/display/processing/waiting";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -200,7 +200,9 @@ export default function Register(props: RegisterProps) {
           href="/favicon.ico"
         />
       </Head>
-      <Processing/>
+      <Processing>
+        <WaitingContent title={"registration"}/>
+      </Processing>
       <main className={styles.main}>
         <div className={styles.header}>
           <div className={`${styles.title} ${cardo.className}`}>
