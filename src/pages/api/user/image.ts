@@ -1,5 +1,4 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import prisma from "@/lib/prisma";
 import {getImage} from "@/hook/api/image";
 
 interface ExtendedNextApiRequest extends NextApiRequest {

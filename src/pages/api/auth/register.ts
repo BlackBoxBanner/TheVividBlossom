@@ -87,7 +87,7 @@ export default async function handler(
 
     console.log("Starting check if user already exist.")
     let userExist: string[] = []
-    await checkUserExist(user).then((e) => {
+    await checkUserExist(user).then(() => {
       userExist.push("User already exists")
     })
     if (userExist.length === 0) return res.status(400).json(userExist)

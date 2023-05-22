@@ -44,7 +44,7 @@ export default function Images() {
 
   function onSubmit(data: DataProps) {
     if (!data.email) return
-    chanheData(data).then(r => console.log(data))
+    chanheData(data).then(r => console.log({r, data}))
   }
 
   return (
