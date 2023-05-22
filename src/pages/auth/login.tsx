@@ -85,7 +85,7 @@ export default function Login() {
                 <Link href={""} className={`${styles.forgetPassword}`} style={cardo.style}>Forget password ?</Link>
               </div>
             </div>
-            <ButtonLogin disable={disable} font={"Outfit"} style={{marginTop: "1rem"}}>
+            <ButtonLogin disabled={disable} font={"Outfit"} style={{marginTop: "1rem"}}>
               Log In
             </ButtonLogin>
           </form>

@@ -47,6 +47,30 @@ model Product {
   Product_Review       Product_Review[]
   Order_Item           Order_Item[]
   Admin_User           Admin_User             @relation(fields: [admin_id], references: [id])
+  Product_Image        Product_Image?
+}
+
+model Product_Image {
+  id        String  @id @default(cuid())
+  productId String  @unique
+  prefix    String  @default("")
+  data1     String  @default("") @db.Text
+  data2     String  @default("") @db.Text
+  data3     String  @default("") @db.Text
+  data4     String  @default("") @db.Text
+  data5     String  @default("") @db.Text
+  data6     String  @default("") @db.Text
+  data7     String  @default("") @db.Text
+  data8     String  @default("") @db.Text
+  data9     String  @default("") @db.Text
+  data10    String  @default("") @db.Text
+  data11    String  @default("") @db.Text
+  data12    String  @default("") @db.Text
+  data13    String  @default("") @db.Text
+  data14    String  @default("") @db.Text
+  data15    String  @default("") @db.Text
+  data16    String  @default("") @db.Text
+  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 // ok
@@ -166,27 +190,30 @@ model User {
   User_Payment  User_Payment[]
   Address       Address[]
   Order_details Order_details[]
+  User_Image    User_Image?
 }
 
-model image {
-  id     String @id @default(cuid())
-  prefix String
-  data1  String @db.Text
-  data2  String @db.Text
-  data3  String @db.Text
-  data4  String @db.Text
-  data5  String @db.Text
-  data6  String @db.Text
-  data7  String @db.Text
-  data8  String @db.Text
-  data9  String @db.Text
-  data10 String @db.Text
-  data11 String @db.Text
-  data12 String @db.Text
-  data13 String @db.Text
-  data14 String @db.Text
-  data15 String @db.Text
-  data16 String @db.Text
+model User_Image {
+  id     String  @id @default(cuid())
+  userId String? @unique
+  prefix String  @default("")
+  data1  String  @default("") @db.Text
+  data2  String  @default("") @db.Text
+  data3  String  @default("") @db.Text
+  data4  String  @default("") @db.Text
+  data5  String  @default("") @db.Text
+  data6  String  @default("") @db.Text
+  data7  String  @default("") @db.Text
+  data8  String  @default("") @db.Text
+  data9  String  @default("") @db.Text
+  data10 String  @default("") @db.Text
+  data11 String  @default("") @db.Text
+  data12 String  @default("") @db.Text
+  data13 String  @default("") @db.Text
+  data14 String  @default("") @db.Text
+  data15 String  @default("") @db.Text
+  data16 String  @default("") @db.Text
+  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ok
