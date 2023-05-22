@@ -3,7 +3,6 @@ import {User, Address, User_Payment} from ".prisma/client";
 import {NextApiRequest, NextApiResponse} from "next";
 import {hash} from "bcrypt";
 import {breakImage} from "@/hook/image";
-import {uploadImage} from "@/hook/api/image";
 
 export interface PostType {
   user: Partial<User>

@@ -20,20 +20,9 @@ export default async function handler(
 
   if (!email) return res.status(400).send("No email provided!");
 
-  const imageId = await prisma.user.findUnique({
-    where: {
-      email
-    },
-    select: {
-      imageId: true
-    }
-  })
+  const image = await getImage(email)
 
-
-  if (!imageId?.imageId) return res.status(200).send("imageId not found!")
-
-  const image = await getImage(imageId.imageId)
-  if (!image) return res.status(404).send("User not found!")
+  if (!image) return res.status(200)
 
   res.status(200).json({image});
 }

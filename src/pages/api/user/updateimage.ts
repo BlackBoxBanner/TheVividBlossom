@@ -4,9 +4,9 @@ import {breakImage} from "@/hook/image";
 import {updateImage} from "@/hook/api/image";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
-  query: {
-    email?: string
-  };
+  // query: {
+  //   email?: string
+  // };
   body: {
     email: string,
     image: string
