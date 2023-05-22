@@ -166,27 +166,30 @@ model User {
   User_Payment  User_Payment[]
   Address       Address[]
   Order_details Order_details[]
+  User_Image    User_Image[]
 }
 
-model image {
-  id     String @id @default(cuid())
+model User_Image {
+  id     String  @id @default(cuid())
+  userId String? @unique
   prefix String
-  data1  String @db.Text
-  data2  String @db.Text
-  data3  String @db.Text
-  data4  String @db.Text
-  data5  String @db.Text
-  data6  String @db.Text
-  data7  String @db.Text
-  data8  String @db.Text
-  data9  String @db.Text
-  data10 String @db.Text
-  data11 String @db.Text
-  data12 String @db.Text
-  data13 String @db.Text
-  data14 String @db.Text
-  data15 String @db.Text
-  data16 String @db.Text
+  data1  String  @db.Text
+  data2  String  @db.Text
+  data3  String  @db.Text
+  data4  String  @db.Text
+  data5  String  @db.Text
+  data6  String  @db.Text
+  data7  String  @db.Text
+  data8  String  @db.Text
+  data9  String  @db.Text
+  data10 String  @db.Text
+  data11 String  @db.Text
+  data12 String  @db.Text
+  data13 String  @db.Text
+  data14 String  @db.Text
+  data15 String  @db.Text
+  data16 String  @db.Text
+  User   User?   @relation(fields: [userId], references: [id])
 }
 
 // ok
