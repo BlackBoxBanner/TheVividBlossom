@@ -7,14 +7,14 @@ import Image from "next/image"
 import axios from "axios";
 
 const schema = z.object({
-  email: z.string(),
-  image: z.any()
+  email: z.string().min(1, "Required"),
+  image: z.any().optional()
 })
 
 type DataProps = z.infer<typeof schema>
 
 export default function Images() {
-  const {watch, handleSubmit, register} = useForm<DataProps>({resolver: zodResolver(schema)})
+  const {watch, handleSubmit, register, formState: {errors}} = useForm<DataProps>({resolver: zodResolver(schema)})
 
   const [image, setImage] = useState<string>()
 
@@ -43,23 +43,21 @@ export default function Images() {
 
 
   function onSubmit(data: DataProps) {
-    if (!image) return
+    if (!data.email) return
     chanheData(data).then(r => console.log(data))
   }
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="file" accept={"image/*"} {...register("image")}/>
-        <input type="text" {...register("email")}/>
+        <input type="file" accept={"image/*"} {...register("image")} required={false}/>
+        <input type="text" required {...register("email")}/>
         <button>click</button>
       </form>
+      {String(errors)}
       <div style={{position: "relative", width: "50%", height: "40rem"}}>
         {image && <Image src={image} alt={""} fill style={{objectFit: "cover"}}/>}
       </div>
     </>
   )
 }
-
-//data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCI
-//data:image/jpeg;base64,data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAE
