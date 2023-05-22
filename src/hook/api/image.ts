@@ -37,25 +37,7 @@ export async function updateImage(props: updateImageProps) {
                 data15: "",
                 data16: "",
               },
-              create: {
-                prefix: "",
-                data1: "",
-                data2: "",
-                data3: "",
-                data4: "",
-                data5: "",
-                data6: "",
-                data7: "",
-                data8: "",
-                data9: "",
-                data10: "",
-                data11: "",
-                data12: "",
-                data13: "",
-                data14: "",
-                data15: "",
-                data16: "",
-              }
+              create: {}
             }
           }
         }
