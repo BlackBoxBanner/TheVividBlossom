@@ -77,19 +77,22 @@ export async function updateImage(props: updateImageProps) {
   }))
 }
 
-export async function getImage(imageId: string) {
+export async function getImage(email: string) {
 
-  if (!imageId) return
-  const imageData = await prisma.image.findUnique({
+  if (!email) return
+  const imageData = await prisma.user.findUnique({
     where: {
-      id: imageId
+      email
+    },
+    select: {
+      User_Image: true
     }
   })
 
   if (!imageData) return
 
   return combineImage({
-    prefix: imageData.prefix,
+    prefix: imageData.User_Image.,
     data: {
       text1: imageData.data1,
       text2: imageData.data2,
