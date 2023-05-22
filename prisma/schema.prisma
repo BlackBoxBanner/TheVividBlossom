@@ -166,7 +166,7 @@ model User {
   User_Payment  User_Payment[]
   Address       Address[]
   Order_details Order_details[]
-  User_Image    User_Image[]
+  User_Image    User_Image?
 }
 
 model User_Image {
