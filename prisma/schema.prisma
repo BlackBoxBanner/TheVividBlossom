@@ -378,32 +378,18 @@ enum AdminType {
 }
 
 // ok
-model Admin_Type {
-  id          String       @id @default(uuid())
-  type        AdminType    @unique @default(staff)
-  permission  String
-  create_at   DateTime
-  modified_at DateTime?
-  Admin_User  Admin_User[]
-}
-
-// ok
 model Admin_User {
-  id            String    @id @default(uuid())
-  usernames     String    @unique
-  password      String
-  first_name    String
-  last_name     String
-  last_login    DateTime
-  create_at     DateTime
-  modified_at   DateTime?
-  deleted_at    DateTime?
-  admin_type_id String?
-  Product       Product[]
-
-  AdminType Admin_Type? @relation(fields: [admin_type_id], references: [id])
-
-  @@index(fields: [admin_type_id], map: "index_admin_type_id")
+  id          String    @id @default(uuid())
+  usernames   String    @unique
+  password    String
+  first_name  String
+  last_name   String
+  create_at   DateTime
+  last_login  DateTime?
+  modified_at DateTime?
+  deleted_at  DateTime?
+  admin_type  AdminType @default(staff)
+  Product     Product[]
 }
 
 model Account {
