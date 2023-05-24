@@ -11,7 +11,7 @@
   left: 0;
   top: 0;
   color: $primary_color;
-  transition: ease-in-out $line_animation;
+  transition: ease-in-out opacity $line_animation;
 
   button {
     color: $primary_color;
@@ -40,5 +40,23 @@
 
   path {
     stroke: $primary_color;
+  }
+}
+
+.invert {
+  opacity: 1;
+  color: $primary_text_color;
+  background-color: $primary_color;
+
+  path {
+    stroke: $primary_text_color;
+  }
+
+  button {
+    color: $primary_text_color;
+  }
+
+  span {
+    background-color: $primary_text_color;
   }
 }

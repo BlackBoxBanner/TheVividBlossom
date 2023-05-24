@@ -47,6 +47,7 @@ export default function Login() {
         const error = JSON.parse(e.error) as { name: "email" | "password", message: string }
         setError(error.name, {message: error.message})
         setDisable(false)
+        setState(false)
       } else {
         router.push("/")
       }
