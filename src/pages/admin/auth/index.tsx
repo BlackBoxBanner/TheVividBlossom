@@ -1,11 +1,7 @@
 import Head from "next/head";
-import Image from "next/image"
-import Link from "next/link";
 import {Cardo} from "next/font/google";
 
-import styles from "@/styles/pages/auth/login.module.scss"
-
-import image from "@./public/pages/login/login_image.jpg"
+import styles from "@/styles/pages/admin/auth/admin_auth.module.scss"
 
 import {FormInput} from "@/components/input";
 import {ButtonLogin} from "@/components/button";
@@ -21,9 +17,8 @@ import {WaitingContent} from "@/components/display/processing/waiting";
 
 const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
 
-
 const schema = z.object({
-  email: z.string().min(1, "Please enter your Email").email("Invalid Email"),
+  usernames: z.string().min(1, "Please enter your username"),
   password: z.string().min(1, "Please enter your password"),
 })
 
@@ -39,15 +34,21 @@ export default function Login() {
     setDisable(true)
     setState(e => !e)
     await signIn("credentials", {
-      email: data.email,
+      usernames: data.usernames,
       password: data.password,
+      type: "admin",
       redirect: false
     }).then((e) => {
       if (e?.error) {
-        const error = JSON.parse(e.error) as { name: "email" | "password", message: string }
-        setError(error.name, {message: error.message})
+        try {
+          const error = JSON.parse(e.error) as { name: "usernames" | "password", message: string }
+          setError(error.name, {message: error.message})
+          setState(e => !e)
+        } catch (error) {
+          console.error(e)
+          setState(e => !e)
+        }
         setDisable(false)
-        setState(false)
       } else {
         router.push("/")
       }
@@ -56,10 +57,10 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Admin - Login</title>
         <meta
           name="description"
-          content="The Vivid Blossom login page"
+          content="The Vivid Blossom admin login page"
         />
         <meta
           name="viewport"
@@ -77,28 +78,20 @@ export default function Login() {
         <div className={styles.formContainer}>
           <h1 className={`${styles.title} ${cardo.className}`}>LOG IN</h1>
           <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-            <FormInput error={errors.email?.message}
-                       label={"Email"}  {...register("email")}/>
-            <div className={styles.passwordRelative}>
-              <FormInput type="password" label={"Password"}
-                         error={errors.password?.message} {...register("password")}/>
-              <div className={styles.forgetPasswordContainer}>
-                <Link href={""} className={`${styles.forgetPassword}`} style={cardo.style}>Forget password ?</Link>
-              </div>
+            <FormInput error={errors.usernames?.message}
+                       label={"Username"}  {...register("usernames")}/>
+            <FormInput type="password" label={"Password"}
+                       error={errors.password?.message} {...register("password")}/>
+            <div
+              style={{width: "100%", display: "flex", justifyContent: "space-between", gap: "2rem"}}>
+              <ButtonLogin disabled={disable} font={"Outfit"} style={{width: "100%"}}>
+                Log In
+              </ButtonLogin>
+              <ButtonLogin disabled={disable} font={"Outfit"} dark style={{width: "100%"}}>
+                Cancel
+              </ButtonLogin>
             </div>
-            <ButtonLogin disabled={disable} font={"Outfit"} style={{marginTop: "1rem"}}>
-              Log In
-            </ButtonLogin>
           </form>
-          <div className={`${styles.offer} ${cardo.className}`}>
-            <p>Don’t have an account ?</p>
-            <div className={styles.createAccount}>
-              <Link href={"/auth/register"}>Create an account</Link>
-            </div>
-          </div>
-        </div>
-        <div className={styles.imageContainer}>
-          <Image src={image} alt="" className={styles.image} priority={true} placeholder={"blur"}/>
         </div>
       </main>
     </>
