@@ -12,7 +12,7 @@ import {Contact} from "@/components/display/landing/contact";
 import ImageContainer from "@/components/display/landing/imageShow";
 import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
-import {signOut, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {ProfileMenu} from "@/components/display/landing/profile";
 
 // const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -114,7 +114,7 @@ export default function Home() {
   const accountSettingList = [
     {
       title: "Edit Account",
-      link:"/user/account"
+      link: "/user/account"
     },
     {
       title: "My Order",
