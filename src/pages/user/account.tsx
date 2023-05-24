@@ -1,8 +1,9 @@
-function Account () {
+function Account() {
   return (
     <>
-      <div>test</div>
+      <div>this page will be user account page.</div>
     </>
   )
 }
+
 export default Account
