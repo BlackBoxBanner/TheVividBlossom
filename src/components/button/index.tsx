@@ -8,13 +8,12 @@ const outfit = Outfit({weight: "500", style: "normal", subsets: ["latin"]})
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   font?: "Cardo" | "Outfit"
-  disabled?: boolean
-  dark?: boolean
+  disable?: boolean
 }
 
 export function Button(props: ButtonProps) {
   const font = props.font || "Cardo"
-  if (props.disabled) {
+  if (props.disable) {
     return (
       <>
         <div
@@ -35,7 +34,7 @@ export function Button(props: ButtonProps) {
 
 export function ButtonLogin(props: ButtonProps) {
   const font = props.font || "Cardo"
-  if (props.disabled) {
+  if (props.disable) {
     return (
       <>
         <button
@@ -47,7 +46,7 @@ export function ButtonLogin(props: ButtonProps) {
   return (
     <>
       <button
-        className={`${styles.button} ${font == "Cardo" ? cardo.className : outfit.className} ${styles.login} ${props.dark && styles.loginDark}`} {...props}>{String(props.children)}</button>
+        className={`${styles.button} ${font == "Cardo" ? cardo.className : outfit.className} ${styles.logins} `} {...props}>{String(props.children)}</button>
     </>
   )
 }

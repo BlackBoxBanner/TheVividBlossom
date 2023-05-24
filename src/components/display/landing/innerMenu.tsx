@@ -17,7 +17,7 @@ interface InnerMenuProps {
 function Btn(props: ListItem) {
   return (
     <>
-      <Link className={styles.btn} onClick={props.onClick} href={props.link ? props.link : ""}>
+      <Link className={styles.btn} onClick={props.onClick} href={""}>
         {props.title}
       </Link>
       <span className={styles.line}/>

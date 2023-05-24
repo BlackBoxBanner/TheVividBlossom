@@ -45,6 +45,7 @@ export const authOptions: NextAuthOptions = {
       },
       // @ts-ignore
       async authorize(credentials, _) {
+        console.log("🚀 ~ file: [...nextauth].ts:47 ~ authorize ~ credentials:", credentials)
         const {email, password, type = "user", usernames} = credentials as {
           email: string;
           password: string;
@@ -73,26 +74,11 @@ export const authOptions: NextAuthOptions = {
               throw new Error(JSON.stringify({name: "password", message: "Invalid password"}));
             }
           }
-
-          const userLogin = await prisma.user.update({
-            where: {
-              id: user.id
-            },
-            data: {
-              last_login: new Date()
-            }
-          })
-
-          return userLogin;
+          return user;
         } else {
-          console.log(usernames, password)
-          if (!usernames) {
-            throw new Error(JSON.stringify({username: "Missing username"}));
+          if (!usernames || !password) {
+            throw new Error("Missing username or password");
           }
-          if (!password) {
-            throw new Error(JSON.stringify({password: "Missing password"}));
-          }
-          console.log(usernames, password)
           const user = await prisma.admin_User.findUnique({
             where: {
               usernames
@@ -100,25 +86,16 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!user) {
-            throw new Error(JSON.stringify({username: "User not found"}));
+            throw new Error("no user found");
           }
 
           if (user?.password) {
             if (!(user && (await compare(password, user.password)))) {
               // if user doesn't exist or password doesn't match
-              throw new Error(JSON.stringify({password: "Invalid username or password"}));
+              throw new Error("Invalid username or password");
             }
           }
-          const admin = await prisma.admin_User.update({
-            where: {
-              usernames: user.usernames
-            },
-            data: {
-              last_login: new Date()
-            }
-          })
-
-          return admin;
+          return user;
         }
       },
     }),

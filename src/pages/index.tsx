@@ -114,33 +114,6 @@ export default function Home() {
     }
   ] satisfies ListItem[]
 
-  const accountSettingList = [
-    {
-      title: "Edit Account",
-      link:"/user/account"
-    },
-    {
-      title: "My Order",
-    },
-    {
-      title: "My Wishlist",
-    },
-    {
-      title: "My Basket",
-    },
-    {
-      title: "Payment Detail",
-    },
-    {
-      title: "Shipping Address",
-    },
-    {
-      title: "Login and Security",
-    }
-  ] satisfies ListItem[]
-
-  const [accountSetting, setAccountSetting] = useState(false)
-
   const {data,} = useSession()
 
 
@@ -209,7 +182,7 @@ export default function Home() {
             setRecommend(false)
             setImage(false)
           }}
-          style={overMenu ? {opacity: "0.9", zIndex: 3} : {opacity: "0", zIndex: -10}}
+          style={overMenu ? {opacity: "0.9", zIndex: 3} : {opacity: "0", zIndex: 0}}
         >
           {/*{seed && <InnerMenu list={flowerSeed}/>}*/}
           {color && <InnerMenu list={flowerColor}/>}
@@ -217,14 +190,7 @@ export default function Home() {
           {season && <InnerMenu list={flowerSeason}/>}
           {recommend && <InnerMenu list={flowerRecommend}/>}
           {contact && <Contact/>}
-          {image && <ProfileMenu setOverMenu={setOverMenu} setAccountSetting={setAccountSetting}/>}
-        </OverMenu>
-        <OverMenu
-          invert style={accountSetting ? {opacity: "1", zIndex: 3} : {opacity: "0", zIndex: -10}}
-          onClose={() => {
-            setAccountSetting(false)
-          }}>
-          <InnerMenu list={accountSettingList}/>
+          {image && <ProfileMenu/>}
         </OverMenu>
       </main>
     </>

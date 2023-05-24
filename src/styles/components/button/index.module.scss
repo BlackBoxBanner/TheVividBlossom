@@ -14,29 +14,18 @@
   }
 }
 
-.login {
+.logins {
   color: $primary_color;
   background-color: $primary_text_color;
   font-size: 1rem;
-  //border: 0px solid rgba(0, 0, 0, 0);
   border: none;
 
   &:hover {
     color: $primary_color;
     background-color: $primary_btn_hover;
+    border-color: $primary_btn_hover;
   }
-}
 
-.loginDark {
-  color: $primary_text_color;
-  background-color: $primary_color;
-  font-size: 1rem;
-  border: 1px solid $primary_text_color;
-
-  &:hover {
-    color: $primary_color;
-    background-color: $primary_text_color;
-  }
 }
 
 .disable {

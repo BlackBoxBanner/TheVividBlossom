@@ -12,7 +12,7 @@ export function useProcessing() {
   function Processing(props: ProcessingProps) {
     return (
       <>
-        <div className={`${!state && styles.default}`}>
+        <div style={{opacity: 0}} className={`${!state && styles.default}`}>
           <div className={`${styles.processing}`}/>
           <div className={`${styles.content}`}>
             {props.children}
