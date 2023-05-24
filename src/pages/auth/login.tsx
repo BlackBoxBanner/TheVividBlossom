@@ -16,8 +16,6 @@ import * as z from "zod";
 import {signIn} from "next-auth/react"
 import {useRouter} from "next/router";
 import {useState} from "react";
-import {useProcessing} from "@/components/display/processing/container";
-import {WaitingContent} from "@/components/display/processing/waiting";
 
 const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
 
@@ -30,14 +28,13 @@ const schema = z.object({
 type DataProps = z.infer<typeof schema>
 
 export default function Login() {
-  const {Processing, setState} = useProcessing()
+
   const router = useRouter()
   const [disable, setDisable] = useState(false)
 
   const {register, handleSubmit, formState: {errors}, setError} = useForm<DataProps>({resolver: zodResolver(schema)})
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     setDisable(true)
-    setState(e => !e)
     await signIn("credentials", {
       email: data.email,
       password: data.password,
@@ -69,9 +66,7 @@ export default function Login() {
           href="/favicon.ico"
         />
       </Head>
-      <Processing>
-        <WaitingContent title={"session"}/>
-      </Processing>
+
       <main className={styles.main}>
         <div className={styles.formContainer}>
           <h1 className={`${styles.title} ${cardo.className}`}>LOG IN</h1>
@@ -85,7 +80,7 @@ export default function Login() {
                 <Link href={""} className={`${styles.forgetPassword}`} style={cardo.style}>Forget password ?</Link>
               </div>
             </div>
-            <ButtonLogin disabled={disable} font={"Outfit"} style={{marginTop: "1rem"}}>
+            <ButtonLogin disable={disable} font={"Outfit"} style={{marginTop: "1rem"}}>
               Log In
             </ButtonLogin>
           </form>

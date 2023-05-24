@@ -3,7 +3,7 @@ import styles from "@/styles/pages/auth/register.module.scss"
 import Image from "next/image"
 import {RegisterInput, RegisterInputMask} from "@/components/input";
 import {Cardo, Outfit} from "next/font/google";
-import {Button, ButtonLogin} from "@/components/button";
+import { ButtonLogin} from "@/components/button";
 import {SubmitHandler, useForm,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -143,7 +143,7 @@ export default function Register(props: RegisterProps) {
     const [monthStr, yearStr] = data.payment.card_expiry.split(" / ");
     const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
 
-    await setState((e) => !e)
+    setState(prevState => !prevState)
 
     await axios({
       baseURL: "/api/auth/register",
