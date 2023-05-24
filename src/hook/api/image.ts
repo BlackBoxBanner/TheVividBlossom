@@ -93,7 +93,6 @@ export async function getImage(email: string) {
   })
 
   if (!imageData?.User_Image) return
-
   return combineImage({
     prefix: imageData.User_Image.prefix,
     data: {
