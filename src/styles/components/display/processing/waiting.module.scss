@@ -1,0 +1,52 @@
+@import "../../../variable";
+
+.container {
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $primary_text_color;
+  background-color: $primary_color;
+  padding: 1.5rem 3rem;
+  width: 35rem;
+  height: 35rem;
+  gap: 1.75rem;
+}
+
+.title {
+  margin: 0 auto;
+  font-size: 3.5rem;
+}
+
+.devLine {
+  width: 60%;
+  background-color: $primary_text_color;
+  padding: 0.5px;
+}
+
+.body {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.content {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.imageContainer {
+  position: relative;
+  width: 90%;
+  min-height: 15rem;
+  height: auto;
+}
+
+.image {
+  object-fit: cover;
+}

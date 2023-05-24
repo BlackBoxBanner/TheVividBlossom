@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import {User, Address, User_Payment} from ".prisma/client";
 import {NextApiRequest, NextApiResponse} from "next";
 import {hash} from "bcrypt";
+import {breakImage} from "@/hook/image";
 
 export interface PostType {
   user: Partial<User>
@@ -86,7 +87,7 @@ export default async function handler(
 
     console.log("Starting check if user already exist.")
     let userExist: string[] = []
-    await checkUserExist(user).then((e) => {
+    await checkUserExist(user).then(() => {
       userExist.push("User already exists")
     })
     if (userExist.length === 0) return res.status(400).json(userExist)
@@ -105,42 +106,102 @@ async function createUser(props: {
   address: Partial<Address>,
   payment: Partial<User_Payment>
 }) {
-  return await prisma.user.create({
-    data: {
-      first_name: props.user.first_name!,
-      last_name: props.user.last_name!,
-      telephone: props.user.telephone!,
-      dob: new Date(String(props.user.dob).split(" / ").reverse().join("-")).toISOString(),
-      email: props.user.email!,
-      password: await hash(props.user.password!, 10),
-      register_on: new Date(),
-      UserImage: {
-        create: {
-          image: props.user.image!
+  // const imageId = await uploadImage(props.user.image);
+
+  if (props.user.image) {
+    const imageData = breakImage(props.user.image)
+
+    await prisma.user.create({
+      data: {
+        first_name: props.user.first_name!,
+        last_name: props.user.last_name!,
+        telephone: props.user.telephone!,
+        dob: new Date(String(props.user.dob).split(" / ").reverse().join("-")).toISOString(),
+        email: props.user.email!,
+        password: await hash(props.user.password!, 10),
+        register_on: new Date(),
+        Address: {
+          create: {
+            address_line1: props.address.address_line1!,
+            address_line2: props.address.address_line2!,
+            subDistrict: props.address.subDistrict!,
+            district: props.address.district!,
+            province: props.address.province!,
+            zipcode: props.address.zipcode!,
+            create_at: new Date(),
+          },
+        },
+        User_Payment: {
+          create: {
+            name_on_card: props.payment.name_on_card!,
+            card_number: props.payment.card_number!,
+            card_expiry: props.payment.card_expiry!,
+            cvv: props.payment.cvv!,
+            card_type: "credit",
+            provider: "MasterCard",
+            create_at: new Date(),
+          },
+        },
+        User_Image: {
+          create: {
+            prefix: imageData.prefix,
+            data1: imageData.data.text1,
+            data2: imageData.data.text2,
+            data3: imageData.data.text3,
+            data4: imageData.data.text4,
+            data5: imageData.data.text5,
+            data6: imageData.data.text6,
+            data7: imageData.data.text7,
+            data8: imageData.data.text8,
+            data9: imageData.data.text9,
+            data10: imageData.data.text10,
+            data11: imageData.data.text11,
+            data12: imageData.data.text12,
+            data13: imageData.data.text13,
+            data14: imageData.data.text14,
+            data15: imageData.data.text15,
+            data16: imageData.data.text16,
+          }
         }
       },
-      Address: {
-        create: {
-          address_line1: props.address.address_line1!,
-          address_line2: props.address.address_line2!,
-          subDistrict: props.address.subDistrict!,
-          district: props.address.district!,
-          province: props.address.province!,
-          zipcode: props.address.zipcode!,
-          create_at: new Date(),
+    })
+  } else {
+    await prisma.user.create({
+      data: {
+        first_name: props.user.first_name!,
+        last_name: props.user.last_name!,
+        telephone: props.user.telephone!,
+        dob: new Date(String(props.user.dob).split(" / ").reverse().join("-")).toISOString(),
+        email: props.user.email!,
+        password: await hash(props.user.password!, 10),
+        register_on: new Date(),
+        Address: {
+          create: {
+            address_line1: props.address.address_line1!,
+            address_line2: props.address.address_line2!,
+            subDistrict: props.address.subDistrict!,
+            district: props.address.district!,
+            province: props.address.province!,
+            zipcode: props.address.zipcode!,
+            create_at: new Date(),
+          },
         },
-      },
-      User_Payment: {
-        create: {
-          name_on_card: props.payment.name_on_card!,
-          card_number: props.payment.card_number!,
-          card_expiry: props.payment.card_expiry!,
-          cvv: props.payment.cvv!,
-          card_type: "credit",
-          provider: "MasterCard",
-          create_at: new Date(),
+        User_Payment: {
+          create: {
+            name_on_card: props.payment.name_on_card!,
+            card_number: props.payment.card_number!,
+            card_expiry: props.payment.card_expiry!,
+            cvv: props.payment.cvv!,
+            card_type: "credit",
+            provider: "MasterCard",
+            create_at: new Date(),
+          },
         },
+        User_Image: {
+          create: {}
+        }
       },
-    },
-  })
+    })
+  }
 }
+

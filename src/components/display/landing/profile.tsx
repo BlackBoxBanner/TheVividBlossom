@@ -17,6 +17,8 @@ export function ProfileMenu(props: ContactProps) {
           <Line/>
           <ProfileBtn title={"Account Settings"}/>
           <Line/>
+          <ProfileBtn title={"My Order"} onClick={() => alert("My order not implemented yet")}/>
+          <Line/>
           <ProfileBtn title={"Log out"} onClick={() => signOut()}/>
           <Line/>
         </div>

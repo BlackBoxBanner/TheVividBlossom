@@ -13,9 +13,6 @@ import ImageContainer from "@/components/display/landing/imageShow";
 import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
 import {signOut, useSession} from "next-auth/react";
-import {Button} from "@/components/button";
-import {GetServerSideProps} from "next";
-import prisma from "@/lib/prisma";
 import {ProfileMenu} from "@/components/display/landing/profile";
 
 // const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})

@@ -4,8 +4,9 @@ generator client {
 
 // For development
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 // ok
@@ -46,6 +47,38 @@ model Product {
   Product_Review       Product_Review[]
   Order_Item           Order_Item[]
   Admin_User           Admin_User             @relation(fields: [admin_id], references: [id])
+  Product_Image        Product_Image?
+
+  @@index(fields: [family_id], map: "index_family_id")
+  @@index(fields: [color_id], map: "index_color_id")
+  @@index(fields: [type_id], map: "index_type_id")
+  @@index(fields: [admin_id], map: "index_admin_id")
+  @@index(fields: [discount_id], map: "index_discount_id")
+}
+
+model Product_Image {
+  id        String  @id @default(cuid())
+  productId String
+  prefix    String  @default("")
+  data1     String  @default("") @db.Text
+  data2     String  @default("") @db.Text
+  data3     String  @default("") @db.Text
+  data4     String  @default("") @db.Text
+  data5     String  @default("") @db.Text
+  data6     String  @default("") @db.Text
+  data7     String  @default("") @db.Text
+  data8     String  @default("") @db.Text
+  data9     String  @default("") @db.Text
+  data10    String  @default("") @db.Text
+  data11    String  @default("") @db.Text
+  data12    String  @default("") @db.Text
+  data13    String  @default("") @db.Text
+  data14    String  @default("") @db.Text
+  data15    String  @default("") @db.Text
+  data16    String  @default("") @db.Text
+  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique(fields: [productId], name: "unique_productId", map: "unique_productId")
 }
 
 // ok
@@ -133,6 +166,8 @@ model Product_Review {
   deleted_at   DateTime?
 
   Product Product? @relation(fields: [product_id], references: [id])
+
+  @@index(fields: [product_id], map: "index_product_id")
 }
 
 // ok
@@ -145,9 +180,10 @@ enum Acc_status {
 // ok
 model User {
   id            String     @id @default(cuid())
-  email         String?    @unique
+  email         String?
   emailVerified DateTime?
   image         String?
+  imageId       String?
   first_name    String
   last_name     String
   password      String
@@ -164,14 +200,34 @@ model User {
   User_Payment  User_Payment[]
   Address       Address[]
   Order_details Order_details[]
-  UserImage     UserImage[]
+  User_Image    User_Image?
+
+  @@unique(fields: [email], name: "unique_email")
 }
 
-model UserImage {
-  id     String  @id @default(cuid())
-  image  String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String?
+model User_Image {
+  id     String @id @default(cuid())
+  userId String
+  prefix String @default("")
+  data1  String @default("") @db.Text
+  data2  String @default("") @db.Text
+  data3  String @default("") @db.Text
+  data4  String @default("") @db.Text
+  data5  String @default("") @db.Text
+  data6  String @default("") @db.Text
+  data7  String @default("") @db.Text
+  data8  String @default("") @db.Text
+  data9  String @default("") @db.Text
+  data10 String @default("") @db.Text
+  data11 String @default("") @db.Text
+  data12 String @default("") @db.Text
+  data13 String @default("") @db.Text
+  data14 String @default("") @db.Text
+  data15 String @default("") @db.Text
+  data16 String @default("") @db.Text
+  User   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique(fields: [userId], map: "unique_user_id", name: "unique_user_id")
 }
 
 // ok
@@ -191,6 +247,8 @@ model User_Payment {
   User User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   Order_Transaction Order_Transaction[]
+
+  @@index([user_id])
 }
 
 // ok
@@ -222,6 +280,9 @@ model Order_Transaction {
 
   Order        Order_details @relation(fields: [order_id], references: [id])
   User_Payment User_Payment  @relation(fields: [payment_id], references: [id])
+
+  @@index(fields: [payment_id], map: "index_payment_id")
+  @@index(fields: [order_id], map: "index_order_id")
 }
 
 // ok
@@ -252,16 +313,8 @@ model Address {
 
   User          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
   Order_details Order_details[]
-}
 
-// ok
-model Order_Status {
-  id            String         @id @default(uuid())
-  status        StatusType     @unique @default(PENDING)
-  description   String?
-  create_at     DateTime
-  modified_at   DateTime?
-  Order_details Order_details?
+  @@index(fields: [user_id], map: "index_user_id")
 }
 
 // ok
@@ -277,6 +330,9 @@ model Order_Item {
 
   Order   Order_details @relation(fields: [order_id], references: [id])
   Product Product?      @relation(fields: [product_id], references: [id])
+
+  @@index(fields: [order_id], map: "index_order_id")
+  @@index(fields: [product_id], map: "index_product_id")
 }
 
 // ok
@@ -289,9 +345,9 @@ enum StatusType {
 
 // ok
 model Order_details {
-  id              String    @id @default(uuid())
+  id              String     @id @default(uuid())
   user_id         String
-  status_id       String    @unique
+  status          StatusType
   subtotal_amount Float
   product_discout Float
   tax_amount      Int
@@ -301,14 +357,17 @@ model Order_details {
   total_amount    Float
   create_at       DateTime
   modified_at     DateTime?
-  admin_UserId    String    @unique
 
-  Status            Order_Status        @relation(fields: [status_id], references: [id])
-  User              User                @relation(fields: [user_id], references: [id])
-  shipping          Shipping            @relation(fields: [shipping_id], references: [id])
-  Address           Address             @relation(fields: [address_id], references: [id])
+  User     User     @relation(fields: [user_id], references: [id])
+  shipping Shipping @relation(fields: [shipping_id], references: [id])
+  Address  Address  @relation(fields: [address_id], references: [id])
+
   Order_Item        Order_Item[]
   Order_Transaction Order_Transaction[]
+
+  @@index(fields: [user_id], map: "index_user_id")
+  @@index(fields: [shipping_id], map: "index_shipping_id")
+  @@index(fields: [address_id], map: "index_address_id")
 }
 
 // ok
@@ -319,30 +378,18 @@ enum AdminType {
 }
 
 // ok
-model Admin_Type {
-  id          String       @id @default(uuid())
-  type        AdminType    @unique @default(staff)
-  permission  String
-  create_at   DateTime
-  modified_at DateTime?
-  Admin_User  Admin_User[]
-}
-
-// ok
 model Admin_User {
-  id            String    @id @default(uuid())
-  usernames     String    @unique
-  password      String
-  first_name    String
-  last_name     String
-  last_login    DateTime
-  create_at     DateTime
-  modified_at   DateTime?
-  deleted_at    DateTime?
-  admin_type_id String?
-  Product       Product[]
-
-  AdminType Admin_Type? @relation(fields: [admin_type_id], references: [id])
+  id          String    @id @default(uuid())
+  usernames   String    @unique
+  password    String
+  first_name  String
+  last_name   String
+  create_at   DateTime
+  last_login  DateTime?
+  modified_at DateTime?
+  deleted_at  DateTime?
+  admin_type  AdminType @default(staff)
+  Product     Product[]
 }
 
 model Account {
@@ -362,6 +409,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -370,6 +418,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
