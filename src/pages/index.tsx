@@ -116,6 +116,33 @@ export default function Home() {
 
   const {data,} = useSession()
 
+  const [account, setAccount] = useState(false)
+
+  const accountList = [
+    {
+      title: "Edit Account",
+      link: "/user/account"
+    },
+    {
+      title: "My Order",
+    },
+    {
+      title: "My Wishlist",
+    },
+    {
+      title: "My Basket",
+    },
+    {
+      title: "Payment Detail",
+    },
+    {
+      title: "Shipping Address",
+    },
+    {
+      title: "Login and Security",
+    },
+  ] satisfies ListItem[]
+
 
   return (
     <>
@@ -173,6 +200,15 @@ export default function Home() {
           />
         </div>
         <OverMenu
+          invert
+          onClose={() => {
+            setAccount(false)
+          }}
+          style={account ? {opacity: "1", zIndex: 4} : {opacity: "0", zIndex: 0}}
+        >
+          <InnerMenu list={accountList}/>
+        </OverMenu>
+        <OverMenu
           onClose={() => {
             setOverMenu(false)
             setContact(false)
@@ -190,7 +226,7 @@ export default function Home() {
           {season && <InnerMenu list={flowerSeason}/>}
           {recommend && <InnerMenu list={flowerRecommend}/>}
           {contact && <Contact/>}
-          {image && <ProfileMenu/>}
+          {image && <ProfileMenu setMenu={setOverMenu} setAccount={setAccount}/>}
         </OverMenu>
       </main>
     </>
