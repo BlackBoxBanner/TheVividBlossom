@@ -1,63 +1,67 @@
 import {getToken} from "next-auth/jwt";
 import {NextRequest, NextResponse} from "next/server";
+import {withAuth} from "next-auth/middleware"
 
-const protectedRoutes = ["/protected", "/user"];
-const adminRoutes = ["/admin"];
+const protectedRoutes = ["/user"];
+const userAuth = ["/auth"]
+const adminRoutes = ["/admin/dashboard"];
+const adminAuth = ["/admin/auth"]
 
-export default async function middleware(req: NextRequest) {
-  function isProtectedRoute() {
-    return protectedRoutes.some((route) => path.startsWith(route));
-  }
-
-
-  function isAdminRoute() {
-    return adminRoutes.some((route) => path.startsWith(route));
-  }
-
-  // Get the pathname of the request (e.g. /, /protected)
-  const path = req.nextUrl.pathname;
-
-  const session = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
-  if (session) {
-    // user login
-    if (path === "/auth/login") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-    if (path === "/auth/register") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-
-    // admin login
-    if (path === "/auth/admin/login") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-    if (path === "/auth/admin/register") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-  } else {
-    if (isProtectedRoute()) {
-      return NextResponse.redirect(new URL("/auth/login", req.url));
-    }
-
-  }
-
-  if (isAdminRoute()) {
-    if (session?.email) return NextResponse.redirect(new URL("/", req.url));
-    if (session?.sub) {
-      // this session only admin can access
-      const admin = await fetch(`${process.env.NEXTAUTH_URL}/api/admin/id`, {
-        method: "POST", body: JSON.stringify({id: session.sub})
-      })
-      const data = await admin.json() as string
-      if (session.sub != data) return NextResponse.redirect(new URL("/", req.url));
-    }
-  }
-
-  // if (isProtectedRoute()) {
-
-  return NextResponse.next();
+interface isProtectedProps {
+  path: string,
+  routes: string[]
 }
+
+function isProtected(props: isProtectedProps) {
+  return props.routes.some((route) => props.path.startsWith(route));
+}
+
+export default withAuth(
+  async function middleware(req, res) {
+    const path = req.nextUrl.pathname;
+
+    // if user is login return to main page.
+    if (isProtected({path, routes: userAuth})) {
+      if (req.nextauth.token) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+    }
+
+    // if admin is login return to main page.
+    if (isProtected({path, routes: adminAuth})) {
+      if (req.nextauth.token) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+    }
+
+    // if user is not login and trying to access protectedRoutes return to login page
+    if (isProtected({path, routes: protectedRoutes})) {
+      if (!req.nextauth.token) {
+        return NextResponse.redirect(new URL("/auth/login", req.url));
+      }
+    }
+
+    // anyone trying to access adminRoutes without auth and has email return to main page
+    if (isProtected({path, routes: adminRoutes})) {
+      if (!req.nextauth.token) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+      if (req.nextauth.token.email) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+    }
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      async authorized({req, token}) {
+        return true
+      },
+    },
+  }
+)
+
+
+export const config = {
+  matcher: ["/auth/:path*", "/user/:path*", "/admin/:path*"],
+};
