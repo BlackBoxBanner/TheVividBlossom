@@ -138,7 +138,6 @@ export default function Home() {
 
   const [accountSetting, setAccountSetting] = useState(false)
 
-  const {data,} = useSession()
 
 
   return (
