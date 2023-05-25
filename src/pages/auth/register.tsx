@@ -222,7 +222,7 @@ export default function Register(props: RegisterProps) {
           <div className={`${styles.title} ${cardo.className}`}>
             {String("Create an account").toUpperCase()}
           </div>
-          <div className={`${outfit.className} ${styles.subtitle}`}>Fields marked * are mandatory</div>
+          <div className={`${outfitLabel.className} ${styles.subtitle}`}>Fields marked * are mandatory</div>
         </div>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <FormContainer header={"Personal Information"}>
