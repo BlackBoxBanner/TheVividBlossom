@@ -19,6 +19,7 @@ function isProtected(props: isProtectedProps) {
 
 export default withAuth(
   async function middleware(req, res) {
+    await delay(2000)
     const path = req.nextUrl.pathname;
 
     // if user is login return to main page.
