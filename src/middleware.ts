@@ -18,20 +18,20 @@ function isProtected(props: isProtectedProps) {
 }
 
 export async function middleware(req: NextRequest, res: NextResponse) {
-  const session = await getToken({req, secret: process.env.NEXTAUTH_SECRET});
-
-  const path = req.nextUrl.pathname;
-
-  if (session) {
-    if (path.startsWith("/auth")) return NextResponse.redirect(new URL("/", req.url));
-    if (path.startsWith("/admin/auth")) return NextResponse.redirect(new URL("/", req.url));
-  } else {
-    if (path.startsWith("/user")) return NextResponse.redirect(new URL("/auth/login", req.url));
-    if (path.startsWith("/admin/dashboard")) return NextResponse.redirect(new URL("/", req.url));
-  }
-  if (session?.email) {
-    if (path.startsWith("/admin/dashboard")) return NextResponse.redirect(new URL("/", req.url));
-  }
+  // const session = await getToken({req, secret: process.env.NEXTAUTH_SECRET});
+  //
+  // const path = req.nextUrl.pathname;
+  //
+  // if (session) {
+  //   if (path.startsWith("/auth")) return NextResponse.redirect(new URL("/", req.url));
+  //   if (path.startsWith("/admin/auth")) return NextResponse.redirect(new URL("/", req.url));
+  // } else {
+  //   if (path.startsWith("/user")) return NextResponse.redirect(new URL("/auth/login", req.url));
+  //   if (path.startsWith("/admin/dashboard")) return NextResponse.redirect(new URL("/", req.url));
+  // }
+  // if (session?.email) {
+  //   if (path.startsWith("/admin/dashboard")) return NextResponse.redirect(new URL("/", req.url));
+  // }
 
   return NextResponse.next();
 }

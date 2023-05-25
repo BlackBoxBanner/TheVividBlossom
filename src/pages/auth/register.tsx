@@ -20,6 +20,7 @@ import {useRouter} from "next/router";
 import {useProcessing} from "@/components/display/processing/container";
 import {getImage} from "@/hook/getImage";
 import {WaitingContent} from "@/components/display/processing/waiting";
+import {useSession} from "next-auth/react";
 
 
 const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
@@ -182,6 +183,19 @@ export default function Register(props: RegisterProps) {
       }
     })
   }
+
+  const {status} = useSession()
+
+  function checkAuth() {
+    if (status == "authenticated") {
+      router.push("/").then()
+      return true
+    }
+    return false
+  }
+
+  if (status == "loading") return <></>
+  if (checkAuth()) return <></>
 
   return (
     <>

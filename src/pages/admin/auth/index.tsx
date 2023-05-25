@@ -9,7 +9,7 @@ import {ButtonLogin} from "@/components/button";
 import {useForm, SubmitHandler,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {signIn} from "next-auth/react"
+import {signIn, useSession} from "next-auth/react"
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {useProcessing} from "@/components/display/processing/container";
@@ -54,6 +54,19 @@ export default function Login() {
       }
     })
   }
+
+  const {status} = useSession()
+
+  function checkAuth() {
+    if (status == "authenticated") {
+      router.push("/").then()
+      return true
+    }
+    return false
+  }
+
+  if (status == "loading") return <></>
+  if (checkAuth()) return <></>
   return (
     <>
       <Head>
