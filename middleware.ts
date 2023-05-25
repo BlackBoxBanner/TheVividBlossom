@@ -38,6 +38,7 @@ export default withAuth(
     // if user is not login and trying to access protectedRoutes return to login page
     if (isProtected({path, routes: protectedRoutes})) {
       if (!req.nextauth.token) {
+        await delay(1000)
         return NextResponse.redirect(new URL("/auth/login", req.url));
       }
     }
