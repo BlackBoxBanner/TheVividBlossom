@@ -1,6 +1,7 @@
 import {getToken} from "next-auth/jwt";
 import {NextRequest, NextResponse} from "next/server";
 import {withAuth} from "next-auth/middleware"
+import {delay} from "@/hook/delay";
 
 const protectedRoutes = ["/user"];
 const userAuth = ["/auth"]
@@ -50,6 +51,7 @@ export default withAuth(
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
+    await delay(1000)
     return NextResponse.next();
   },
   {
