@@ -1,7 +1,7 @@
-import {getToken} from "next-auth/jwt";
 import {NextRequest, NextResponse} from "next/server";
-import {withAuth} from "next-auth/middleware"
-import {delay} from "@/hook/delay";
+import {getServerSession} from "next-auth";
+import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import {getToken} from "next-auth/jwt";
 
 const protectedRoutes = ["/user"];
 const userAuth = ["/auth"]
@@ -17,51 +17,43 @@ function isProtected(props: isProtectedProps) {
   return props.routes.some((route) => props.path.startsWith(route));
 }
 
-export default withAuth(
-  async function middleware(req, res) {
-    await delay(2000)
-    const path = req.nextUrl.pathname;
+export async function middleware(req: NextRequest, res: NextResponse) {
+  const session = await getToken({req, secret: process.env.NEXTAUTH_SECRET});
 
-    // if user is login return to main page.
-    if (isProtected({path, routes: userAuth})) {
-      if (req.nextauth.token) {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
-    }
+  const path = req.nextUrl.pathname;
 
-    // if admin is login return to main page.
-    if (isProtected({path, routes: adminAuth})) {
-      if (req.nextauth.token) {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
+  // if user is login return to main page.
+  if (isProtected({path, routes: userAuth})) {
+    if (session) {
+      return NextResponse.redirect(new URL("/", req.url));
     }
-
-    // if user is not login and trying to access protectedRoutes return to login page
-    if (isProtected({path, routes: protectedRoutes})) {
-      if (!req.nextauth.token) {
-        return NextResponse.redirect(new URL("/auth/login", req.url));
-      }
-    }
-
-    // anyone trying to access adminRoutes without auth and has email return to main page
-    if (isProtected({path, routes: adminRoutes})) {
-      if (!req.nextauth.token) {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
-      if (req.nextauth.token.email) {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
-    }
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      async authorized({req, token}) {
-        return true
-      },
-    },
   }
-)
+
+  // if admin is login return to main page.
+  if (isProtected({path, routes: adminAuth})) {
+    if (session) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+
+  // if user is not login and trying to access protectedRoutes return to login page
+  if (isProtected({path, routes: protectedRoutes})) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+  }
+
+  // anyone trying to access adminRoutes without auth and has email return to main page
+  if (isProtected({path, routes: adminRoutes})) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    if (session.email) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+  return NextResponse.next();
+}
 
 
 export const config = {
