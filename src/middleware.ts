@@ -23,28 +23,32 @@ export async function middleware(req: NextRequest, res: NextResponse) {
   const path = req.nextUrl.pathname;
 
   // if user is login return to main page.
-  if (isProtected({path, routes: userAuth})) {
+  // if (isProtected({path, routes: userAuth})) {
+  if (path.startsWith("/auth")) {
     if (session) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
 
   // if admin is login return to main page.
-  if (isProtected({path, routes: adminAuth})) {
+  // if (isProtected({path, routes: adminAuth})) {
+  if (path.startsWith("/admin/auth")) {
     if (session) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
 
   // if user is not login and trying to access protectedRoutes return to login page
-  if (isProtected({path, routes: protectedRoutes})) {
+  // if (isProtected({path, routes: protectedRoutes})) {
+  if (path.startsWith("/user")) {
     if (!session) {
       return NextResponse.redirect(new URL("/auth/login", req.url));
     }
   }
 
   // anyone trying to access adminRoutes without auth and has email return to main page
-  if (isProtected({path, routes: adminRoutes})) {
+  // if (isProtected({path, routes: adminRoutes})) {
+  if (path.startsWith("/admin/dashboard")) {
     if (!session) {
       return NextResponse.redirect(new URL("/", req.url));
     }
