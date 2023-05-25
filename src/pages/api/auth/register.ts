@@ -48,28 +48,28 @@ export default async function handler(
 
 
     function checkUser(user: Partial<User>) {
-      if (!user.first_name) errorArray.push({firstname: "Firstname is missing"})
-      if (!user.last_name) errorArray.push({Lastname: "Lastname is missing"})
-      if (!user.email) errorArray.push({email: "Email is missing"})
-      if (!user.dob) errorArray.push({dateOfBirth: "Date of birth is missing"})
-      if (!user.password) errorArray.push({password: "password is missing"})
-      if (!user.telephone) errorArray.push({telephone: "Phone number is missing"})
+      if (!user?.first_name) errorArray.push({firstname: "Firstname is missing"})
+      if (!user?.last_name) errorArray.push({Lastname: "Lastname is missing"})
+      if (!user?.email) errorArray.push({email: "Email is missing"})
+      if (!user?.dob) errorArray.push({dateOfBirth: "Date of birth is missing"})
+      if (!user?.password) errorArray.push({password: "password is missing"})
+      if (!user?.telephone) errorArray.push({telephone: "Phone number is missing"})
       // todo : check date of date is valid.
     }
 
     function checkAddress(address: Partial<Address>) {
-      if (!address.address_line1) errorArray.push({address_line1: "Address line 1 is missing"})
-      if (!address.subDistrict) errorArray.push({subDistrict: "Sub district is missing"})
-      if (!address.district) errorArray.push({district: "District is missing"})
-      if (!address.province) errorArray.push({province: "Province is missing"})
-      if (!address.zipcode) errorArray.push({zipcode: "Zipcode is missing"})
+      if (!address?.address_line1) errorArray.push({address_line1: "Address line 1 is missing"})
+      if (!address?.subDistrict) errorArray.push({subDistrict: "Sub district is missing"})
+      if (!address?.district) errorArray.push({district: "District is missing"})
+      if (!address?.province) errorArray.push({province: "Province is missing"})
+      if (!address?.zipcode) errorArray.push({zipcode: "Zipcode is missing"})
     }
 
     function checkPayment(payment: Partial<User_Payment>) {
-      if (!payment.card_number) errorArray.push({card_number: "Card number is missing"})
-      if (!payment.name_on_card) errorArray.push({name_on_card: "Name on card is missing"})
-      if (!payment.card_expiry) errorArray.push({card_expiry: "Card expire date is missing"})
-      if (!payment.cvv) errorArray.push({cvv: "CVV code is missing"})
+      if (!payment?.card_number) errorArray.push({card_number: "Card number is missing"})
+      if (!payment?.name_on_card) errorArray.push({name_on_card: "Name on card is missing"})
+      if (!payment?.card_expiry) errorArray.push({card_expiry: "Card expire date is missing"})
+      if (!payment?.cvv) errorArray.push({cvv: "CVV code is missing"})
     }
 
     async function checkUserExist(user: Partial<User>) {
