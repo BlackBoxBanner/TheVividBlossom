@@ -2,7 +2,6 @@ import Head from "next/head";
 import styles from "@/styles/pages/auth/register.module.scss"
 import Image from "next/image"
 import {RegisterInput, RegisterInputMask} from "@/components/input";
-import {Cardo, Outfit} from "next/font/google";
 import {Button, ButtonLogin} from "@/components/button";
 import {SubmitHandler, useForm,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -21,12 +20,8 @@ import {useProcessing} from "@/components/display/processing/container";
 import {getImage} from "@/hook/getImage";
 import {WaitingContent} from "@/components/display/processing/waiting";
 import {useSession} from "next-auth/react";
+import {cardo, outfit, outfitLabel, outfitStrong} from "@/util/font";
 
-
-const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
-const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
-const outfitLabel = Outfit({weight: "500", style: ["normal"], subsets: ["latin"]});
-const outfitStrong = Outfit({weight: "600", style: ["normal"], subsets: ["latin"]});
 
 
 interface RegisterProps {

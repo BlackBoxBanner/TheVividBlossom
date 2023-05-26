@@ -14,6 +14,7 @@ import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
 import {useSession} from "next-auth/react";
 import {ProfileMenu} from "@/components/display/landing/profile";
+import axios from "axios";
 
 // const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
@@ -37,6 +38,7 @@ export default function Home() {
   const [recommend, setRecommend] = useState(false)
   const [image, setImage] = useState(false)
 
+  const [userId, setUserId] = useState<string>()
 
   useEffect(() => {
     function intervalCallback() {
@@ -114,7 +116,7 @@ export default function Home() {
   const accountSettingList = [
     {
       title: "Edit Account",
-      link: "/user/account"
+      link: `/user/${userId || "noId"}/account`
     },
     {
       title: "My Order",
@@ -138,6 +140,29 @@ export default function Home() {
 
   const [accountSetting, setAccountSetting] = useState(false)
 
+  const {data: session} = useSession()
+
+  useEffect(() => {
+    const email = session?.user?.email
+    if (!email) return
+
+    async function getUser() {
+      return axios<{ id: string }>({
+        baseURL: "/api/user/id",
+        method: "GET",
+        params: {
+          email
+        }
+      });
+    }
+
+    getUser().then(e => {
+      if (e.status == 200) {
+        setUserId(e.data.id)
+      }
+    })
+
+  }, [session?.user?.email])
 
 
   return (
