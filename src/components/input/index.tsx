@@ -128,7 +128,18 @@ export interface InputMaskProps extends ReactInputMaskProps {
 }
 
 export const InputDate = forwardRef<ReactInputMask, InputMaskProps>((props, ref) => {
-  const {page} = props
+  const {type: initType, page = "landing"} = props;
+  const [type, setType] = useState<"password" | "text">(props.type == "password" ? "password" : "text");
+
+
+  function changeHandler() {
+    if (type === "password") {
+      setType("text");
+    } else {
+      setType("password");
+    }
+  }
+
   return (
     <>
       <div className={`${styles.inputContainer} ${outfit.className}`}>
@@ -140,10 +151,21 @@ export const InputDate = forwardRef<ReactInputMask, InputMaskProps>((props, ref)
           <ReactInputMask mask={props.mask!} onChange={props.onChange} onBlur={props.onBlur} name={props.name}
                           disabled={props.disabled}
                           maskChar={null}
-                          type={props.type}
+                          type={type}
                           ref={ref}
                           placeholder={props.placeholder}
                           className={`${styles.input} ${props.className} ${!!props.error ? styles.inputError : ""} ${styles.date} ${page === "setting" && styles.settingInput}`}/>
+          {initType === "password" && (
+            type === "password" ? (
+              <button onClick={changeHandler} type="button" className={styles.hideBtn}>
+                <AiOutlineEye size={25} className={styles.icon}/>
+              </button>
+            ) : (
+              <button onClick={changeHandler} type="button" className={styles.hideBtn}>
+                <AiOutlineEyeInvisible size={25} className={styles.icon}/>
+              </button>
+            )
+          )}
         </div>
       </div>
     </>
