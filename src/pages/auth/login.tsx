@@ -85,7 +85,7 @@ export default function Login() {
         />
       </Head>
       <Processing>
-        <WaitingContent title={"session"}/>
+        <WaitingContent title={"request"}/>
       </Processing>
       <main className={styles.main}>
         <div className={styles.formContainer}>
