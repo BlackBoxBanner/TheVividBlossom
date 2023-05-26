@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image"
 import Link from "next/link";
-import {Cardo} from "next/font/google";
 
 import styles from "@/styles/pages/auth/login.module.scss"
 
@@ -19,8 +18,7 @@ import {useEffect, useState} from "react";
 import {useProcessing} from "@/components/display/processing/container";
 import {WaitingContent} from "@/components/display/processing/waiting";
 import {useSession} from "next-auth/react"
-
-const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
+import {cardo} from "@/util/font";
 
 
 const schema = z.object({

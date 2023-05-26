@@ -15,7 +15,7 @@ export default async function handler(
   req: ExtendedNextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") return res.status(404).send("Not found!")
+  if (req.method !== "PATCH") return res.status(404).send("Not found!")
   const {email, image} = req.body
 
   if (!email) return res.status(404).send("No email provided!");
