@@ -3,6 +3,8 @@ import {User, Address, User_Payment} from ".prisma/client";
 import {NextApiRequest, NextApiResponse} from "next";
 import {hash} from "bcrypt";
 import {breakImage} from "@/hook/image";
+import {mockSession} from "next-auth/client/__tests__/helpers/mocks";
+import user = mockSession.user;
 
 export interface PostType {
   user: Partial<User>
@@ -110,7 +112,6 @@ async function createUser(props: {
 
   if (props.user.image) {
     const imageData = breakImage(props.user.image)
-
     await prisma.user.create({
       data: {
         first_name: props.user.first_name!,
