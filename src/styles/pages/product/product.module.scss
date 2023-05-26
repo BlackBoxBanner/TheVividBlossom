@@ -1,0 +1,18 @@
+@import "./../../variable";
+
+.main {
+  display: block;
+}
+
+.gridDisplay {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.header {
+  grid-row: span 2 / span 2;
+  width: 33.33333%;
+  display: block;
+
+
+}

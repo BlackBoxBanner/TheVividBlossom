@@ -15,6 +15,7 @@ import RightMenu from "@/components/display/landing/rightmenu";
 import {useSession} from "next-auth/react";
 import {ProfileMenu} from "@/components/display/landing/profile";
 import axios from "axios";
+import {useRouter} from "next/router";
 
 // const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
@@ -39,6 +40,8 @@ export default function Home() {
   const [image, setImage] = useState(false)
 
   const [userId, setUserId] = useState<string>()
+
+  const router = useRouter()
 
   useEffect(() => {
     function intervalCallback() {
@@ -185,7 +188,7 @@ export default function Home() {
       <main style={{position: "relative"}}>
         <div className={styles.main + " " + cardo.className}>
           <div className={styles.sidebar + " " + styles.leftsidebar}>
-            <MenuButton>All Flower Seeds</MenuButton>
+            <MenuButton onClick={() => router.push("/product")}>All Flower Seeds</MenuButton>
             <MenuButton onClick={() => {
               setColor(true)
               setOverMenu(true)
