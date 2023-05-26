@@ -294,7 +294,7 @@ export default function Register(props: RegisterProps) {
             <RegisterInputMask label={"Expiry Date *"} mask={"99 / 99"}
                                error={errors.payment?.card_expiry?.message}
                                placeholder={"MM / YY"} {...register("payment.card_expiry")}/>
-            <RegisterInputMask label={"Security Code *"} mask={"999"}
+            <RegisterInputMask label={"Security Code *"} mask={"999"} type={"password"}
                                error={errors.payment?.cvv?.message}
                                placeholder={"CVC"} {...register("payment.cvv")}/>
             <RegisterInput label={"Country"} error={""} placeholder={"Country"}/>
