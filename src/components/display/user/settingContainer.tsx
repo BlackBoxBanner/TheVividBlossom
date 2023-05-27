@@ -19,7 +19,7 @@ function SettingContainer(props: SettingContainerProps) {
         <span/>
         <button
           className={`${styles.closeButton}`}
-          onClick={() => router.push("")}
+          onClick={() => router.push("/")}
         >
           <svg
             width="58"
@@ -41,16 +41,17 @@ function SettingContainer(props: SettingContainerProps) {
           {props.children}
         </article>
       </main>
-      <footer className={`${styles.footer}`}>
-        <div>
-          <ButtonLogin font={"Outfit"} type={"reset"} onClick={props.onCancel} dark style={{width: "100%"}}>
-            Cancel
-          </ButtonLogin>
-          <ButtonLogin font={"Outfit"} style={{width: "100%"}} form={props.formId}>
-            Save
-          </ButtonLogin>
-        </div>
-      </footer>
+      {props.formId &&
+          <footer className={`${styles.footer}`}>
+              <div>
+                  <ButtonLogin font={"Outfit"} type={"reset"} onClick={props.onCancel} dark style={{width: "100%"}}>
+                      Cancel
+                  </ButtonLogin>
+                  <ButtonLogin font={"Outfit"} style={{width: "100%"}} form={props.formId}>
+                      Save
+                  </ButtonLogin>
+              </div>
+          </footer>}
     </>
   )
 }

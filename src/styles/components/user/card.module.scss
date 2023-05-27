@@ -1,0 +1,131 @@
+@import "../../variable";
+
+.card {
+  padding: 1.5rem;
+  border: 1px solid $primary_text_color;
+  border-radius: 1.75rem;
+  width: 18rem;
+  height: 10rem;
+  overflow: clip;
+  position: relative;
+
+  &:hover {
+    .cardHover {
+      opacity: 0.8;
+    }
+
+    .hoverContent {
+      opacity: 1;
+    }
+  }
+
+  .cardHover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: $primary_text_color;
+    opacity: 0;
+    transition: ease-in-out all $btn_animation;
+  }
+
+  .hoverContent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    color: #50AB75;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: ease-in-out all $btn_animation;
+    gap: 0.5rem;
+  }
+}
+
+.addCard {
+  transition: background-color ease-in-out $btn_animation;
+
+  .closeIcon {
+    transform: rotate(45deg);
+    transition: all ease-in-out $btn_animation;
+
+    path {
+      transition: all ease-in-out $btn_animation;
+      stroke: $primary_text_color;
+    }
+  }
+
+  &:hover {
+    background-color: $primary_text_color;
+
+    .closeIcon {
+      transform: rotate(180deg+45deg);
+
+      path {
+        stroke: $primary_color;
+      }
+    }
+  }
+}
+
+.cardDetailContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+
+  .leftContainer {
+    width: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .name {
+    font-size: 1.25rem;
+
+    .lastname {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .cardNo {
+    font-size: 0.9rem;
+  }
+
+  .rightContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.cardImage {
+  width: 3rem;
+  height: auto;
+}
+
+.visa {
+  margin-top: 0.5rem;
+}
+
+.default {
+  position: absolute;
+  color: $inner_btn_hover;
+  border: 1px solid $inner_btn_hover;
+  border-radius: 10rem;
+  background-color: $primary_color;
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  top: 0.75rem;
+  right: 0.75rem;
+}
