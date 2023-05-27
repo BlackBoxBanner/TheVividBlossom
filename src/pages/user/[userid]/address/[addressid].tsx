@@ -2,6 +2,7 @@ import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import Head from "next/head";
 import {GetServerSideProps, InferGetServerSidePropsType} from "next";
+import prisma from "@/lib/prisma";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -11,18 +12,48 @@ import {
   AccountFormInput,
   AccountFormInputMask, SettingLabel,
 } from "@/components/input";
+import {getImage as getImageApi} from "@/hook/api/image";
+import {getImage} from "@/hook/getImage";
+import {useEffect, useState} from "react";
+import Image from "next/image";
+import {BsPersonFill} from "react-icons/bs";
+import {ButtonLogin} from "@/components/button";
 import axios from "axios";
+import {Address} from ".prisma/client";
 
 interface ServerSideProps {
-
+  userid: string | undefined
+  addressid: string | undefined
+  address: Partial<Address> | null
 }
 
-export const getServerSideProps: GetServerSideProps<{ userid: string | undefined }, {
-  userid: string
+export const getServerSideProps: GetServerSideProps<ServerSideProps, {
+  userid: string,
+  addressid: string
 }> = async (context) => {
   const userid = context.params?.userid
+  const addressid = context.params?.addressid
+
+  const resData = await prisma?.address.findUnique({
+    where: {
+      id: addressid,
+    }
+  })
+
   return {
-    props: {userid: userid}
+    props: {
+      userid,
+      addressid,
+      address: {
+        id: resData?.id,
+        address_line1: resData?.address_line1,
+        address_line2: resData?.address_line2,
+        subDistrict: resData?.subDistrict,
+        district: resData?.district,
+        province: resData?.province,
+        zipcode: resData?.zipcode,
+      }
+    }
   }
 };
 
@@ -37,24 +68,32 @@ const schema = z.object({
 
 type DataProps = z.infer<typeof schema>
 
-function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function EditAddress({userid, addressid, address}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
 
   const {register, handleSubmit, formState: {errors}, setError, watch} = useForm<DataProps>({
     resolver: zodResolver(schema),
-    defaultValues: {}
+    defaultValues: {
+      address_line1: address?.address_line1,
+      address_line2: address?.address_line2 || "",
+      subDistrict: address?.subDistrict,
+      district: address?.district,
+      province: address?.province,
+      zipcode: address?.zipcode,
+    }
   })
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
-    console.log(userid)
+    console.log(data);
     await axios({
       url: "/api/user/address",
-      method: "POST",
+      method: "PATCH",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
       },
       data: {
         userid: userid,
+        addressId: address?.id,
         address_line1: data.address_line1,
         address_line2: data.address_line2,
         subDistrict: data.subDistrict,
@@ -109,24 +148,24 @@ function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSidePr
       }}>
         <form onSubmit={handleSubmit(onSubmit)} className={`${styles.form}`} id={"editAccount"}>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Address line 1 *"} edit
+            <AccountFormInput label={"Address line 1 *"}
                               placeholder={"House number, Village no, Street address"}  {...register("address_line1")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Address line 2"} edit
+            <AccountFormInput label={"Address line 2"}
                               placeholder={"Village / Building name, Floor number"} {...register("address_line2")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Sub district *"} edit placeholder={"Sub District"} {...register("subDistrict")}/>
+            <AccountFormInput label={"Sub district *"} placeholder={"Sub District"} {...register("subDistrict")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"District *"} edit placeholder={"District"} {...register("district")}/>
+            <AccountFormInput label={"District *"} placeholder={"District"} {...register("district")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Province *"} edit placeholder={"Province"} {...register("province")}/>
+            <AccountFormInput label={"Province *"} placeholder={"Province"} {...register("province")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInputMask mask={"99999"} edit label={"Postal code *"}
+            <AccountFormInputMask mask={"99999"} label={"Postal code *"}
                                   placeholder={"XXXXX"} {...register("zipcode")}/>
           </div>
         </form>
@@ -135,4 +174,4 @@ function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSidePr
   )
 }
 
-export default AddAddress
+export default EditAddress

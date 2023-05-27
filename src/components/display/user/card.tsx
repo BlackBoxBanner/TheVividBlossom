@@ -4,13 +4,18 @@ import {outfitLabel} from "@/util/font";
 import {ButtonLogin} from "@/components/button";
 import Image from "next/image";
 import mastercard from "@./public/pages/register/mastercard.svg";
+import {useRouter} from "next/router";
 
 interface CardContainerProps extends ComponentProps<"div"> {
   type: "card" | "address"
   default?: boolean
+  valId: string
+  userId: string
+  onDelete: () => void
 }
 
 export function CardContainer(props: CardContainerProps) {
+  const router = useRouter()
   const removeText = `Remove ${props.type}`
   return (
     <>
@@ -25,12 +30,13 @@ export function CardContainer(props: CardContainerProps) {
                   Set as default
               </ButtonLogin>
           }
-          <ButtonLogin dark font={"Outfit"} payment style={{width: "11rem"}}>
+          <ButtonLogin dark font={"Outfit"} payment style={{width: "11rem"}}
+                       onClick={() => router.push(`/user/${props.userId}/${props.type}/${props.valId}`)}>
             Review details
           </ButtonLogin>
           {
             !props.default &&
-              <ButtonLogin font={"Outfit"} payment style={{width: "11rem"}}>
+              <ButtonLogin font={"Outfit"} payment style={{width: "11rem"}} onClick={props.onDelete}>
                 {removeText}
               </ButtonLogin>
           }

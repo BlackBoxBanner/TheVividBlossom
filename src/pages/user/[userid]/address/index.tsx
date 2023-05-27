@@ -8,6 +8,7 @@ import axios from "axios";
 import styles from "@/styles/pages/user/payment.module.scss"
 import {AddCardButton, CardDetail, CardContainer, CardAddressDetail} from "@/components/display/user/card"
 import {Address, User_Payment} from ".prisma/client";
+import address from "@/pages/user/[userid]/create/address";
 
 interface AddressProps {
   user: {
@@ -30,38 +31,55 @@ export const getServerSideProps: GetServerSideProps<{ userid: string | undefined
   }
 };
 
-
 function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const router = useRouter()
 
   const [userAddress, setUserAddress] = useState<AddressProps>()
 
+  async function fetchHandler() {
+
+    await axios<AddressProps>({
+      url: "/api/user/address",
+      headers: {
+        Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
+      },
+      params: {
+        id: userid
+      }
+    }).then((e) => {
+      console.log(e.data.default)
+      console.log(e.data)
+      setUserAddress(e.data)
+    }).catch(e => {
+      console.error(e)
+    })
+  }
+
+  async function onDelete(id: string) {
+    console.log(id)
+    await axios({
+      url: "/api/user/address",
+      method: "DELETE",
+      headers: {
+        Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
+      },
+      data: {
+        addressId: id
+      }
+    }).then(() => fetchHandler().then()).catch(e => {
+      console.error(e)
+    })
+  }
+
+
   useEffect(() => {
-    async function handler() {
 
-      await axios<AddressProps>({
-        url: "/api/user/address",
-        headers: {
-          Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
-        },
-        params: {
-          id: userid
-        }
-      }).then((e) => {
-        console.log(e.data.default)
-        console.log(e.data)
-        setUserAddress(e.data)
-      }).catch(e => {
-        console.error(e)
-      })
-    }
-
-    handler().then()
+    fetchHandler().then()
     return
   }, [userid])
 
-  // do not touch
+// do not touch
   const {status} = useSession()
 
   function checkAuth() {
@@ -98,7 +116,10 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
           <AddCardButton for={"address"} onClick={() => router.push(`/user/${userid}/create/address`)}/>
           {userAddress?.address.map((value, index, array) => {
             return (
-              <CardContainer type={"address"} key={index} default={userAddress?.default.includes(value.id)}>
+              <CardContainer type={"address"} valId={value.id} userId={userid!} key={index}
+                             default={userAddress?.default.includes(value.id)} onDelete={() => {
+                onDelete(value.id).then()
+              }}>
                 <CardAddressDetail
                   name={userAddress?.user.name!}
                   address={`${value.address_line1} ${value.address_line2} ${value.subDistrict} ${value.district} ${value.province} ${value.zipcode}`}

@@ -198,7 +198,7 @@ export const AccountFormInput = forwardRef<HTMLInputElement, FormInputProps>((pr
       <Input page={"setting"} showError={false} {...props} ref={ref} disabled={disable}/>
       {
         !props.edit &&
-          <ButtonLogin font={"Outfit"} onClick={() => {
+          <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
             setDisable(e => !e)
           }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
               Edit
@@ -218,7 +218,7 @@ export const AccountFormInputMask = forwardRef<ReactInputMask, InputMaskProps>((
                  {...props} ref={ref}/>
       {
         !props.edit &&
-          <ButtonLogin font={"Outfit"} type={"reset"} onClick={() => {
+          <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
             setDisable(e => !e)
           }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
               Edit
@@ -248,7 +248,7 @@ export const AccountFormInputImage = forwardRef<HTMLInputElement, InputProps>((p
           />
         </div>
       </div>
-      <ButtonLogin font={"Outfit"} type={"reset"} onClick={() => {
+      <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
         setDisable(e => !e)
       }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
         Edit

@@ -1,12 +1,14 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {userGetAddress, userGetPayment} from "@/hook/api/user";
+import {userGetAddress} from "@/hook/api/user";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   query: {
     id: string
+    addressId?: string
   };
   body: {
     userid: string
+    addressId: string
     address_line1: string
     address_line2: string
     subDistrict: string
@@ -26,26 +28,57 @@ export default async function handler(
     return res.status(401).send("un-authorization")
   }
 
-  if (req.method === "GET") {
-    const {id} = req.query
+  switch (req.method) {
+    case "GET":
+      await getHandler();
+      break
+    case "POST":
+      await postHandler()
+      break
+    case "PATCH":
+      await patchHandler()
+      break
+    case "DELETE":
+      await deleteHandler()
+      break
+    default:
+      res.status(404).json({error: "Not found!"})
 
-    const data = await userGetAddress({id})
-
-
-    res.status(200).json({
-      user: {
-        name: `${data?.first_name} ${data?.last_name}`,
-        tel: data?.telephone,
-      },
-      address: data?.Address,
-      default: data?.DefaultAddress?.addressId
-    });
   }
-  if (req.method === "POST") {
-    const data = req.body
-    console.log(data);
 
-    const address = await prisma?.address.create({
+  async function getHandler() {
+    const {id, addressId} = req.query
+
+    if (addressId) {
+      await prisma?.address.findUnique({
+        where: {
+          id: addressId,
+        }
+      }).then(e => {
+        return res.status(200).json({address: e})
+      }).catch(e => {
+        return res.status(400).json(e)
+      })
+    }
+
+    await userGetAddress({id}).then(e => {
+      return res.status(200).json({
+        user: {
+          name: `${e?.first_name} ${e?.last_name}`,
+          tel: e?.telephone,
+        },
+        address: e?.Address,
+        default: e?.DefaultAddress?.addressId
+      });
+    }).catch(e => {
+      return res.status(400).json(e)
+    })
+  }
+
+  async function postHandler() {
+    const data = req.body
+
+    await prisma?.address.create({
       data: {
         user_id: data.userid,
         address_line1: data.address_line1,
@@ -56,12 +89,45 @@ export default async function handler(
         zipcode: data.zipcode,
         create_at: new Date(),
       },
-    })
-
-    res.status(200).send(address)
+    }).then(e => {
+      return res.status(200).send(e)
+    }).catch(e => res.status(400).json(e))
   }
 
-  return res.status(404).send("Not found!")
+  async function patchHandler() {
+    const data = req.body
+
+    await prisma?.address.update({
+      where: {
+        id: data.addressId,
+      },
+      data: {
+        user_id: data.userid,
+        address_line1: data.address_line1,
+        address_line2: data.address_line2,
+        subDistrict: data.subDistrict,
+        district: data.district,
+        province: data.province,
+        zipcode: data.zipcode,
+        modified_at: new Date()
+      }
+    }).then(e => {
+      return res.status(200).send(e)
+    }).catch(e => res.status(400).json(e))
+  }
+
+  async function deleteHandler() {
+    const {addressId} = req.body
+
+    await prisma?.address.delete({
+      where: {
+        id: addressId
+      }
+    }).then((e) => {
+      res.status(200).json({status: "Deleted"})
+    }).catch(e => res.status(400).json(e))
+
+  }
 }
 
 
