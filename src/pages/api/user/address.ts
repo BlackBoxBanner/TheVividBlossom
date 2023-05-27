@@ -7,6 +7,7 @@ interface ExtendedNextApiRequest extends NextApiRequest {
     addressId?: string
   };
   body: {
+    type?: string
     userid: string
     addressId: string
     address_line1: string
@@ -38,7 +39,7 @@ export default async function handler(
     case "PATCH":
       await patchHandler()
       break
-    case "DELETE":
+    case "":
       await deleteHandler()
       break
     default:
@@ -96,6 +97,23 @@ export default async function handler(
 
   async function patchHandler() {
     const data = req.body
+
+    if (data.type === "default") {
+      await prisma?.user.update({
+        where: {
+          id: data.userid
+        },
+        data: {
+          DefaultAddress: {
+            update: {
+              addressId: data.addressId
+            }
+          }
+        }
+      }).then(e => {
+        return res.status(200).send(e)
+      }).catch(e => res.status(400).json(e))
+    }
 
     await prisma?.address.update({
       where: {

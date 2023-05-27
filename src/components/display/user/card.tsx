@@ -12,6 +12,7 @@ interface CardContainerProps extends ComponentProps<"div"> {
   valId: string
   userId: string
   onDelete: () => void
+  changeDefault?: () => void
 }
 
 export function CardContainer(props: CardContainerProps) {
@@ -26,7 +27,7 @@ export function CardContainer(props: CardContainerProps) {
         <section className={styles.hoverContent}>
           {
             !props.default &&
-              <ButtonLogin dark font={"Outfit"} payment style={{width: "11rem"}}>
+              <ButtonLogin dark font={"Outfit"} payment style={{width: "11rem"}} onClick={props.changeDefault}>
                   Set as default
               </ButtonLogin>
           }

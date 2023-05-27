@@ -72,6 +72,24 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
     })
   }
 
+  async function onUpdateDefault(id: string) {
+    console.log(id)
+    await axios({
+      url: "/api/user/address",
+      method: "PATCH",
+      headers: {
+        Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
+      },
+      data: {
+        addressId: id,
+        userid: userid,
+        type: "default"
+      }
+    }).then(() => fetchHandler().then()).catch(e => {
+      console.error(e)
+    })
+  }
+
 
   useEffect(() => {
 
@@ -119,6 +137,8 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
               <CardContainer type={"address"} valId={value.id} userId={userid!} key={index}
                              default={userAddress?.default.includes(value.id)} onDelete={() => {
                 onDelete(value.id).then()
+              }} changeDefault={() => {
+                onUpdateDefault(value.id).then()
               }}>
                 <CardAddressDetail
                   name={userAddress?.user.name!}
