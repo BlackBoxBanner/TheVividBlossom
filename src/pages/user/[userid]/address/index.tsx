@@ -48,8 +48,6 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
         id: userid
       }
     }).then((e) => {
-      console.log(e.data.default)
-      console.log(e.data)
       setUserAddress(e.data)
     }).catch(e => {
       console.error(e)
@@ -57,7 +55,6 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
   }
 
   async function onDelete(id: string) {
-    console.log(id)
     await axios({
       url: "/api/user/address",
       method: "DELETE",
@@ -73,7 +70,6 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
   }
 
   async function onUpdateDefault(id: string) {
-    console.log(id)
     await axios({
       url: "/api/user/address",
       method: "PATCH",

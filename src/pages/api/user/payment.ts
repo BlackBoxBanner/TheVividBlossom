@@ -37,7 +37,7 @@ export default async function handler(
       await patchHandler(req, res)
       break
     case "POST":
-      await createHandler(req, res).then()
+      await createHandler(req, res)
       break
     default:
       res.status(404).send("Not found!")
@@ -47,43 +47,44 @@ export default async function handler(
 
 async function getHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
   const {id} = req.query
-  await userGetPayment({id}).then(e => {
-    return res.status(200).json({
-      payment: e?.User_Payment,
-      default: e?.DefaultPayment?.paymentId
-    });
-  }).catch(e => res.status(400).json(e))
+  const payment = await userGetPayment({id})
+
+  if (!payment) return res.status(400).json({message: "Error"})
+  return res.status(200).json({
+    payment: payment?.User_Payment,
+    default: payment?.DefaultPayment?.paymentId
+  })
 }
 
 async function deleteHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
   const {paymentId} = req.body
-  await prisma?.user_Payment.delete({
+  const payment = await prisma?.user_Payment.delete({
     where: {
       id: paymentId
     }
-  }).then(e => {
-    return res.status(200).json(e)
-  }).catch(e => res.status(400).json(e))
+  })
+  if (!payment) return res.status(400).json({message: "Error"})
+  return res.status(200).json(payment)
 }
 
 async function patchHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
   const {paymentId, type, id} = req.body
   switch (type) {
     case "default":
-      await updateDefault().then()
+      await updateDefault()
       break
     default:
-      await updatePayment().then()
+      await updatePayment()
       break
   }
 
   async function updatePayment() {
-    const {name_on_card, card_number, card_expiry, cvv, paymentId, id} = req.body
+    const {name_on_card, card_number, card_expiry, cvv, paymentId} = req.body
 
     const [monthStr, yearStr] = card_expiry!.split(" / ");
     const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
 
-    await prisma?.user_Payment.update({
+    const payment = await prisma?.user_Payment.update({
       where: {
         id: paymentId
       },
@@ -93,14 +94,14 @@ async function patchHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
         card_expiry: date,
         cvv,
       }
-    }).then(e => {
-      return res.status(200).send(e)
-    }).catch(e => res.status(400).json(e))
+    })
+
+    if (!payment) return res.status(400).json({message: "Error"})
+    return res.status(200).json(payment)
   }
 
   async function updateDefault() {
-    console.log(id)
-    await prisma?.user.update({
+    const payment = await prisma?.user.update({
       where: {
         id
       },
@@ -111,9 +112,10 @@ async function patchHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
           }
         }
       }
-    }).then(e => {
-      return res.status(200).send(e)
-    }).catch(e => res.status(400).json(e))
+    })
+
+    if (!payment) return res.status(400).json({message: "Error"})
+    return res.status(200).json(payment)
   }
 }
 
@@ -123,7 +125,7 @@ async function createHandler(req: ExtendedNextApiRequest, res: NextApiResponse) 
   const [monthStr, yearStr] = card_expiry!.split(" / ");
   const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
 
-  await prisma?.user.update({
+  const payment = await prisma?.user.update({
     where: {
       id
     },
@@ -140,9 +142,9 @@ async function createHandler(req: ExtendedNextApiRequest, res: NextApiResponse) 
         }
       }
     }
-  }).then(e => {
-    return res.status(200).json(e)
-  }).catch(e => res.status(500).json(e))
+  })
+  if (!payment) return res.status(400).json({message: "Error"})
+  return res.status(200).json(payment)
 }
 
 

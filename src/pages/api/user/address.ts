@@ -51,35 +51,32 @@ export default async function handler(
     const {id, addressId} = req.query
 
     if (addressId) {
-      await prisma?.address.findUnique({
+      const address = await prisma?.address.findUnique({
         where: {
           id: addressId,
         }
-      }).then(e => {
-        return res.status(200).json({address: e})
-      }).catch(e => {
-        return res.status(400).json(e)
       })
+      if (!address) return res.status(400).json({message: "Error"})
+      return res.status(200).json(address)
     }
 
-    await userGetAddress({id}).then(e => {
-      return res.status(200).json({
-        user: {
-          name: `${e?.first_name} ${e?.last_name}`,
-          tel: e?.telephone,
-        },
-        address: e?.Address,
-        default: e?.DefaultAddress?.addressId
-      });
-    }).catch(e => {
-      return res.status(400).json(e)
+    const address = await userGetAddress({id})
+
+    if (!address) return res.status(400).json({message: "Error"})
+    return res.status(200).json({
+      user: {
+        name: `${address?.first_name} ${address?.last_name}`,
+        tel: address?.telephone,
+      },
+      address: address?.Address,
+      default: address?.DefaultAddress?.addressId
     })
   }
 
   async function postHandler() {
     const data = req.body
 
-    await prisma?.address.create({
+    const address = await prisma?.address.create({
       data: {
         user_id: data.userid,
         address_line1: data.address_line1,
@@ -90,16 +87,17 @@ export default async function handler(
         zipcode: data.zipcode,
         create_at: new Date(),
       },
-    }).then(e => {
-      return res.status(200).send(e)
-    }).catch(e => res.status(400).json(e))
+    })
+
+    if (!address) return res.status(400).json({message: "Error"})
+    return res.status(200).json(address)
   }
 
   async function patchHandler() {
     const data = req.body
 
     if (data.type === "default") {
-      await prisma?.user.update({
+      const address = await prisma?.user.update({
         where: {
           id: data.userid
         },
@@ -110,12 +108,13 @@ export default async function handler(
             }
           }
         }
-      }).then(e => {
-        return res.status(200).send(e)
-      }).catch(e => res.status(400).json(e))
+      })
+
+      if (!address) return res.status(400).json({message: "Error"})
+      return res.status(200).json(address)
     }
 
-    await prisma?.address.update({
+    const address = await prisma?.address.update({
       where: {
         id: data.addressId,
       },
@@ -129,22 +128,23 @@ export default async function handler(
         zipcode: data.zipcode,
         modified_at: new Date()
       }
-    }).then(e => {
-      return res.status(200).send(e)
-    }).catch(e => res.status(400).json(e))
+    })
+
+    if (!address) return res.status(400).json({message: "Error"})
+    return res.status(200).json(address)
   }
 
   async function deleteHandler() {
     const {addressId} = req.body
 
-    await prisma?.address.delete({
+    const address = await prisma?.address.delete({
       where: {
         id: addressId
       }
-    }).then((e) => {
-      res.status(200).json({status: "Deleted"})
-    }).catch(e => res.status(400).json(e))
+    })
 
+    if (!address) return res.status(400).json({message: "Error"})
+    return res.status(200).json(address)
   }
 }
 
