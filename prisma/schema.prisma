@@ -194,14 +194,40 @@ model User {
   modified_at   DateTime?
   deleted_at    DateTime?
 
-  accounts      Account[]
-  sessions      Session[]
-  User_Payment  User_Payment[]
-  Address       Address[]
-  Order_details Order_details[]
-  User_Image    User_Image?
+  accounts       Account[]
+  sessions       Session[]
+  User_Payment   User_Payment[]
+  Address        Address[]
+  Order_details  Order_details[]
+  User_Image     User_Image?
+  DefaultPayment DefaultPayment?
+  DefaultAddress DefaultAddress?
 
   @@unique(fields: [email], name: "unique_email")
+}
+
+model DefaultPayment {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  paymentId String? @unique
+
+  User    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Payment User_Payment? @relation(fields: [paymentId], references: [id])
+
+  @@unique(fields: [userId], map: "unique_user_id", name: "unique_user_id")
+  @@unique(fields: [paymentId], map: "unique_paymentId", name: "unique_paymentId")
+}
+
+model DefaultAddress {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  addressId String? @unique
+
+  User    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Address Address? @relation(fields: [addressId], references: [id])
+
+  @@unique(fields: [userId], map: "unique_user_id", name: "unique_user_id")
+  @@unique(fields: [addressId], map: "unique_addressId", name: "unique_addressId")
 }
 
 model User_Image {
@@ -246,6 +272,7 @@ model User_Payment {
   User User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   Order_Transaction Order_Transaction[]
+  DefaultPayment    DefaultPayment?
 
   @@index([user_id])
 }
@@ -310,8 +337,9 @@ model Address {
   modified_at   DateTime?
   deleted_at    DateTime?
 
-  User          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  Order_details Order_details[]
+  User           User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Order_details  Order_details[]
+  DefaultAddress DefaultAddress?
 
   @@index(fields: [user_id], map: "index_user_id")
 }
