@@ -53,3 +53,28 @@ export async function userUpdateApi(props: userUpdateProps) {
     }
   })
 }
+
+export async function userGetPayment(props: { id: string }) {
+  console.log(props.id)
+  return prisma.user.findUnique({
+    where: {
+      id: props.id
+    },
+    select: {
+      User_Payment: {
+        select: {
+          id: true,
+          name_on_card: true,
+          card_number: true,
+          card_expiry: true,
+          provider: true
+        }
+      },
+      DefaultPayment: {
+        select: {
+          paymentId: true
+        }
+      }
+    }
+  })
+}
