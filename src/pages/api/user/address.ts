@@ -39,7 +39,7 @@ export default async function handler(
     case "PATCH":
       await patchHandler()
       break
-    case "":
+    case "DELETE":
       await deleteHandler()
       break
     default:
