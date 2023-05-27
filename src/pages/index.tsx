@@ -136,6 +136,7 @@ export default function Home() {
     },
     {
       title: "Shipping Address",
+      link: `/user/${userId || "no-id"}/address`
     },
     {
       title: "Login and Security",
