@@ -7,7 +7,7 @@ import mastercard from "@./public/pages/register/mastercard.svg";
 import {useRouter} from "next/router";
 
 interface CardContainerProps extends ComponentProps<"div"> {
-  type: "card" | "address"
+  type: "payment" | "address"
   default?: boolean
   valId: string
   userId: string

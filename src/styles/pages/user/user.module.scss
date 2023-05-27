@@ -85,3 +85,34 @@
   display: flex;
   gap: 2rem;
 }
+
+.paymentInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.paymentInfoTitle {
+  font-size: 1rem;
+}
+
+.paymentInfoDescription {
+
+}
+
+.cardTitle {
+  height: 1.5rem;
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cardImage {
+  height: 100%;
+  width: auto;
+  padding-right: .5rem;
+}
+
+.visa {
+  padding: 0.25em 0;
+}

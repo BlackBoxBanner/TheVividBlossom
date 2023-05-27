@@ -76,8 +76,8 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
       },
       data: {
-        addressId: id,
-        userid: userid,
+        paymentId: id,
+        id: userid,
         type: "default"
       }
     }).then(() => fetchHandler().then()).catch(e => {
@@ -124,16 +124,18 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
       <SettingContainer title={"Payment Method"} onCancel={() => {
       }}>
         <div className={styles.main}>
-          <AddCardButton/>
+          <AddCardButton onClick={() => router.push(`/user/${userid}/create/payment`)}/>
           {userPayment?.payment.map((value, index, array) => {
             const date = new Date(String(value.card_expiry))
             const expDate = `${date.getMonth() + 1} / ${date.getFullYear().toString().slice(2)}`
             return (
-              <CardContainer type={"card"} key={index} default={userPayment?.default.includes(value.id)}
+              <CardContainer type={"payment"} key={index} default={userPayment?.default.includes(value.id)}
                              valId={value.id} userId={userid!}
                              onDelete={() => {
+                               onDelete(value.id).then()
                              }}
                              changeDefault={() => {
+                               onUpdateDefault(value.id).then()
                              }}>
                 <CardDetail name={value.name_on_card} cardNo={value.card_number}
                             provider={value.provider}

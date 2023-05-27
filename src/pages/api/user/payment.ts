@@ -9,6 +9,10 @@ interface ExtendedNextApiRequest extends NextApiRequest {
     id: string
     paymentId?: string
     type?: string
+    name_on_card?: string
+    card_number?: string
+    card_expiry?: string
+    cvv?: string
   };
 }
 
@@ -31,6 +35,10 @@ export default async function handler(
       break
     case "PATCH":
       await patchHandler(req, res)
+      break
+    case "POST":
+      await createHandler(req, res).then()
+      break
     default:
       res.status(404).send("Not found!")
       break
@@ -65,10 +73,33 @@ async function patchHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
       await updateDefault().then()
       break
     default:
+      await updatePayment().then()
       break
   }
 
+  async function updatePayment() {
+    const {name_on_card, card_number, card_expiry, cvv, paymentId, id} = req.body
+
+    const [monthStr, yearStr] = card_expiry!.split(" / ");
+    const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
+
+    await prisma?.user_Payment.update({
+      where: {
+        id: paymentId
+      },
+      data: {
+        name_on_card,
+        card_number,
+        card_expiry: date,
+        cvv,
+      }
+    }).then(e => {
+      return res.status(200).send(e)
+    }).catch(e => res.status(400).json(e))
+  }
+
   async function updateDefault() {
+    console.log(id)
     await prisma?.user.update({
       where: {
         id
@@ -84,7 +115,37 @@ async function patchHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
       return res.status(200).send(e)
     }).catch(e => res.status(400).json(e))
   }
-
-
 }
+
+async function createHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
+  const {id, name_on_card, card_number, card_expiry, cvv} = req.body
+
+  const [monthStr, yearStr] = card_expiry!.split(" / ");
+  const date = new Date(Number(`20${yearStr}`), Number(monthStr) - 1);
+
+  await prisma?.user.update({
+    where: {
+      id
+    },
+    data: {
+      User_Payment: {
+        create: {
+          name_on_card: name_on_card!,
+          card_number: card_number!,
+          card_expiry: date,
+          cvv: cvv!,
+          card_type: "credit",
+          provider: "MasterCard",
+          create_at: new Date(),
+        }
+      }
+    }
+  }).then(e => {
+    return res.status(200).json(e)
+  }).catch(e => res.status(500).json(e))
+}
+
+
+
+
 

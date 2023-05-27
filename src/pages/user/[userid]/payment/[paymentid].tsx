@@ -13,90 +13,88 @@ import {
   AccountFormInputMask, SettingLabel,
 } from "@/components/input";
 import axios from "axios";
-import {Address} from ".prisma/client";
+import {Address, User_Payment} from ".prisma/client";
 
 interface ServerSideProps {
   userid: string | undefined
-  addressid: string | undefined
-  address: Partial<Address> | null
+  paymentid: string | undefined
+  payment: Partial<{
+    name_on_card: string
+    card_number: string
+    card_expiry: string
+    cvv: string
+  }> | null
 }
 
 export const getServerSideProps: GetServerSideProps<ServerSideProps, {
   userid: string,
-  addressid: string
+  paymentid: string
 }> = async (context) => {
   const userid = context.params?.userid
-  const addressid = context.params?.addressid
+  const paymentid = context.params?.paymentid
 
-  const resData = await prisma?.address.findUnique({
+  const resData = await prisma?.user_Payment.findUnique({
     where: {
-      id: addressid,
+      id: paymentid
     }
   })
 
   return {
     props: {
       userid,
-      addressid,
-      address: {
-        id: resData?.id,
-        address_line1: resData?.address_line1,
-        address_line2: resData?.address_line2,
-        subDistrict: resData?.subDistrict,
-        district: resData?.district,
-        province: resData?.province,
-        zipcode: resData?.zipcode,
+      paymentid,
+      payment: {
+        name_on_card: resData?.name_on_card,
+        card_number: resData?.card_number,
+        card_expiry: String(resData?.card_expiry),
+        cvv: resData?.cvv,
       }
     }
   }
 };
 
 const schema = z.object({
-  address_line1: z.string().min(1, ""),
-  address_line2: z.string().min(0, ""),
-  subDistrict: z.string().min(1, ""),
-  district: z.string().min(1, ""),
-  province: z.string().min(1, ""),
-  zipcode: z.string().min(1, ""),
+  name_on_card: z.string().min(1, ""),
+  card_number: z.string().min(1, ""),
+  card_expiry: z.string().min(1, ""),
+  cvv: z.string().min(1, ""),
 })
 
 type DataProps = z.infer<typeof schema>
 
-function EditAddress({userid, addressid, address}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function EditAddress({userid, payment, paymentid}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
 
   const {register, handleSubmit, formState: {errors}, setError, watch} = useForm<DataProps>({
     resolver: zodResolver(schema),
     defaultValues: {
-      address_line1: address?.address_line1,
-      address_line2: address?.address_line2 || "",
-      subDistrict: address?.subDistrict,
-      district: address?.district,
-      province: address?.province,
-      zipcode: address?.zipcode,
+      name_on_card: payment?.name_on_card,
+      card_number: payment?.card_number,
+      card_expiry: new Date(String(payment?.card_expiry)).toLocaleDateString('en-US', {
+        month: '2-digit',
+        year: '2-digit'
+      }).replace('/', ' / '),
+      cvv: payment?.cvv,
     }
   })
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     console.log(data);
     await axios({
-      url: "/api/user/address",
+      url: "/api/user/payment",
       method: "PATCH",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
       },
       data: {
-        userid: userid,
-        addressId: address?.id,
-        address_line1: data.address_line1,
-        address_line2: data.address_line2,
-        subDistrict: data.subDistrict,
-        district: data.district,
-        province: data.province,
-        zipcode: data.zipcode,
+        paymentId: paymentid,
+        name_on_card: data.name_on_card,
+        card_number: data.card_number,
+        card_expiry: data.card_expiry,
+        cvv: data.cvv,
       }
     }).then(() => {
-      router.push(`/user/${userid}/address`)
+      router.push(`/user/${userid}/payment`)
     }).catch(e => {
       console.error(e)
     })
@@ -124,7 +122,7 @@ function EditAddress({userid, addressid, address}: InferGetServerSidePropsType<t
   return (
     <>
       <Head>
-        <title>Add New Shipping Address</title>
+        <title>Payment Detail</title>
         <meta
           name="description"
           content="CPE241 - Database System Project"
@@ -138,30 +136,28 @@ function EditAddress({userid, addressid, address}: InferGetServerSidePropsType<t
           href="/favicon.ico"
         />
       </Head>
-      <SettingContainer title={"Add New Shipping Address"} formId={"editAccount"} onCancel={() => {
+      <SettingContainer title={"Payment Detail"} formId={"editAccount"} onCancel={() => {
         router.push(`/user/${userid}/address`).then()
       }}>
         <form onSubmit={handleSubmit(onSubmit)} className={`${styles.form}`} id={"editAccount"}>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Address line 1 *"}
-                              placeholder={"House number, Village no, Street address"}  {...register("address_line1")}/>
+            <AccountFormInput label={"Cardholder Name *"}
+                              placeholder={"Cardholder Name"}  {...register("name_on_card")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Address line 2"}
-                              placeholder={"Village / Building name, Floor number"} {...register("address_line2")}/>
+            <AccountFormInputMask label={"Card Number *"} mask={"9999 9999 9999 9999"}
+                                  placeholder={"XXXX XXXX XXXX XXXX"} {...register("card_number")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Sub district *"} placeholder={"Sub District"} {...register("subDistrict")}/>
+            <AccountFormInputMask label={"Expiry Date *"} mask={"99 / 99"}
+                                  placeholder={"MM / YY"} {...register("card_expiry")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"District *"} placeholder={"District"} {...register("district")}/>
+            <AccountFormInputMask label={"Security Code *"} mask={"999"}
+                                  placeholder={"CVC"} {...register("cvv")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Province *"} placeholder={"Province"} {...register("province")}/>
-          </div>
-          <div className={styles.inputContainer}>
-            <AccountFormInputMask mask={"99999"} label={"Postal code *"}
-                                  placeholder={"XXXXX"} {...register("zipcode")}/>
+            <AccountFormInput label={"Country"} placeholder={"Country"}/>
           </div>
         </form>
       </SettingContainer>
