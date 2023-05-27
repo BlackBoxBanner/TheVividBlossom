@@ -112,62 +112,99 @@ async function createUser(props: {
 
   if (props.user.image) {
     const imageData = breakImage(props.user.image)
-    await prisma.user.create({
-      data: {
-        first_name: props.user.first_name!,
-        last_name: props.user.last_name!,
-        telephone: props.user.telephone!,
-        dob: new Date(String(props.user.dob).split(" / ").reverse().join("-")).toISOString(),
-        email: props.user.email!,
-        password: await hash(props.user.password!, 10),
-        register_on: new Date(),
-        Address: {
-          create: {
-            address_line1: props.address.address_line1!,
-            address_line2: props.address.address_line2!,
-            subDistrict: props.address.subDistrict!,
-            district: props.address.district!,
-            province: props.address.province!,
-            zipcode: props.address.zipcode!,
-            create_at: new Date(),
+    const user = await prisma.user.create({
+        data: {
+          first_name: props.user.first_name!,
+          last_name: props.user.last_name!,
+          telephone: props.user.telephone!,
+          dob: new Date(String(props.user.dob).split(" / ").reverse().join("-")).toISOString(),
+          email: props.user.email!,
+          password: await hash(props.user.password!, 10),
+          register_on: new Date(),
+          DefaultAddress: {
+            create: {}
           },
-        },
-        User_Payment: {
-          create: {
-            name_on_card: props.payment.name_on_card!,
-            card_number: props.payment.card_number!,
-            card_expiry: props.payment.card_expiry!,
-            cvv: props.payment.cvv!,
-            card_type: "credit",
-            provider: "MasterCard",
-            create_at: new Date(),
+          Address: {
+            create: {
+              address_line1: props.address.address_line1!,
+              address_line2: props.address.address_line2!,
+              subDistrict: props.address.subDistrict!,
+              district: props.address.district!,
+              province: props.address.province!,
+              zipcode: props.address.zipcode!,
+              create_at: new Date(),
+            },
           },
+          DefaultPayment: {
+            create: {}
+          },
+          User_Payment: {
+            create: {
+              name_on_card: props.payment.name_on_card!,
+              card_number: props.payment.card_number!,
+              card_expiry: props.payment.card_expiry!,
+              cvv: props.payment.cvv!,
+              card_type: "credit",
+              provider: "MasterCard",
+              create_at: new Date(),
+            },
+          },
+          User_Image: {
+            create: {
+              prefix: imageData.prefix,
+              data1: imageData.data.text1,
+              data2: imageData.data.text2,
+              data3: imageData.data.text3,
+              data4: imageData.data.text4,
+              data5: imageData.data.text5,
+              data6: imageData.data.text6,
+              data7: imageData.data.text7,
+              data8: imageData.data.text8,
+              data9: imageData.data.text9,
+              data10: imageData.data.text10,
+              data11: imageData.data.text11,
+              data12: imageData.data.text12,
+              data13: imageData.data.text13,
+              data14: imageData.data.text14,
+              data15: imageData.data.text15,
+              data16: imageData.data.text16,
+            }
+          }
         },
-        User_Image: {
-          create: {
-            prefix: imageData.prefix,
-            data1: imageData.data.text1,
-            data2: imageData.data.text2,
-            data3: imageData.data.text3,
-            data4: imageData.data.text4,
-            data5: imageData.data.text5,
-            data6: imageData.data.text6,
-            data7: imageData.data.text7,
-            data8: imageData.data.text8,
-            data9: imageData.data.text9,
-            data10: imageData.data.text10,
-            data11: imageData.data.text11,
-            data12: imageData.data.text12,
-            data13: imageData.data.text13,
-            data14: imageData.data.text14,
-            data15: imageData.data.text15,
-            data16: imageData.data.text16,
+        select: {
+          id: true,
+          Address: {
+            select: {
+              id: true
+            }
+          },
+          User_Payment: {
+            select: {
+              id: true
+            }
           }
         }
+      }
+    )
+    await prisma.user.update({
+      where: {
+        id: user.id
       },
+      data: {
+        DefaultPayment: {
+          update: {
+            paymentId: user.User_Payment[0].id,
+          }
+        },
+        DefaultAddress: {
+          update: {
+            addressId: user.Address[0].id
+          }
+        }
+      }
     })
   } else {
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         first_name: props.user.first_name!,
         last_name: props.user.last_name!,
@@ -176,6 +213,9 @@ async function createUser(props: {
         email: props.user.email!,
         password: await hash(props.user.password!, 10),
         register_on: new Date(),
+        DefaultAddress: {
+          create: {}
+        },
         Address: {
           create: {
             address_line1: props.address.address_line1!,
@@ -186,6 +226,9 @@ async function createUser(props: {
             zipcode: props.address.zipcode!,
             create_at: new Date(),
           },
+        },
+        DefaultPayment: {
+          create: {}
         },
         User_Payment: {
           create: {
@@ -202,6 +245,36 @@ async function createUser(props: {
           create: {}
         }
       },
+      select: {
+        id: true,
+        Address: {
+          select: {
+            id: true
+          }
+        },
+        User_Payment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+    await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        DefaultPayment: {
+          update: {
+            paymentId: user.User_Payment[0].id,
+          }
+        },
+        DefaultAddress: {
+          update: {
+            addressId: user.Address[0].id
+          }
+        }
+      }
     })
   }
 }
