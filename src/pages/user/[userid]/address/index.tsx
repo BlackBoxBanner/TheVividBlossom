@@ -95,18 +95,18 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
       <SettingContainer title={"Shipping Address"} onCancel={() => {
       }}>
         <div className={styles.main}>
-          <AddCardButton for={"address"}/>
-          <CardContainer type={"address"} key={1} default>
-            {userAddress?.address.map((value, index, array) => {
-              return (
+          <AddCardButton for={"address"} onClick={() => router.push(`/user/${userid}/create/address`)}/>
+          {userAddress?.address.map((value, index, array) => {
+            return (
+              <CardContainer type={"address"} key={index} default={userAddress?.default.includes(value.id)}>
                 <CardAddressDetail
-                  key={index} name={userAddress?.user.name!}
+                  name={userAddress?.user.name!}
                   address={`${value.address_line1} ${value.address_line2} ${value.subDistrict} ${value.district} ${value.province} ${value.zipcode}`}
                   phoneNumber={userAddress?.user.tel!}
                 />
-              )
-            })}
-          </CardContainer>
+              </CardContainer>
+            )
+          })}
         </div>
       </SettingContainer>
     </>
