@@ -106,6 +106,7 @@ function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSidePr
         />
       </Head>
       <SettingContainer title={"Add New Shipping Address"} formId={"editAccount"} onCancel={() => {
+        router.push(`/user/${userid}/address`).then()
       }}>
         <form onSubmit={handleSubmit(onSubmit)} className={`${styles.form}`} id={"editAccount"}>
           <div className={styles.inputContainer}>

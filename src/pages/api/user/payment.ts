@@ -5,9 +5,11 @@ interface ExtendedNextApiRequest extends NextApiRequest {
   query: {
     id: string
   };
-  // body: {
-  // 	id: string
-  // };
+  body: {
+    id: string
+    paymentId?: string
+    type?: string
+  };
 }
 
 export default async function handler(
@@ -20,18 +22,69 @@ export default async function handler(
     return res.status(401).send("un-authorization")
   }
 
-  if (req.method !== "GET") return res.status(404).send("Not found!")
-  const {id} = req.query
-
-  console.log(id)
-
-  const payment = await userGetPayment({id})
-
-
-  res.status(200).json({
-    payment: payment?.User_Payment,
-    default: payment?.DefaultPayment?.paymentId
-  });
+  switch (req.method) {
+    case "GET":
+      await getHandler(req, res)
+      break
+    case "DELETE":
+      await deleteHandler(req, res)
+      break
+    case "PATCH":
+      await patchHandler(req, res)
+    default:
+      res.status(404).send("Not found!")
+      break
+  }
 }
 
+async function getHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
+  const {id} = req.query
+  await userGetPayment({id}).then(e => {
+    return res.status(200).json({
+      payment: e?.User_Payment,
+      default: e?.DefaultPayment?.paymentId
+    });
+  }).catch(e => res.status(400).json(e))
+}
+
+async function deleteHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
+  const {paymentId} = req.body
+  await prisma?.user_Payment.delete({
+    where: {
+      id: paymentId
+    }
+  }).then(e => {
+    return res.status(200).json(e)
+  }).catch(e => res.status(400).json(e))
+}
+
+async function patchHandler(req: ExtendedNextApiRequest, res: NextApiResponse) {
+  const {paymentId, type, id} = req.body
+  switch (type) {
+    case "default":
+      await updateDefault().then()
+      break
+    default:
+      break
+  }
+
+  async function updateDefault() {
+    await prisma?.user.update({
+      where: {
+        id
+      },
+      data: {
+        DefaultPayment: {
+          update: {
+            paymentId
+          }
+        }
+      }
+    }).then(e => {
+      return res.status(200).send(e)
+    }).catch(e => res.status(400).json(e))
+  }
+
+
+}
 
