@@ -14,14 +14,17 @@ export function CardContainer(props: CardContainerProps) {
   const removeText = `Remove ${props.type}`
   return (
     <>
-      <div className={styles.card}>
+      <div className={`${styles.card} ${props.type == "address" && styles.address}`}>
         {props.children}
         {props.default && <div className={`${styles.default} ${outfitLabel.className}`}>Default</div>}
         <span className={styles.cardHover}/>
         <section className={styles.hoverContent}>
-          <ButtonLogin dark font={"Outfit"} payment style={{width: "11rem"}}>
-            Set as default
-          </ButtonLogin>
+          {
+            !props.default &&
+              <ButtonLogin dark font={"Outfit"} payment style={{width: "11rem"}}>
+                  Set as default
+              </ButtonLogin>
+          }
           <ButtonLogin dark font={"Outfit"} payment style={{width: "11rem"}}>
             Review details
           </ButtonLogin>
@@ -37,10 +40,15 @@ export function CardContainer(props: CardContainerProps) {
   )
 }
 
-export function AddCardButton(props: ComponentProps<"button">) {
+interface AddCardButtonProps extends ComponentProps<"button"> {
+  for?: string
+}
+
+export function AddCardButton(props: AddCardButtonProps) {
   return (
     <>
-      <button className={`${styles.card} ${styles.addCard}`} onClick={props.onClick}>
+      <button className={`${styles.card} ${styles.addCard} ${props.for == "address" && styles.address}`}
+              onClick={props.onClick}>
         <span>
           <svg
             width="58"
@@ -97,6 +105,38 @@ export function CardDetail(props: CardDetailProps) {
             {/*exp date*/}
             <p className={`${outfitLabel.className} ${styles.cardNo}`}>{props.expDate}</p>
           </section>
+        </section>
+      </div>
+    </>
+  )
+}
+
+interface CardAddressDetailProps extends ComponentProps<"div"> {
+  name: string
+  address: string
+  phoneNumber: string
+}
+
+export function CardAddressDetail(props: CardAddressDetailProps) {
+  const [fname, lname] = props.name.split(" ")
+  return (
+    <>
+      <div className={styles.cardDetailContainer}>
+        {/*left*/}
+        <section className={styles.leftContainer} style={{width: "14rem", justifyContent: "normal", gap: "2rem"}}>
+          {/*name*/}
+          <article className={`${outfitLabel.className} ${styles.name}`}>
+            {/*fname*/}
+            <p>{fname}</p>
+            {/*lname*/}
+            <p className={styles.lastname}>{lname}</p>
+          </article>
+          <article className={`${outfitLabel.className} ${styles.textData}`}>
+            {props.address}
+          </article>
+          <article className={`${outfitLabel.className} ${styles.textData}`}>
+            {props.phoneNumber}
+          </article>
         </section>
       </div>
     </>

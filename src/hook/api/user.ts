@@ -78,3 +78,33 @@ export async function userGetPayment(props: { id: string }) {
     }
   })
 }
+
+export async function userGetAddress(props: { id: string }) {
+  console.log(props.id)
+  return prisma.user.findUnique({
+    where: {
+      id: props.id
+    },
+    select: {
+      telephone: true,
+      first_name: true,
+      last_name: true,
+      Address: {
+        select: {
+          id: true,
+          address_line1: true,
+          address_line2: true,
+          subDistrict: true,
+          district: true,
+          province: true,
+          zipcode: true,
+        }
+      },
+      DefaultAddress: {
+        select: {
+          addressId: true
+        }
+      }
+    }
+  })
+}
