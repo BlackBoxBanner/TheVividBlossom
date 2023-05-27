@@ -88,6 +88,7 @@ ErrorMessage.displayName = "ErrorMessage";
 export interface FormInputProps extends ComponentProps<typeof Input> {
   showError?: boolean
   error?: string;
+  edit?: boolean
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>((props, ref) => {
@@ -125,6 +126,7 @@ export interface InputMaskProps extends ReactInputMaskProps {
   label: string;
   error?: boolean | string;
   page?: pageList
+  edit?: boolean
 }
 
 export const InputDate = forwardRef<ReactInputMask, InputMaskProps>((props, ref) => {
@@ -190,15 +192,18 @@ InputDate.displayName = "InputDate";
 RegisterInputMask.displayName = "RegisterInputMask";
 
 export const AccountFormInput = forwardRef<HTMLInputElement, FormInputProps>((props, ref) => {
-  const [disable, setDisable] = useState(true)
+  const [disable, setDisable] = useState(!props.edit)
   return (
     <>
       <Input page={"setting"} showError={false} {...props} ref={ref} disabled={disable}/>
-      <ButtonLogin font={"Outfit"} onClick={() => {
-        setDisable(e => !e)
-      }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
-        Edit
-      </ButtonLogin>
+      {
+        !props.edit &&
+          <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
+            setDisable(e => !e)
+          }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
+              Edit
+          </ButtonLogin>
+      }
     </>
   )
 })
@@ -206,16 +211,19 @@ export const AccountFormInput = forwardRef<HTMLInputElement, FormInputProps>((pr
 AccountFormInput.displayName = "AccountFormInput";
 
 export const AccountFormInputMask = forwardRef<ReactInputMask, InputMaskProps>((props, ref) => {
-  const [disable, setDisable] = useState(true)
+  const [disable, setDisable] = useState(!props.edit)
   return (
     <>
       <InputDate page={"setting"} showError={false} disabled={disable}
                  {...props} ref={ref}/>
-      <ButtonLogin font={"Outfit"} type={"reset"} onClick={() => {
-        setDisable(e => !e)
-      }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
-        Edit
-      </ButtonLogin>
+      {
+        !props.edit &&
+          <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
+            setDisable(e => !e)
+          }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
+              Edit
+          </ButtonLogin>
+      }
     </>
   )
 })
@@ -240,7 +248,7 @@ export const AccountFormInputImage = forwardRef<HTMLInputElement, InputProps>((p
           />
         </div>
       </div>
-      <ButtonLogin font={"Outfit"} type={"reset"} onClick={() => {
+      <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
         setDisable(e => !e)
       }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
         Edit

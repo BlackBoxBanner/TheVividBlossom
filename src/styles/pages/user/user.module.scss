@@ -7,7 +7,7 @@
 
   .inputContainer {
     width: 100%;
-    padding: 1.75rem 2.5rem;
+    padding: 1.25rem 2.5rem;
     border-bottom: 1px solid $primary_text_color;
     display: flex;
     justify-content: space-between;
@@ -84,4 +84,35 @@
 .btnContainer{
   display: flex;
   gap: 2rem;
+}
+
+.paymentInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.paymentInfoTitle {
+  font-size: 1rem;
+}
+
+.paymentInfoDescription {
+
+}
+
+.cardTitle {
+  height: 1.5rem;
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cardImage {
+  height: 100%;
+  width: auto;
+  padding-right: .5rem;
+}
+
+.visa {
+  padding: 0.25em 0;
 }

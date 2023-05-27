@@ -53,3 +53,58 @@ export async function userUpdateApi(props: userUpdateProps) {
     }
   })
 }
+
+export async function userGetPayment(props: { id: string }) {
+  console.log(props.id)
+  return prisma.user.findUnique({
+    where: {
+      id: props.id
+    },
+    select: {
+      User_Payment: {
+        select: {
+          id: true,
+          name_on_card: true,
+          card_number: true,
+          card_expiry: true,
+          provider: true
+        }
+      },
+      DefaultPayment: {
+        select: {
+          paymentId: true
+        }
+      }
+    }
+  })
+}
+
+export async function userGetAddress(props: { id: string }) {
+  console.log(props.id)
+  return prisma.user.findUnique({
+    where: {
+      id: props.id
+    },
+    select: {
+      telephone: true,
+      first_name: true,
+      last_name: true,
+      Address: {
+        select: {
+          id: true,
+          address_line1: true,
+          address_line2: true,
+          subDistrict: true,
+          district: true,
+          province: true,
+          zipcode: true,
+        }
+      },
+      DefaultAddress: {
+        select: {
+          addressId: true
+        }
+      }
+    }
+  })
+}
