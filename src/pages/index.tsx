@@ -119,7 +119,7 @@ export default function Home() {
   const accountSettingList = [
     {
       title: "Edit Account",
-      link: `/user/${userId || "noId"}/account`
+      link: `/user/${userId || "no-id"}/account`
     },
     {
       title: "My Order",
@@ -131,7 +131,8 @@ export default function Home() {
       title: "My Basket",
     },
     {
-      title: "Payment Detail",
+      title: "Payment Method",
+      link: `/user/${userId || "no-id"}/payment`
     },
     {
       title: "Shipping Address",
