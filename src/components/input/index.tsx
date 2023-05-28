@@ -195,7 +195,9 @@ export const AccountFormInput = forwardRef<HTMLInputElement, FormInputProps>((pr
   const [disable, setDisable] = useState(!props.edit)
   return (
     <>
-      <Input page={"setting"} showError={false} {...props} ref={ref} disabled={disable}/>
+      <div>
+        <Input page={"setting"} showError={false} {...props} ref={ref} disabled={disable}/>
+      </div>
       {
         !props.edit &&
           <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {

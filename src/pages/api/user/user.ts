@@ -1,9 +1,9 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import {getId} from "@/hook/api/user";
+import prisma from "@/lib/prisma";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   query: {
-    email?: string
+    id?: string
   };
   // body: {
   // 	id: string
@@ -15,13 +15,18 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "GET") return res.status(404).send("Not found!")
-  const {email} = req.query
+  const {id} = req.query
 
-  if (!email) return res.status(204)
+  if (!id) return res.status(204).send("no id")
 
-  const idPrommis = await getId(email)
+  const user = await prisma.user.findUnique({
+    where: {
+      id
+    }
+  })
 
-  if (!idPrommis?.id) return res.status(204)
+  if (!user) return res.status(204)
 
-  res.status(200).json({id: idPrommis.id});
+  res.status(200).json({user});
 }
+

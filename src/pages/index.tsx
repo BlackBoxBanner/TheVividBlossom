@@ -140,6 +140,7 @@ export default function Home() {
     },
     {
       title: "Login and Security",
+      link: `/user/${userId || "no-id"}/security`
     }
   ] satisfies ListItem[]
 

@@ -9,9 +9,10 @@ import styles from "@/styles/pages/user/user.module.scss"
 import SettingContainer from "@/components/display/user/settingContainer";
 import {
   AccountFormInput,
-  AccountFormInputMask, SettingLabel,
 } from "@/components/input";
 import axios from "axios";
+import {useEffect, useState} from "react";
+import {User} from "@prisma/client";
 
 interface ServerSideProps {
 
@@ -27,12 +28,10 @@ export const getServerSideProps: GetServerSideProps<{ userid: string | undefined
 };
 
 const schema = z.object({
-  address_line1: z.string().min(1, ""),
-  address_line2: z.string().min(0, ""),
-  subDistrict: z.string().min(1, ""),
-  district: z.string().min(1, ""),
-  province: z.string().min(1, ""),
-  zipcode: z.string().min(1, ""),
+  email: z.string().min(1, ""),
+  cPassword: z.string().min(1, ""),
+  nPassword: z.string().min(1, ""),
+  cfPassword: z.string().min(1, ""),
 })
 
 type DataProps = z.infer<typeof schema>
@@ -40,33 +39,57 @@ type DataProps = z.infer<typeof schema>
 function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
 
+  const [user, setUser] = useState<User>()
+
   const {register, handleSubmit, formState: {errors}, setError, watch} = useForm<DataProps>({
     resolver: zodResolver(schema),
-    defaultValues: {}
+    values: {
+      email: user?.email!,
+      cPassword: "",
+      nPassword: "",
+      cfPassword: "",
+    }
   })
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     await axios({
-      url: "/api/user/address/create",
+      url: "/api/user/security",
       method: "POST",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
       },
       data: {
-        userid: userid,
-        address_line1: data.address_line1,
-        address_line2: data.address_line2,
-        subDistrict: data.subDistrict,
-        district: data.district,
-        province: data.province,
-        zipcode: data.zipcode,
+        id: user?.id,
+        email: data.email,
+        dPassword: user?.password,
+        cPassword: data.cPassword,
+        nPassword: data.nPassword,
+        cfPassword: data.cfPassword,
       }
     }).then(() => {
-      router.push(`/user/${userid}/address`)
+      router.push(`/`)
     }).catch(e => {
       console.error(e)
     })
   }
+
+  async function fetchData() {
+    await axios<{ user: User }>({
+      url: "/api/user/user",
+      method: "GET",
+      params: {
+        id: userid,
+      }
+    }).then((e) => {
+      setUser(e.data.user)
+    }).catch(e => {
+      console.error(e)
+    })
+  }
+
+  useEffect(() => {
+    fetchData().then()
+  }, [])
 
   // do not touch
   const {status} = useSession()
@@ -90,7 +113,7 @@ function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSidePr
   return (
     <>
       <Head>
-        <title>Add New Shipping Address</title>
+        <title>Login and Security</title>
         <meta
           name="description"
           content="CPE241 - Database System Project"
@@ -104,30 +127,25 @@ function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSidePr
           href="/favicon.ico"
         />
       </Head>
-      <SettingContainer title={"Add New Shipping Address"} formId={"editAccount"} onCancel={() => {
-        router.push(`/user/${userid}/address`).then()
+      <SettingContainer title={"Login and Security"} formId={"editAccount"}  onCancel={() => {
+        router.push(`/`).then()
       }}>
         <form onSubmit={handleSubmit(onSubmit)} className={`${styles.form}`} id={"editAccount"}>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Address line 1 *"} edit
-                              placeholder={"House number, Village no, Street address"}  {...register("address_line1")}/>
+            <AccountFormInput label={"Email *"} autoComplete={"email"}
+                              placeholder={"Email"}  {...register("email")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Address line 2"} edit
-                              placeholder={"Village / Building name, Floor number"} {...register("address_line2")}/>
+            <AccountFormInput label={"Current Password *"} type={"password"} autoComplete={"current-password"}
+                              placeholder={"Current Password"} {...register("cPassword")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"Sub district *"} edit placeholder={"Sub District"} {...register("subDistrict")}/>
+            <AccountFormInput label={"New Password"} placeholder={"New Password"} autoComplete={"new-password"}
+                              type={"password"} {...register("nPassword")}/>
           </div>
           <div className={styles.inputContainer}>
-            <AccountFormInput label={"District *"} edit placeholder={"District"} {...register("district")}/>
-          </div>
-          <div className={styles.inputContainer}>
-            <AccountFormInput label={"Province *"} edit placeholder={"Province"} {...register("province")}/>
-          </div>
-          <div className={styles.inputContainer}>
-            <AccountFormInputMask mask={"99999"} edit label={"Postal code *"}
-                                  placeholder={"XXXXX"} {...register("zipcode")}/>
+            <AccountFormInput label={"Confirmed Password"} type={"password"} autoComplete={"new-password"}
+                              placeholder={"Confirmed Password"} {...register("cfPassword")}/>
           </div>
         </form>
       </SettingContainer>
