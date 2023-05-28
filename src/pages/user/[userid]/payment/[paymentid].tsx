@@ -67,22 +67,21 @@ function EditAddress({userid, payment, paymentid}: InferGetServerSidePropsType<t
 
   const {register, handleSubmit, formState: {errors}, setError, watch} = useForm<DataProps>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      name_on_card: payment?.name_on_card,
-      card_number: payment?.card_number,
+    values: {
+      name_on_card: payment?.name_on_card!,
+      card_number: payment?.card_number!,
       card_expiry: new Date(String(payment?.card_expiry)).toLocaleDateString('en-US', {
         month: '2-digit',
         year: '2-digit'
       }).replace('/', ' / '),
-      cvv: payment?.cvv,
+      cvv: payment?.cvv!,
     }
   })
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
-    console.log(data);
     await axios({
-      url: "/api/user/payment",
-      method: "PATCH",
+      url: "/api/user/payment/update",
+      method: "POST",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
       },

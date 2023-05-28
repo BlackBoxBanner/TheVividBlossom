@@ -63,7 +63,7 @@ function EditAddress({userid}: InferGetServerSidePropsType<typeof getServerSideP
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     await axios({
-      url: "/api/user/payment",
+      url: "/api/user/payment/create",
       method: "POST",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
