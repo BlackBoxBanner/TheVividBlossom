@@ -3,6 +3,7 @@ import {cardo} from "@/util/font";
 import {ButtonLogin} from "@/components/button";
 import {ComponentProps} from "react";
 import {useRouter} from "next/router";
+import * as string_decoder from "string_decoder";
 
 interface SettingContainerProps extends ComponentProps<"div"> {
   title: string
@@ -65,7 +66,16 @@ export default SettingContainer
 
 interface PageLayoutProps extends ComponentProps<"div"> {
   title: string
-  onCancel?: () => void
+  button?: {
+    btn1: {
+      title: string,
+      function: () => void
+    },
+    btn2: {
+      title: string,
+      function: () => void
+    }
+  }
 }
 
 export function PageLayout(props: PageLayoutProps) {
@@ -96,7 +106,25 @@ export function PageLayout(props: PageLayoutProps) {
             </svg>
           </button>
         </header>
-        {props.children}
+        <div style={{height: "100%", position: "relative"}}>
+          {props.children}
+        {props.button &&
+            <footer className={`${styles.footer}`}>
+                <div>
+                    <ButtonLogin font={"Outfit"} onClick={() => {
+                      props.button?.btn1.function()
+                    }} dark
+                                 style={{width: "100%"}}>
+                      {props.button.btn1.title}
+                    </ButtonLogin>
+                    <ButtonLogin font={"Outfit"} onClick={() => {
+                      props.button?.btn2.function()
+                    }} style={{width: "100%"}}>
+                      {props.button.btn1.title}
+                    </ButtonLogin>
+                </div>
+            </footer>}
+        </div>
       </section>
     </>
   )

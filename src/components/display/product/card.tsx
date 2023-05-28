@@ -48,6 +48,8 @@ export function ProductDisplay(props: ProductDisplayProps) {
             <div className={styles.icons}>
               <div>
                 <IconHover
+                  onClick={() => {
+                  }}
                   outlineIcon={<AiOutlineHeart/>}
                   fillIcon={<AiFillHeart/>}
                   size={25}
@@ -56,6 +58,8 @@ export function ProductDisplay(props: ProductDisplayProps) {
               </div>
               <div>
                 <IconHover
+                  onClick={() => {
+                  }}
                   outlineIcon={<AiOutlineShopping/>}
                   fillIcon={<AiTwotoneShopping/>}
                   size={25}

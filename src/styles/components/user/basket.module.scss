@@ -58,6 +58,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 1.75rem;
+  }
+
+  .btnN {
+    padding-right: 0;
+  }
+
+  .btnAddContainer {
+    width: 20rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 0 1.75rem;;
   }
 }
@@ -75,3 +87,30 @@
   gap: 0.75rem;
 }
 
+.quantity {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+}
+
+
+.inventory {
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
+.statusGreen {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: $available_color;
+}
+
+.statusRed {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: $error_color;
+}

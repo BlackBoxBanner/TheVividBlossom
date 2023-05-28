@@ -6,9 +6,10 @@ interface IconHoverProps {
   fillIcon: React.ReactElement;
   size: number;
   primaryTextColor: string;
+  onClick: () => void
 }
 
-const IconHover: React.FC<IconHoverProps> = ({outlineIcon, fillIcon, size, primaryTextColor}) => {
+const IconHover: React.FC<IconHoverProps> = ({outlineIcon, fillIcon, size, primaryTextColor, onClick}) => {
   const [icon, setIcon] = useState(false);
 
   return (
@@ -16,6 +17,7 @@ const IconHover: React.FC<IconHoverProps> = ({outlineIcon, fillIcon, size, prima
       className={styles.container}
       onMouseOver={() => setIcon(true)}
       onMouseLeave={() => setIcon(false)}
+      onClick={onClick}
     >
       {React.cloneElement(outlineIcon, {
         size: size.toString(),
