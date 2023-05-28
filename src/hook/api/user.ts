@@ -80,7 +80,6 @@ export async function userGetPayment(props: { id: string }) {
 }
 
 export async function userGetAddress(props: { id: string }) {
-  console.log(props.id)
   return prisma.user.findUnique({
     where: {
       id: props.id

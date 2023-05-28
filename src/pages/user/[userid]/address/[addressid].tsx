@@ -10,7 +10,7 @@ import styles from "@/styles/pages/user/user.module.scss"
 import SettingContainer from "@/components/display/user/settingContainer";
 import {
   AccountFormInput,
-  AccountFormInputMask, SettingLabel,
+  AccountFormInputMask,
 } from "@/components/input";
 import axios from "axios";
 import {Address} from ".prisma/client";
@@ -67,21 +67,21 @@ function EditAddress({userid, addressid, address}: InferGetServerSidePropsType<t
 
   const {register, handleSubmit, formState: {errors}, setError, watch} = useForm<DataProps>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      address_line1: address?.address_line1,
+    values: {
+      address_line1: address?.address_line1!,
       address_line2: address?.address_line2 || "",
-      subDistrict: address?.subDistrict,
-      district: address?.district,
-      province: address?.province,
-      zipcode: address?.zipcode,
+      subDistrict: address?.subDistrict!,
+      district: address?.district!,
+      province: address?.province!,
+      zipcode: address?.zipcode!,
     }
   })
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     console.log(data);
     await axios({
-      url: "/api/user/address",
-      method: "PATCH",
+      url: "/api/user/address/update",
+      method: "POST",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
       },

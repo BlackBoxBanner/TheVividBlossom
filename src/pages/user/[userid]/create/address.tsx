@@ -47,7 +47,7 @@ function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSidePr
 
   const onSubmit: SubmitHandler<DataProps> = async (data) => {
     await axios({
-      url: "/api/user/address/createaddress",
+      url: "/api/user/address/create",
       method: "POST",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,

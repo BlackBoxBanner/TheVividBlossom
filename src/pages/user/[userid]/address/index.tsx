@@ -40,7 +40,8 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
   async function fetchHandler() {
 
     await axios<AddressProps>({
-      url: "/api/user/address",
+      url: "/api/user/address/get/all",
+      method: "GET",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
       },
@@ -56,8 +57,8 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
 
   async function onDelete(id: string) {
     await axios({
-      url: "/api/user/address",
-      method: "DELETE",
+      url: "/api/user/address/delete",
+      method: "POST",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
       },
@@ -71,15 +72,14 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
 
   async function onUpdateDefault(id: string) {
     await axios({
-      url: "/api/user/address",
-      method: "PATCH",
+      url: "/api/user/address/update/default",
+      method: "POST",
       headers: {
         Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
       },
       data: {
         addressId: id,
         userid: userid,
-        type: "default"
       }
     }).then(() => fetchHandler().then()).catch(e => {
       console.error(e)
