@@ -55,7 +55,6 @@ export async function userUpdateApi(props: userUpdateProps) {
 }
 
 export async function userGetPayment(props: { id: string }) {
-  console.log(props.id)
   return prisma.user.findUnique({
     where: {
       id: props.id
