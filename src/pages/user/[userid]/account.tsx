@@ -89,13 +89,13 @@ function Account({user}: InferGetServerSidePropsType<typeof getServerSideProps>)
 
   const {register, handleSubmit, formState: {errors}, setError, watch} = useForm<DataProps>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      id: user?.id,
-      email: user?.email,
+    values: {
+      id: user?.id!,
+      email: user?.email!,
       dob: `${initDate.day} / ${String(initDate.month).length == 1 ? `0${initDate.month}` : initDate.month} / ${initDate.year}`,
-      first_name: user?.first_name,
-      last_name: user?.last_name,
-      telephone: user?.telephone,
+      first_name: user?.first_name!,
+      last_name: user?.last_name!,
+      telephone: user?.telephone!,
       image: user?.image
     }
   })
