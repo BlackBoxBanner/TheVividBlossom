@@ -186,9 +186,7 @@ function MyBasket({userid}: InferGetServerSidePropsType<typeof getServerSideProp
           href="/favicon.ico"
         />
       </Head>
-      <PageLayout title={"My Basket"} onCancel={() => {
-        router.push("/").then()
-      }}>
+      <PageLayout title={"My Basket"}>
         <div className={`${styles.main} ${outfit.className}`}>
           <section className={`${styles.content} ${styles.container}`}>
             {items.map((value, index, array) => {
