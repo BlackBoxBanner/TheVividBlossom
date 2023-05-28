@@ -37,7 +37,7 @@ export default function OverMenu(props: OverMenuProps) {
         </div>
         <div
           className={props.className}
-          style={{width: "100%", height: "100%"}}
+          style={{width: "100%", height: "100%",scrollBehavior:"smooth"}}
         >
           {props.children}
         </div>

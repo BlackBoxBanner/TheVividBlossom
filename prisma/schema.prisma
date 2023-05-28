@@ -48,6 +48,7 @@ model Product {
   Order_Item           Order_Item[]
   Admin_User           Admin_User             @relation(fields: [admin_id], references: [id])
   Product_Image        Product_Image?
+  MyBasket             MyBasket[]
 
   @@index(fields: [family_id], map: "index_family_id")
   @@index(fields: [color_id], map: "index_color_id")
@@ -202,8 +203,22 @@ model User {
   User_Image     User_Image?
   DefaultPayment DefaultPayment?
   DefaultAddress DefaultAddress?
+  MyBasket       MyBasket[]
 
   @@unique(fields: [email], name: "unique_email")
+}
+
+model MyBasket {
+  id        String @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int @default(1)
+
+  Product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  User    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index(fields: [userId], name: "index_userId")
+  @@index(fields: [productId], name: "index_productId")
 }
 
 model DefaultPayment {
