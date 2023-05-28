@@ -64,6 +64,7 @@ function MyBasket({userid}: InferGetServerSidePropsType<typeof getServerSideProp
 
   // todo - replace with data from database
   const items: Items[] = [
+
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
@@ -171,7 +172,7 @@ function MyBasket({userid}: InferGetServerSidePropsType<typeof getServerSideProp
   return (
     <>
       <Head>
-        <title>Payment Method</title>
+        <title>My Basket</title>
         <meta
           name="description"
           content="CPE241 - Database System Project"

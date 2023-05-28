@@ -10,8 +10,7 @@ import {AddCardButton, CardDetail, CardContainer} from "@/components/display/use
 import {User_Payment} from ".prisma/client";
 import {Button, ButtonLogin} from "@/components/button";
 import {cardo, outfit, outfitLabel} from "@/util/font";
-
-import {BasketItem, Items} from "@/components/user/basketItem";
+import {WishlistItem, Items} from "@/components/user/wishlistItem";
 
 interface PaymentProps {
   payment: User_Payment[],
@@ -68,91 +67,83 @@ function MyBasket({userid}: InferGetServerSidePropsType<typeof getServerSideProp
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 2,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 2,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 0,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 1,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 2,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 0,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 2,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 2,
       image: "",
     },
     {
       name: "Black Eyed Susans",
       description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
       price: 5,
-      quantity: 2,
+      inventory: 0,
       image: "",
     },
+    {
+      name: "Black Eyed Susans",
+      description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
+      price: 5,
+      inventory: 0,
+      image: "",
+    },
+    {
+      name: "Black Eyed Susans",
+      description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
+      price: 5,
+      inventory: 2,
+      image: "",
+    },
+
   ]
 
   const [price, setPrice] = useState(0)
-
-  function getAmount() {
-    setPrice(0)
-    items.forEach((item) => {
-      setPrice(e => e + (parseInt(String(item.price)) * parseInt(String(item.quantity))))
-    })
-  }
-
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const handleInputChange = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(getAmount, 5000);
-    };
-
-    handleInputChange()
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
 
   // do not touch
   const {status} = useSession()
@@ -171,7 +162,7 @@ function MyBasket({userid}: InferGetServerSidePropsType<typeof getServerSideProp
   return (
     <>
       <Head>
-        <title>Payment Method</title>
+        <title>My Wishlist</title>
         <meta
           name="description"
           content="CPE241 - Database System Project"
@@ -185,29 +176,23 @@ function MyBasket({userid}: InferGetServerSidePropsType<typeof getServerSideProp
           href="/favicon.ico"
         />
       </Head>
-      <PageLayout title={"My Basket"} onCancel={() => {
-        router.push("/").then()
+      <PageLayout title={"My Wishlist"} button={{
+        btn1: {
+          title: "Cancel",
+          function: () => {
+          }
+        },
+        btn2: {
+          title: "Keep Shopping",
+          function: () => {
+          }
+        }
       }}>
         <div className={`${styles.main} ${outfit.className}`}>
-          <section className={`${styles.content} ${styles.container}`}>
+          <section className={`${styles.contentWish} ${styles.container}`}>
             {items.map((value, index, array) => {
-              return <BasketItem items={value} key={index}/>
+              return <WishlistItem items={value} key={index}/>
             })}
-          </section>
-          <section className={`${styles.summaryContainer} ${styles.container}`}>
-            <header className={`${styles.header} ${cardo.className}`}>
-              Order Summary
-            </header>
-            <div className={`${styles.divider}`}/>
-            <div className={`${styles.price} ${outfitLabel.className}`}>
-              <article>
-                <p>Sub Total :</p>
-                <p className={`${styles.number}`}>{`$ ${price}`}</p>
-              </article>
-              <div>
-                <ButtonLogin font={"Outfit"}>Buy now</ButtonLogin>
-              </div>
-            </div>
           </section>
         </div>
       </PageLayout>
