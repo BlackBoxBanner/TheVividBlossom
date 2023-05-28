@@ -23,11 +23,14 @@ const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 interface RightMenuProps {
   onProfile: Dispatch<SetStateAction<boolean>>
   setOverMenu: Dispatch<SetStateAction<boolean>>
+  userId: string
 }
 
 export default function RightMenu(props: RightMenuProps) {
   const {data: session, status} = useSession()
   const [image, setImage] = useState<string>()
+
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchData() {
@@ -68,6 +71,9 @@ export default function RightMenu(props: RightMenuProps) {
             fillIcon={<AiFillMessage/>}
             size={25}
             primaryTextColor={styles.primaryTextColor}
+            onClick={() => {
+              router.push(`/`).then()
+            }}
           />
         </div>
         <div>
@@ -76,6 +82,9 @@ export default function RightMenu(props: RightMenuProps) {
             fillIcon={<AiFillHeart/>}
             size={25}
             primaryTextColor={styles.primaryTextColor}
+            onClick={() => {
+              router.push(`/user/${props.userId || "no-id"}/wishlist`).then()
+            }}
           />
         </div>
         <div>
@@ -84,6 +93,9 @@ export default function RightMenu(props: RightMenuProps) {
             fillIcon={<AiTwotoneShopping/>}
             size={25}
             primaryTextColor={styles.primaryTextColor}
+            onClick={() => {
+              router.push(`/user/${props.userId || "no-id"}/basket`).then()
+            }}
           />
         </div>
 

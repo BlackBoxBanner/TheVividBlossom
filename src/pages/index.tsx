@@ -126,6 +126,7 @@ export default function Home() {
     },
     {
       title: "My Wishlist",
+      link: `/user/${userId || "no-id"}/wishlist`
     },
     {
       title: "My Basket",
@@ -218,7 +219,7 @@ export default function Home() {
           </div>
           <div className={styles.rightContent}>
             <ImageContainer stage={state}/>
-            <RightMenu onProfile={setImage} setOverMenu={setOverMenu}/>
+            <RightMenu onProfile={setImage} setOverMenu={setOverMenu} userId={userId!}/>
           </div>
           <OverText
             colors={colorList}
