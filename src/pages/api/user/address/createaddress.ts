@@ -1,10 +1,11 @@
 import {NextApiRequest, NextApiResponse} from "next";
+import prisma from "@/lib/prisma";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   query: {};
   body: {
     userid: string
-    addressId: string
+    addressId?: string
     address_line1: string
     address_line2: string
     subDistrict: string
@@ -24,23 +25,35 @@ export default async function handler(
     return res.status(401).send("un-authorization")
   }
 
-  if (req.method !== "POST") return res.status(405).json({message: "Error"});
 
-  const data = req.body
+  // if (req.method !== "POST") return res.status(405).json({message: "Error"});
 
-  const address = await prisma?.address.create({
-    data: {
-      user_id: data.userid,
-      address_line1: data.address_line1,
-      address_line2: data.address_line2,
-      subDistrict: data.subDistrict,
-      district: data.district,
-      province: data.province,
-      zipcode: data.zipcode,
-      create_at: new Date(),
-    },
-  })
+  const {method, body, query} = req;
 
-  if (!address) return res.status(400).json({message: "Error"})
-  return res.status(200).json(address)
+  switch (method) {
+    case "POST":
+      try {
+        const address = await prisma?.address.create({
+          data: {
+            user_id: body.userid,
+            address_line1: body.address_line1,
+            address_line2: body.address_line2,
+            subDistrict: body.subDistrict,
+            district: body.district,
+            province: body.province,
+            zipcode: body.zipcode,
+            create_at: new Date(),
+          },
+        })
+        return res.status(200).json(address)
+      } catch (e) {
+        console.log(e)
+        res.status(400).send(e)
+      }
+      break;
+    default:
+      res.setHeader("Allow", ["POST"]);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
+      break;
+  }
 }
