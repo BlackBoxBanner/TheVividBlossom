@@ -24,12 +24,12 @@ export function WishlistItem(props: basketItemProps) {
 
   function onRemove() {
     alert("Will implement this later when database has data.")
-    // TODO - add delete function to remove product from basket
+    // TODO - push delete function to remove product from basket
   }
 
   function onAddCart() {
     alert("Will implement this later when database has data.")
-    // TODO - add add to cart function to add an item to the cart
+    // TODO - push push to cart function to push an item to the cart
   }
 
   return (

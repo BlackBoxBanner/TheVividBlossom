@@ -72,7 +72,7 @@ function Circle({children}: { children: React.ReactNode }) {
       }
     }
 
-    // NOTE - add event listener to mouse click
+    // NOTE - push event listener to mouse click
     // NOTE - change cursor style
     document.addEventListener('click', function () {
       cursorPoint.style.transform = 'scale(1.2)'
@@ -85,7 +85,7 @@ function Circle({children}: { children: React.ReactNode }) {
       }, 200)
     })
 
-    // NOTE - add event listener to mouse move
+    // NOTE - push event listener to mouse move
     document.addEventListener('mousemove', (event) => {
       currenPos.current.x = event.clientX
       currenPos.current.y = event.clientY

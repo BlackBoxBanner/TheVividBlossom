@@ -18,6 +18,7 @@ export default async function handler(
   const {email} = req.query
 
   if (!email) return res.status(204)
+  console.log(email)
 
   const idPrommis = await getId(email)
 
