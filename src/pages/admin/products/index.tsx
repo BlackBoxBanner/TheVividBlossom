@@ -28,7 +28,7 @@ function AdminDashboard() {
   return (
     <>
       <Head>
-        <title>Admin - dashboard</title>
+        <title>Admin - products</title>
         <meta
           name="description"
           content="CPE241 - Database System Project"
@@ -43,7 +43,7 @@ function AdminDashboard() {
         />
       </Head>
       <AdminContainer>
-        <AdminSideBar page={"dashboard"}/>
+        <AdminSideBar page={"product"}/>
         <ContentContainer>
 
         </ContentContainer>

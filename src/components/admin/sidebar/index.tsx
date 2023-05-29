@@ -9,7 +9,7 @@ interface AdminSideBarProps {
   page: "dashboard" | "customer" | "order" | "product"
 }
 
-export default function AdminSideBar() {
+export default function AdminSideBar(props: AdminSideBarProps) {
   return (
     <>
       <div className={`${outfit.className} ${styles.sidebar}`}>
@@ -30,10 +30,10 @@ export default function AdminSideBar() {
             />
           </div>
           <div className={`${styles.buttonContainer}`}>
-            <LinkComponent href={"/admin/dashboard"} on>Dash Board</LinkComponent>
-            <LinkComponent href={"/admin/customers"}>Customers</LinkComponent>
-            <LinkComponent href={"/admin/orders"}>Orders</LinkComponent>
-            <LinkComponent href={"/admin/products"}>Products</LinkComponent>
+            <LinkComponent href={"/admin/dashboard"} on={props.page == "dashboard"}>Dash Board</LinkComponent>
+            <LinkComponent href={"/admin/customers"} on={props.page == "customer"}>Customers</LinkComponent>
+            <LinkComponent href={"/admin/orders"} on={props.page == "order"}>Orders</LinkComponent>
+            <LinkComponent href={"/admin/products"} on={props.page == "product"}>Products</LinkComponent>
             <IconHover
               outlineIcon={<AiOutlineMessage/>}
               fillIcon={<AiFillMessage/>}
@@ -66,7 +66,7 @@ export default function AdminSideBar() {
 }
 
 interface LinkComponentProps extends ComponentProps<typeof Link> {
-  on?: boolean
+  on: boolean
 }
 
 function LinkComponent(props: LinkComponentProps) {
