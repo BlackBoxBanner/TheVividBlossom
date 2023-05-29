@@ -47,7 +47,7 @@ export function BasketItem(props: basketItemProps) {
 
   function onRemove() {
     alert("Will implement this later when database has data.")
-  // TODO - add delete function to remove product from basket
+  // TODO - push delete function to remove product from basket
   }
 
   return (
