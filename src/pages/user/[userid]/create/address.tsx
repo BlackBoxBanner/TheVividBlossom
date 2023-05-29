@@ -83,7 +83,7 @@ function AddAddress({userid}: InferGetServerSidePropsType<typeof getServerSidePr
     await router.push("/").then()
   }
 
-  // if (!user) Relocate().then()
+  if (userid == "no-id") Relocate().then()
   if (status == "loading") return <></>
   if (checkAuth()) return <></>
 

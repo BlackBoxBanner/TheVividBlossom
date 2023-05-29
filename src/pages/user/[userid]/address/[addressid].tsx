@@ -117,7 +117,7 @@ function EditAddress({userid, addressid, address}: InferGetServerSidePropsType<t
     await router.push("/").then()
   }
 
-  // if (!user) Relocate().then()
+  if (userid == "no-id") Relocate().then()
   if (status == "loading") return <></>
   if (checkAuth()) return <></>
 
