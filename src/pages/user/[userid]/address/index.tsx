@@ -103,7 +103,11 @@ function Account({userid}: InferGetServerSidePropsType<typeof getServerSideProps
     }
     return false
   }
+  async function Relocate() {
+    await router.push("/").then()
+  }
 
+  if (userid == "no-id") Relocate().then()
   if (status == "loading") return <></>
   if (checkAuth()) return <></>
 
