@@ -1,7 +1,7 @@
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
 import Head from "next/head";
-import AdminContainer from "@/components/admin/container";
+import {AdminContainer, ContentContainer} from "@/components/admin/container";
 import AdminSideBar from "@/components/admin/sidebar";
 
 function AdminDashboard() {
@@ -43,16 +43,9 @@ function AdminDashboard() {
       </Head>
       <AdminContainer>
         <AdminSideBar/>
-        <div style={{
-          minHeight: "100%",
-          height: "fit-content",
-          width: "100%",
-          backgroundColor: "aliceblue",
-          display: "block",
-          padding: "1rem"
-        }}>
-          {/*<div style={{height: "200vh", width: "100%", backgroundColor: "wheat", display: "block"}}>as</div>*/}
-        </div>
+        <ContentContainer>
+
+        </ContentContainer>
       </AdminContainer>
     </>
   )
