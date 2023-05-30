@@ -26,10 +26,12 @@ export function ContentContainer(props: ContentContainerProps) {
     <>
       <div style={{
         minHeight: "100%",
-        height: "fit-content",
+        height: "100%",
         width: "100%",
         display: "block",
-        padding: "1rem"
+        position:"relative",
+        overflow:"clip",
+        wordWrap:"normal"
       }}>
         {props.children}
       </div>

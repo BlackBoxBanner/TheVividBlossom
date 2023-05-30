@@ -1,0 +1,165 @@
+@import "../../../variable";
+
+// heading
+.searchMenu {
+  width: 15rem;
+  height: fit-content;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+
+  div {
+    display: flex;
+    justify-content: flex-end;
+    height: 2rem;
+
+    input {
+      font-size: 0.75rem;
+      transition: ease-in-out $line_animation/2;
+      width: 0;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &:before {
+      transition: ease-in-out $line_animation/2;
+      content: "";
+      width: 0;
+      height: 1px;
+      background-color: $primary_text_color;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+}
+
+.inputContainer {
+  width: 100%;
+
+  ::placeholder {
+    color: $primary_placeholder_text_color;
+    font-size: 14px;
+  }
+}
+
+.searchMenu.searchActive {
+  div:before {
+    width: 100%;
+  }
+}
+
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+
+
+  .headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .title {
+      font-size: 1.5rem;
+      color: $inner_btn_hover;
+    }
+
+    div {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+}
+
+.contents {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  position: relative;
+  word-break: break-word;
+  flex-direction: column;
+
+}
+
+.tableContainer {
+  display: grid;
+  grid-template-columns: 1fr repeat(9, 1fr) 1fr;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  height: fit-content;
+  font-size: 0.85rem;
+
+
+  thead {
+    background-color: $primary_text_color;
+    color: $primary_color;
+
+    tr {
+    }
+
+    th {
+      padding: 1rem;
+
+    }
+  }
+
+  tbody {
+    //background-color: #D61C4E;
+    tr {
+      border-bottom: 1px solid $primary_text_color;
+
+      td {
+        padding: 1rem;
+      }
+    }
+  }
+}
+
+.form {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(9, 1fr);
+  margin: 0 6.5rem 2rem 6.5rem;
+  gap: 1rem 6.5rem;
+
+  .label {
+    color: $primary_text_color;
+    font-weight: bold;
+    font-size: 1rem
+  }
+
+  .input {
+    width: fit-content;
+  }
+}
+
+.btnContainer {
+  display: flex;
+  align-self: flex-end;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  margin-right: 2rem;
+}
+
+.inputContainerInput {
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  justify-content: flex-start;
+  font-weight: lighter;
+}

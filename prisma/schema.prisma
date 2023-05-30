@@ -19,40 +19,33 @@ enum ProductStatus {
 
 // ok
 model Product {
-  id                   String                 @id @default(uuid())
+  id                   String           @id @default(uuid())
   title                String
-  image                String
   description          String
   showing_instruction  String
   bloom_size           String
-  type_id              String
-  color_id             String
-  family_id            String
   cost_price           Float
   selling_price        Float
   inventory            Int
   sku                  Int
   discount_id          String?
-  admin_id             String //
-  status               ProductStatus          @default(OUT_OF_STOCK)
+  admin_id             String? //
+  status               ProductStatus    @default(OUT_OF_STOCK)
   create_at            DateTime
   modified_at          DateTime?
   deleted_at           DateTime?
-  category             Category[]
-  Flower_Family        Flower_Family          @relation(fields: [family_id], references: [id])
-  Seasonal_Information Seasonal_Information[]
-  Flower_Color         Flower_Color           @relation(fields: [color_id], references: [id])
-  Flower_Type          Flower_Type            @relation(fields: [type_id], references: [id])
-  Discount             Discount?              @relation(fields: [discount_id], references: [id])
+  category             String
+  Flower_Family        String
+  Seasonal_Information String
+  Flower_Color         String
+  Flower_Type          String
+  Discount             Discount?        @relation(fields: [discount_id], references: [id])
   Product_Review       Product_Review[]
   Order_Item           Order_Item[]
-  Admin_User           Admin_User             @relation(fields: [admin_id], references: [id])
+  Admin_User           Admin_User?       @relation(fields: [admin_id], references: [id])
   Product_Image        Product_Image?
   MyBasket             MyBasket[]
 
-  @@index(fields: [family_id], map: "index_family_id")
-  @@index(fields: [color_id], map: "index_color_id")
-  @@index(fields: [type_id], map: "index_type_id")
   @@index(fields: [admin_id], map: "index_admin_id")
   @@index(fields: [discount_id], map: "index_discount_id")
 }
@@ -80,61 +73,6 @@ model Product_Image {
   Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique(fields: [productId], name: "unique_productId", map: "unique_productId")
-}
-
-// ok
-model Category {
-  id          String    @id @default(uuid())
-  name        String
-  description String
-  create_at   DateTime
-  modified_at DateTime?
-  deleted_at  DateTime?
-  Product     Product[]
-}
-
-// ok
-model Flower_Family {
-  id          String    @id @default(uuid())
-  name        String
-  description String?
-  create_at   DateTime
-  modified_at DateTime?
-  deleted_at  DateTime?
-  Product     Product[]
-}
-
-// ok
-model Seasonal_Information {
-  id          String    @id @default(uuid())
-  name        String
-  description String?
-  create_at   DateTime
-  modified_at DateTime?
-  deleted_at  DateTime?
-  Product     Product[]
-}
-
-// ok
-model Flower_Type {
-  id          String    @id @default(uuid())
-  name        String
-  description String?
-  create_at   DateTime
-  modified_at DateTime?
-  deleted_at  DateTime?
-  Product     Product[]
-}
-
-// ok
-model Flower_Color {
-  id          String    @id @default(uuid())
-  name        String
-  description String?
-  create_at   DateTime
-  modified_at DateTime?
-  deleted_at  DateTime?
-  Product     Product[]
 }
 
 // ok
@@ -212,7 +150,7 @@ model MyBasket {
   id        String @id @default(cuid())
   userId    String
   productId String
-  quantity  Int @default(1)
+  quantity  Int    @default(1)
 
   Product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   User    User    @relation(fields: [userId], references: [id], onDelete: Cascade)

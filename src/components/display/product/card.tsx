@@ -67,7 +67,7 @@ export function ProductDisplay(props: ProductDisplayProps) {
     <>
       <section className={styles.card}>
         <div className={styles.imageContainer}>
-          <Image src={testImage} alt={"Product Image"} fill className={styles.image}/>
+          <Image src={props.product.image} alt={"Product Image"} fill className={styles.image}/>
         </div>
         <div className={styles.contentContainer}>
           <div className={styles.leftContent}>

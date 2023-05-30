@@ -9,6 +9,7 @@ import {Product_Image, ProductStatus} from "@prisma/client"
 import {combineImage} from "@/hook/image";
 import {useSession} from "next-auth/react";
 import {cardo} from "@/util/font";
+import {log} from "util";
 
 
 export const getServerSideProps: GetServerSideProps<{}, {
@@ -80,10 +81,30 @@ function Product({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
     })
   }
 
+  // useEffect(() => {
+  //   fetchHandler().then()
+  //   return
+  // }, [])
+
   useEffect(() => {
-    fetchHandler().then()
-    return
-  }, [])
+    let isMounted = true;
+    if (isMounted) {
+      const delayEffect = setTimeout(() => {
+        if (isMounted) {
+          // Code to be executed after 2 seconds delay
+          if (products.length == 0) {
+            fetchHandler().then()
+          }
+          console.log("as")
+        }
+      }, 500);
+
+      return () => {
+        isMounted = false;
+        clearTimeout(delayEffect);
+      };
+    }
+  }, [products.length]);
 
 
   useEffect(() => {
@@ -145,103 +166,3 @@ function Product({}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 }
 
 export default Product
-
-const products: ProductType[] = [
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-  {
-    id: "",
-    flowerName: "Black Eyed Susans",
-    description: `The "black eye" of black-eyed Susans refers to the dark brown center of their daisy-like flower heads. In addition, some species of black-eyed Susans are also known as Rudbeckia daisies.`,
-    price: 5,
-    status: "AVAILABLE",
-    image: ""
-  },
-
-]

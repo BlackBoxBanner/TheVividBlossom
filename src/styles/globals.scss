@@ -3,7 +3,7 @@
 * {
   box-sizing: border-box;
   padding: 0;
-  margin: 0;
+  margin: 0;;
 }
 
 html,
@@ -30,4 +30,15 @@ button, input, select, textarea {
 
 * {
   cursor: none;
+}
+
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  //background-color: #727469;
+  //all: unset;
 }
