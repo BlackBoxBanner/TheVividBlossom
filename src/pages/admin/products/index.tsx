@@ -14,7 +14,6 @@ import {Product} from ".prisma/client";
 import {DataTable} from "@/components/admin/product/DataTable";
 import {getColumesProducts} from "@/components/admin/product/columes";
 import {makeData} from "@/components/admin/product/makeData";
-import {log} from "util";
 
 function AdminDashboard() {
 
