@@ -1,0 +1,70 @@
+@import "../../variable";
+
+.sidebar {
+  height: 100%;
+  width: 17rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid $primary_text_color;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+
+  p {
+    font-size: 1.5rem;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 0.25rem;
+  border-top: 1px solid $primary_text_color;
+
+  .role {
+    color: $primary_placeholder_text_color;
+  }
+}
+
+.btnF {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+}
+
+.contentContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  all: unset;
+  color: $primary_text_color;
+  transition: ease-in-out all $btn_animation/1.5;
+
+  &:hover {
+    color: $inner_btn_hover;
+  }
+}
+
+.active {
+  color: $inner_btn_hover;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+}

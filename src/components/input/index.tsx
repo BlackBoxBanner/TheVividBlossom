@@ -1,22 +1,34 @@
 import {ComponentProps, useState, forwardRef} from "react";
 import styles from "@/styles/components/input/input.module.scss";
-import {Outfit} from "next/font/google";
 import {AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
 // import InputMask from 'react-input-mask';
 import ReactInputMask, {Props as ReactInputMaskProps} from 'react-input-mask';
+import {outfit, outfitLabel} from "@/util/font";
+import {ButtonLogin} from "@/components/button";
 
-const outfit = Outfit({weight: "300", style: ["normal"], subsets: ["latin"]});
-const outfitLabel = Outfit({weight: "500", style: ["normal"], subsets: ["latin"]});
+type pageList = "setting" | "landing"
+
 
 interface InputProps extends ComponentProps<"input"> {
   label: string;
   error?: boolean | string;
   mask?: string
+  page?: pageList
+}
+
+export function SettingLabel(props: { id: string, label: string }) {
+  return (
+    <label htmlFor={props.id}
+           className={`${styles.label} ${outfitLabel.className} ${styles.settingLabel}`}>
+      {props.label}
+    </label>
+  )
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const initType = props.type;
+  const {type: initType, page = "landing"} = props;
   const [type, setType] = useState<"password" | "text">(props.type == "password" ? "password" : "text");
+
 
   function changeHandler() {
     if (type === "password") {
@@ -29,19 +41,20 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <>
       <div className={`${styles.inputContainer} ${outfit.className}`}>
-        <label htmlFor={props.id} className={`${styles.label} ${outfitLabel.className}`}>
+        <label htmlFor={props.id}
+               className={`${styles.label} ${outfitLabel.className} ${page === "setting" && styles.settingLabel}`}>
           {props.label}
         </label>
         <div className={styles.inputRelative}>
           <input
             ref={ref}
-            className={`${styles.input}  ${props.className} ${!!props.error ? styles.inputError : ""}`}
+            className={`${styles.input}  ${props.className} ${!!props.error ? styles.inputError : ""} ${page === "setting" && styles.settingInput}`}
             {...props}
             type={`${type}`}
           />
           {initType === "password" && (
             type === "password" ? (
-              <button onClick={changeHandler} type="button" className={styles.hideBtn} >
+              <button onClick={changeHandler} type="button" className={styles.hideBtn}>
                 <AiOutlineEye size={25} className={styles.icon}/>
               </button>
             ) : (
@@ -71,17 +84,21 @@ export const ErrorMessage = forwardRef<HTMLParagraphElement, ErrorMessageProps>(
 
 ErrorMessage.displayName = "ErrorMessage";
 
-interface FormInputProps extends ComponentProps<typeof Input> {
-  error: string | undefined;
+
+export interface FormInputProps extends ComponentProps<typeof Input> {
+  showError?: boolean
+  error?: string;
+  edit?: boolean
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>((props, ref) => {
+  const {showError = true} = props
   return (
     <>
       <div>
         <Input ref={ref} {...props} />
-        {props.error ? <ErrorMessage>{String(props.error)}</ErrorMessage> :
-          <ErrorMessage style={{opacity: 0}}>test</ErrorMessage>}
+        {showError && (props.error ? <ErrorMessage>{String(props.error)}</ErrorMessage> :
+          <ErrorMessage style={{opacity: 0}}>test</ErrorMessage>)}
       </div>
     </>
   );
@@ -103,26 +120,54 @@ export const RegisterInput = forwardRef<HTMLInputElement, FormInputProps>((props
 
 RegisterInput.displayName = "RegisterInput";
 
-interface InputMaskProps extends ReactInputMaskProps {
+export interface InputMaskProps extends ReactInputMaskProps {
   // Add any additional props you need
+  showError?: boolean
   label: string;
   error?: boolean | string;
+  page?: pageList
+  edit?: boolean
 }
 
 export const InputDate = forwardRef<ReactInputMask, InputMaskProps>((props, ref) => {
+  const {type: initType, page = "landing"} = props;
+  const [type, setType] = useState<"password" | "text">(props.type == "password" ? "password" : "text");
+
+
+  function changeHandler() {
+    if (type === "password") {
+      setType("text");
+    } else {
+      setType("password");
+    }
+  }
+
   return (
     <>
       <div className={`${styles.inputContainer} ${outfit.className}`}>
-        <label htmlFor={props.id} className={`${styles.label} ${outfitLabel.className}`}>
+        <label htmlFor={props.id}
+               className={`${styles.label} ${outfitLabel.className} ${page === "setting" && styles.settingLabel}`}>
           {props.label}
         </label>
         <div className={styles.inputRelative}>
           <ReactInputMask mask={props.mask!} onChange={props.onChange} onBlur={props.onBlur} name={props.name}
+                          disabled={props.disabled}
                           maskChar={null}
-                          type={props.type}
+                          type={type}
                           ref={ref}
                           placeholder={props.placeholder}
-                          className={`${styles.input} ${props.className} ${!!props.error ? styles.inputError : ""} ${styles.date}`}/>
+                          className={`${styles.input} ${props.className} ${!!props.error ? styles.inputError : ""} ${styles.date} ${page === "setting" && styles.settingInput}`}/>
+          {initType === "password" && (
+            type === "password" ? (
+              <button onClick={changeHandler} type="button" className={styles.hideBtn}>
+                <AiOutlineEye size={25} className={styles.icon}/>
+              </button>
+            ) : (
+              <button onClick={changeHandler} type="button" className={styles.hideBtn}>
+                <AiOutlineEyeInvisible size={25} className={styles.icon}/>
+              </button>
+            )
+          )}
         </div>
       </div>
     </>
@@ -130,12 +175,14 @@ export const InputDate = forwardRef<ReactInputMask, InputMaskProps>((props, ref)
 });
 
 export const RegisterInputMask = forwardRef<ReactInputMask, InputMaskProps>((props, ref) => {
+  const {showError = true} = props
+
   return (
     <>
       <div>
         <InputDate ref={ref} {...props} />
-        {props.error ? <ErrorMessage>{String(props.error)}</ErrorMessage> :
-          <ErrorMessage/>}
+        {showError && (props.error ? <ErrorMessage>{String(props.error)}</ErrorMessage> :
+          <ErrorMessage/>)}
       </div>
     </>
   );
@@ -143,3 +190,72 @@ export const RegisterInputMask = forwardRef<ReactInputMask, InputMaskProps>((pro
 
 InputDate.displayName = "InputDate";
 RegisterInputMask.displayName = "RegisterInputMask";
+
+export const AccountFormInput = forwardRef<HTMLInputElement, FormInputProps>((props, ref) => {
+  const [disable, setDisable] = useState(!props.edit)
+  return (
+    <>
+      <div>
+        <Input page={"setting"} showError={false} {...props} ref={ref} disabled={disable}/>
+      </div>
+      {
+        !props.edit &&
+          <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
+            setDisable(e => !e)
+          }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
+              Edit
+          </ButtonLogin>
+      }
+    </>
+  )
+})
+
+AccountFormInput.displayName = "AccountFormInput";
+
+export const AccountFormInputMask = forwardRef<ReactInputMask, InputMaskProps>((props, ref) => {
+  const [disable, setDisable] = useState(!props.edit)
+  return (
+    <>
+      <InputDate page={"setting"} showError={false} disabled={disable}
+                 {...props} ref={ref}/>
+      {
+        !props.edit &&
+          <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
+            setDisable(e => !e)
+          }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
+              Edit
+          </ButtonLogin>
+      }
+    </>
+  )
+})
+AccountFormInputMask.displayName = "AccountFormInputMask"
+
+export const AccountFormInputImage = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  const [disable, setDisable] = useState(true)
+  return (
+    <>
+      <div className={`${styles.inputContainer} ${outfit.className}`}>
+        <label htmlFor={props.id}
+               className={`${styles.label} ${outfitLabel.className} ${styles.settingLabel}`}>
+          {props.label}
+        </label>
+        <div className={styles.inputRelative}>
+          <input
+            ref={ref}
+            className={`${styles.input}  ${props.className} `}
+            type={"file"}
+            accept={"image/*"}
+            {...props}
+          />
+        </div>
+      </div>
+      <ButtonLogin font={"Outfit"} type={"button"} onClick={() => {
+        setDisable(e => !e)
+      }} dark style={{padding: "0.5rem 1.75rem", margin: "auto 0"}}>
+        Edit
+      </ButtonLogin>
+    </>
+  )
+})
+AccountFormInputImage.displayName = "AccountFormInputImage"

@@ -12,8 +12,10 @@ import {Contact} from "@/components/display/landing/contact";
 import ImageContainer from "@/components/display/landing/imageShow";
 import InnerMenu, {ListItem} from "@/components/display/landing/innerMenu";
 import RightMenu from "@/components/display/landing/rightmenu";
-import {signOut, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {ProfileMenu} from "@/components/display/landing/profile";
+import axios from "axios";
+import {useRouter} from "next/router";
 
 // const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
 const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
@@ -37,6 +39,9 @@ export default function Home() {
   const [recommend, setRecommend] = useState(false)
   const [image, setImage] = useState(false)
 
+  const [userId, setUserId] = useState<string>()
+
+  const router = useRouter()
 
   useEffect(() => {
     function intervalCallback() {
@@ -114,31 +119,58 @@ export default function Home() {
   const accountSettingList = [
     {
       title: "Edit Account",
-      link:"/user/account"
+      link: `/user/${userId || "no-id"}/account`
     },
     {
       title: "My Order",
     },
     {
       title: "My Wishlist",
+      link: `/user/${userId || "no-id"}/wishlist`
     },
     {
       title: "My Basket",
+      link: `/user/${userId || "no-id"}/basket`
     },
     {
-      title: "Payment Detail",
+      title: "Payment Method",
+      link: `/user/${userId || "no-id"}/payment`
     },
     {
       title: "Shipping Address",
+      link: `/user/${userId || "no-id"}/address`
     },
     {
       title: "Login and Security",
+      link: `/user/${userId || "no-id"}/security`
     }
   ] satisfies ListItem[]
 
   const [accountSetting, setAccountSetting] = useState(false)
 
-  const {data,} = useSession()
+  const {data: session} = useSession()
+
+  useEffect(() => {
+    const email = session?.user?.email
+    if (!email) return
+
+    async function getUser() {
+      return axios<{ id: string }>({
+        baseURL: "/api/user/id",
+        method: "GET",
+        params: {
+          email
+        }
+      });
+    }
+
+    getUser().then(e => {
+      if (e.status == 200) {
+        setUserId(e.data.id)
+      }
+    })
+
+  }, [session?.user?.email])
 
 
   return (
@@ -161,7 +193,7 @@ export default function Home() {
       <main style={{position: "relative"}}>
         <div className={styles.main + " " + cardo.className}>
           <div className={styles.sidebar + " " + styles.leftsidebar}>
-            <MenuButton>All Flower Seeds</MenuButton>
+            <MenuButton onClick={() => router.push("/product")}>All Flower Seeds</MenuButton>
             <MenuButton onClick={() => {
               setColor(true)
               setOverMenu(true)
@@ -187,7 +219,7 @@ export default function Home() {
           </div>
           <div className={styles.rightContent}>
             <ImageContainer stage={state}/>
-            <RightMenu onProfile={setImage} setOverMenu={setOverMenu}/>
+            <RightMenu onProfile={setImage} setOverMenu={setOverMenu} userId={userId!}/>
           </div>
           <OverText
             colors={colorList}

@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image"
 import Link from "next/link";
-import {Cardo} from "next/font/google";
 
 import styles from "@/styles/pages/auth/login.module.scss"
 
@@ -15,11 +14,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
 import {signIn} from "next-auth/react"
 import {useRouter} from "next/router";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useProcessing} from "@/components/display/processing/container";
 import {WaitingContent} from "@/components/display/processing/waiting";
-
-const cardo = Cardo({weight: "400", subsets: ["latin"], style: "italic"})
+import {useSession} from "next-auth/react"
+import {cardo} from "@/util/font";
 
 
 const schema = z.object({
@@ -53,6 +52,21 @@ export default function Login() {
       }
     })
   }
+
+
+  const {status} = useSession()
+
+  function checkAuth() {
+    if (status == "authenticated") {
+      router.push("/").then()
+      return true
+    }
+    return false
+  }
+
+  if (status == "loading") return <></>
+  if (checkAuth()) return <></>
+
   return (
     <>
       <Head>
@@ -71,7 +85,7 @@ export default function Login() {
         />
       </Head>
       <Processing>
-        <WaitingContent title={"session"}/>
+        <WaitingContent title={"request"}/>
       </Processing>
       <main className={styles.main}>
         <div className={styles.formContainer}>

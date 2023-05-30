@@ -3,13 +3,15 @@
 * {
   box-sizing: border-box;
   padding: 0;
-  margin: 0;
+  margin: 0;;
 }
 
 html,
 body {
+  height: 100%;
+  width: 100%;
   overflow-x: hidden;
-  min-height: 100vh;
+  //min-height: 100vh;
   color: #2A2E21FF;
   background-color: #FDFCF5FF;
   fill: #2A2E21FF;
@@ -28,4 +30,15 @@ button, input, select, textarea {
 
 * {
   cursor: none;
+}
+
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  //background-color: #727469;
+  //all: unset;
 }

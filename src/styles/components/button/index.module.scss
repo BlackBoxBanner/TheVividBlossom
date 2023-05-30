@@ -6,7 +6,8 @@
   border: 1px solid $primary_text_color;
   border-radius: 2rem;
   transition: ease-in-out $btn_animation;
-  font-size: $landing_btn_font_menu;
+  font-size: 1rem;
+  background-color: $primary_color;
 
   &:hover {
     color: $primary_color;
@@ -24,6 +25,14 @@
   &:hover {
     color: $primary_color;
     background-color: $primary_btn_hover;
+  }
+}
+
+.payment {
+  border: 1px solid $primary_color;
+
+  &:hover {
+    border-color: $primary_btn_hover;
   }
 }
 

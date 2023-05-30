@@ -2,7 +2,6 @@ import Head from "next/head";
 import styles from "@/styles/pages/auth/register.module.scss"
 import Image from "next/image"
 import {RegisterInput, RegisterInputMask} from "@/components/input";
-import {Cardo, Outfit} from "next/font/google";
 import {Button, ButtonLogin} from "@/components/button";
 import {SubmitHandler, useForm,} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -20,12 +19,9 @@ import {useRouter} from "next/router";
 import {useProcessing} from "@/components/display/processing/container";
 import {getImage} from "@/hook/getImage";
 import {WaitingContent} from "@/components/display/processing/waiting";
+import {useSession} from "next-auth/react";
+import {cardo, outfit, outfitLabel, outfitStrong} from "@/util/font";
 
-
-const outfit = Outfit({weight: "400", style: "normal", subsets: ["latin"]})
-const cardo = Cardo({weight: "400", subsets: ["greek"], style: "italic"})
-const outfitLabel = Outfit({weight: "500", style: ["normal"], subsets: ["latin"]});
-const outfitStrong = Outfit({weight: "600", style: ["normal"], subsets: ["latin"]});
 
 
 interface RegisterProps {
@@ -183,6 +179,19 @@ export default function Register(props: RegisterProps) {
     })
   }
 
+  const {status} = useSession()
+
+  function checkAuth() {
+    if (status == "authenticated") {
+      router.push("/").then()
+      return true
+    }
+    return false
+  }
+
+  if (status == "loading") return <></>
+  if (checkAuth()) return <></>
+
   return (
     <>
       <Head>
@@ -208,7 +217,7 @@ export default function Register(props: RegisterProps) {
           <div className={`${styles.title} ${cardo.className}`}>
             {String("Create an account").toUpperCase()}
           </div>
-          <div className={`${outfit.className} ${styles.subtitle}`}>Fields marked * are mandatory</div>
+          <div className={`${outfitLabel.className} ${styles.subtitle}`}>Fields marked * are mandatory</div>
         </div>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <FormContainer header={"Personal Information"}>

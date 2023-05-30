@@ -1,9 +1,24 @@
 import {breakImage, combineImage} from "@/hook/image";
 import prisma from "@/lib/prisma";
+import axios from "axios";
 
 interface updateImageProps {
   email: string
   image?: string | null,
+}
+
+export async function updateImageHandler(props: updateImageProps) {
+  return axios({
+    url: "/api/user/updateimage",
+    method: "PATCH",
+    headers: {
+      Authorization: `Simple ${process.env.NEXT_PUBLIC_API_KEY}`,
+    },
+    data: {
+      email: props.email,
+      image: props.image
+    }
+  })
 }
 
 export async function updateImage(props: updateImageProps) {

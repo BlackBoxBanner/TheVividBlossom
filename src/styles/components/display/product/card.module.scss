@@ -1,0 +1,102 @@
+@import "./../../../variable";
+
+
+.card {
+  display: block;
+  border: 0.25px solid $primary_text_color;
+  width: 100%;
+  height: 33rem;
+}
+
+.imageContainer {
+  position: relative;
+  width: auto;
+  height: 60%;
+}
+
+.contentContainer {
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.leftContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem 0;
+
+  .textContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .flowerName {
+      font-size: 1.1rem;
+    }
+
+    .description {
+      font-size: 0.75rem;
+      color: $primary_placeholder_text_color;
+    }
+  }
+}
+
+.rightContent {
+  display: flex;
+  width: 8rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-direction: column;
+
+  .price {
+    font-size: 3.5rem;
+  }
+
+  .icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.statusContainer {
+  display: flex;
+  width: 6rem;
+  padding: 0.4rem 0;
+  border: 1px solid $primary_text_color;
+  border-radius: 1rem;
+}
+
+.container {
+  display: flex;
+  margin: 0 auto;
+  font-size: 0.75rem;
+  gap: 0.5rem;
+}
+
+.statusIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+
+  .status {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+}
+
+.available {
+  background-color: $available_color;
+}
+
+.unavailable {
+  background-color: $error_color;
+}
