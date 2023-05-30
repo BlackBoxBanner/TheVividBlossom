@@ -1,8 +1,7 @@
 import styles from "@/styles/components/display/landing/innerMenu.module.scss"
 import {Cardo} from "next/font/google";
 import Link from "next/link"
-
-const cardo = Cardo({weight: "400", style: "italic", subsets: ["latin", "greek"]})
+import {cardo} from "@/util/font";
 
 export interface ListItem {
   onClick?: () => void;
