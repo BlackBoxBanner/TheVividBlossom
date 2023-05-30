@@ -142,7 +142,17 @@ function Circle({children}: { children: React.ReactNode }) {
   return (
     <>
       <div id="canvas" style={{minHeight: '100vh', position: 'relative'}}>
-        {children}
+        <div style={{
+          minHeight: "100%",
+          height: "100%",
+          width: "100%",
+          display: "block",
+          position: "relative",
+          overflow: "scroll",
+          wordWrap: "normal"
+        }}>
+          {children}
+        </div>
         <span
           id="cursor"
           style={{

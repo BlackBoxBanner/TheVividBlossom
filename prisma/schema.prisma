@@ -27,7 +27,7 @@ model Product {
   cost_price           Float
   selling_price        Float
   inventory            Int
-  sku                  Int
+  sku                  String
   discount_id          String?
   admin_id             String? //
   status               ProductStatus    @default(OUT_OF_STOCK)

@@ -53,7 +53,7 @@ export default async function getAllProductHandler(
             Flower_Family: body.Flower_Family!,
             cost_price: parseInt(body.selling_price!) - 3,
             selling_price: parseInt(body.selling_price!),
-            sku: parseInt(body.sku!),
+            sku: body.sku!,
             inventory: parseInt(body.inventory!),
             category: "flower",
             create_at: new Date(),

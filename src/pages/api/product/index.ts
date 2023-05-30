@@ -12,11 +12,6 @@ export default async function getAllProductHandler(
   req: ExtendedNextApiRequest,
   res: NextApiResponse
 ) {
-  if (
-    req.headers.authorization != `Simple ${process.env.NEXT_PUBLIC_API_KEY}`
-  ) {
-    return res.status(401).send("un-authorization")
-  }
 
   const {method, body, query} = req;
 
