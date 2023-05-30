@@ -28,6 +28,7 @@ function AdminDashboard() {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState(false)
   const [products, setProducts] = useState<Product[]>([])
+  const [total, setTotal] = useState(0)
 
   async function fetchHandler() {
     const productsRes = await axios<Product[]>({
@@ -38,12 +39,19 @@ function AdminDashboard() {
       },
     })
     setProducts(productsRes.data)
+
+
   }
 
+
   useEffect(() => {
-    fetchHandler().then()
-    return
-  }, [])
+    if (!total && products) {
+      fetchHandler().then()
+      products.map((value) => {
+        setTotal(prev => prev + value.selling_price)
+      })
+    }
+  }, [products, total])
 
   interface ProductProps {
     sku: string
@@ -81,6 +89,7 @@ function AdminDashboard() {
     columnHelper.accessor('selling_price', {
       header: "PRICE",
       cell: info => info.getValue(),
+      footer: `${String(total)}`
     }),
     columnHelper.accessor('inventory', {
       header: "INVENTORY",
@@ -138,7 +147,8 @@ function AdminDashboard() {
                 <p>Products</p>
               </div>
               <div>
-                <ButtonLogin dark font={"Outfit"} onClick={()=> router.push("/admin/products/add")}>Add product</ButtonLogin>
+                <ButtonLogin dark font={"Outfit"} onClick={() => router.push("/admin/products/add")}>Add
+                  product</ButtonLogin>
                 <ButtonLogin dark font={"Outfit"}>Sort by: Flower</ButtonLogin>
                 <ButtonLogin dark font={"Outfit"}>Remove product</ButtonLogin>
               </div>
@@ -196,6 +206,22 @@ function AdminDashboard() {
                 </tr>
               ))}
               </tbody>
+              <tfoot>
+              {table.getFooterGroups().map(footerGroup => (
+                <tr key={footerGroup.id}>
+                  {footerGroup.headers.map(header => (
+                    <th key={header.id} colSpan={header.colSpan}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                          header.column.columnDef.footer,
+                          header.getContext()
+                        )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+              </tfoot>
             </table>
             {/*{String(JSON.stringify(products))}*/}
           </section>

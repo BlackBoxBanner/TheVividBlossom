@@ -81,7 +81,7 @@ function AdminDashboard() {
         image,
       }
     }).then(() => {
-      // router.push(`/admin/products`)
+      router.push(`/admin/products`)
     }).catch(e => {
       console.error(e)
     })
@@ -181,7 +181,7 @@ function AdminDashboard() {
             </form>
             <div className={`${styles.btnContainer}`}>
               <ButtonLogin dark font={"Outfit"} style={{width: "10rem"}}
-                           onClick={() => router.push("/admin/product")}>Cancel</ButtonLogin>
+                           onClick={() => router.push("/admin/products")}>Cancel</ButtonLogin>
               <ButtonLogin font={"Outfit"} type={"submit"} style={{width: "10rem"}}
                            form={"AddProduct"}>Add</ButtonLogin>
             </div>
