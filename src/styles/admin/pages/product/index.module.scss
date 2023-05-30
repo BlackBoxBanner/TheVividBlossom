@@ -128,7 +128,22 @@
       }
     }
   }
+
+  tfoot {
+    background-color: $primary_text_color;
+    color: $primary_color;
+
+    tr {
+    }
+
+    th {
+      padding: 1rem;
+
+    }
+  }
 }
+
+
 
 .form {
   display: grid;

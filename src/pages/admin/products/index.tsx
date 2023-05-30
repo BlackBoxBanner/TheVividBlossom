@@ -43,9 +43,10 @@ function AdminDashboard() {
 
   }
 
+
   useEffect(() => {
-    fetchHandler().then()
     if (!total && products) {
+      fetchHandler().then()
       products.map((value) => {
         setTotal(prev => prev + value.selling_price)
       })
@@ -88,7 +89,7 @@ function AdminDashboard() {
     columnHelper.accessor('selling_price', {
       header: "PRICE",
       cell: info => info.getValue(),
-      footer: String(total)
+      footer: `${String(total)}`
     }),
     columnHelper.accessor('inventory', {
       header: "INVENTORY",
@@ -208,16 +209,16 @@ function AdminDashboard() {
               <tfoot>
               {table.getFooterGroups().map(footerGroup => (
                 <tr key={footerGroup.id}>
-                    {footerGroup.headers.map(header => (
-                      <th key={header.id} colSpan={header.colSpan}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                            header.column.columnDef.footer,
-                            header.getContext()
-                          )}
-                      </th>
-                    ))}
+                  {footerGroup.headers.map(header => (
+                    <th key={header.id} colSpan={header.colSpan}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                          header.column.columnDef.footer,
+                          header.getContext()
+                        )}
+                    </th>
+                  ))}
                 </tr>
               ))}
               </tfoot>
