@@ -11,17 +11,9 @@ import {AiOutlineSearch} from "react-icons/ai";
 import btnStyles from "@/styles/components/button/iconbtn.module.scss";
 import axios from "axios";
 import {Product} from ".prisma/client";
-import {loadRequireHook} from "next/dist/build/webpack/require-hook";
-import Link from "next/link";
-
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-
-import DataGrid from 'react-data-grid';
+import {DataTable} from "@/components/admin/product/DataTable";
+import {getColumesProducts} from "@/components/admin/product/columes";
+import {makeData} from "@/components/admin/product/makeData";
 
 function AdminDashboard() {
 
@@ -39,10 +31,7 @@ function AdminDashboard() {
       },
     })
     setProducts(productsRes.data)
-
-
   }
-
 
   useEffect(() => {
     if (!total && products) {
@@ -53,55 +42,9 @@ function AdminDashboard() {
     }
   }, [products, total])
 
-  interface ProductProps {
-    sku: string
-    title: string
-    Flower_Color: string
-    Flower_Type: string
-    Seasonal_Information: string
-    selling_price: string
-    inventory: string
-  }
 
-  const columnHelper = createColumnHelper<Product>()
-
-  const columns = [
-    columnHelper.accessor('sku', {
-      header: "SKU",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('title', {
-      header: "FLOWER NAME",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('Flower_Color', {
-      header: "COLOR",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('Flower_Type', {
-      header: "FLOWER TYPE",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('Seasonal_Information', {
-      header: "BLOOMING SEASON",
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('selling_price', {
-      header: "PRICE",
-      cell: info => info.getValue(),
-      footer: `${String(total)}`
-    }),
-    columnHelper.accessor('inventory', {
-      header: "INVENTORY",
-      cell: info => info.getValue(),
-    }),
-  ]
-
-  const table = useReactTable({
-    data: products,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+  const [rowSelection, setRowSelection] = useState({})
+  const columns = getColumesProducts(makeData(products))
 
   // Don't touch
   const router = useRouter()
@@ -121,6 +64,7 @@ function AdminDashboard() {
 
   if (status == "loading") return <></>
   if (checkAuth()) return <></>
+
   return (
     <>
       <Head>
@@ -150,7 +94,9 @@ function AdminDashboard() {
                 <ButtonLogin dark font={"Outfit"} onClick={() => router.push("/admin/products/add")}>Add
                   product</ButtonLogin>
                 <ButtonLogin dark font={"Outfit"}>Sort by: Flower</ButtonLogin>
-                <ButtonLogin dark font={"Outfit"}>Remove product</ButtonLogin>
+                <ButtonLogin dark font={"Outfit"} onClick={() => {
+                  console.log(rowSelection)
+                }}>Remove product</ButtonLogin>
               </div>
             </div>
             <div>
@@ -178,52 +124,7 @@ function AdminDashboard() {
             </div>
           </header>
           <section className={`${styles.contents}`}>
-            <table className={`${styles.table} ${outfitLabel.className}`}>
-              <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-              </thead>
-              <tbody>
-              {table.getRowModel().rows.map(row => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map(cell => (
-                    <td key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-              </tbody>
-              <tfoot>
-              {table.getFooterGroups().map(footerGroup => (
-                <tr key={footerGroup.id}>
-                  {footerGroup.headers.map(header => (
-                    <th key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext()
-                        )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-              </tfoot>
-            </table>
-            {/*{String(JSON.stringify(products))}*/}
+            <DataTable data={products} columns={columns} rowSelection={rowSelection} setRowSelection={setRowSelection}/>
           </section>
         </ContentContainer>
       </AdminContainer>

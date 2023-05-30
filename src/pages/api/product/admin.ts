@@ -22,13 +22,14 @@ export default async function getAllProductHandler(
   switch (method) {
     case "GET":
       try {
-
+        console.log("feteching")
         const productRes = await prisma?.product.findMany({})
 
         return res.status(200).json(productRes)
       } catch
         (e) {
         res.status(400).send(e)
+        console.log(e);
       }
       break;
     default:

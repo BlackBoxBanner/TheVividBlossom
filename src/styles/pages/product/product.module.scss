@@ -1,12 +1,18 @@
 @import "./../../variable";
 
 .main {
-  display: block;
+  background-color: $primary_color;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow: clip;
 }
 
 .gridDisplay {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: clip;
+  max-height: 100vh;
+  overflow: scroll;
 }
 
 .header {
@@ -14,7 +20,7 @@
   width: 33.33333%;
   display: block;
 
-  .title{
+  .title {
     font-size: 3rem;
   }
 
